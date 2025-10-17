@@ -10,6 +10,7 @@ book:
   downloads: [pdf]
   repo-actions: [edit, issue]
   reader-mode: true
+  license: CC-BY-NC 4.0
   sidebar:
     style: docked
   chapters:
