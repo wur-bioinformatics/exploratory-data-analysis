@@ -1,5 +1,9 @@
 _book
 
+# renv files
+renv/library/
+renv/staging/
+
 # History files
 .Rhistory
 .Rapp.history
