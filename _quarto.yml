@@ -37,11 +37,14 @@ format:
   html:
     theme:
       - pandoc
+    font:
+      google: "Noto Sans"
   pdf:
     documentclass: scrreprt
     papersize: letter
     highlight-style: github
-    mainfont: Arial
+    mainfont: "Noto Sans"
+    engine: xelatex
 
 
 
