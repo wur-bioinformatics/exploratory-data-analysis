@@ -3,3 +3,32 @@ title: "Summary statistics"
 format: html
 ---
 
+## Summary statistics
+
+Let's load an example data set and look at how some summary statistics can be computed.
+
+Conventional way first.
+
+```{r}
+library(datasets)
+dataset(iris)
+head(iris)
+```
+
+`dim` lets us inspect the size of the data.
+
+```{r}
+dim(iris)
+```
+
+`summary` gives a per-column overview: mean, median, quartiles, and min/max values for numeric columns, counts for factors.
+
+```{r}
+summary(iris)
+```
+
+Alternative one-liner syntax that does not bring anything unnecessary in scope and uses the pipe operator. 
+
+```{r}
+datasets::iris |> summary()
+```
