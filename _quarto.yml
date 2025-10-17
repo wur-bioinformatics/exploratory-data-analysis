@@ -1,0 +1,46 @@
+project:
+  type: book
+
+book:
+  title: "Exploratory Data Analysis"
+  author: "Rens Holmer"
+  date: "7/15/2025"
+  page-navigation: true
+  search: true
+  downloads: [pdf]
+  repo-actions: [edit, issue]
+  reader-mode: true
+  sidebar:
+    style: docked
+  chapters:
+    - index.qmd
+    - part: week1.qmd
+      chapters: 
+        - summary_statistics.qmd
+    - part: week2.qmd
+      chapters: 
+        - programming_concepts.qmd
+        - debugging.qmd
+    - part: week3.qmd
+      chapters: 
+        - visualization.qmd
+        - unsupervised_analysis.qmd
+    - part: week4.qmd
+      chapters: 
+        - regression_classification.qmd
+        - workflows.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme:
+      - pandoc
+  pdf:
+    documentclass: scrreprt
+    papersize: letter
+    highlight-style: github
+    mainfont: Arial
+
+
+

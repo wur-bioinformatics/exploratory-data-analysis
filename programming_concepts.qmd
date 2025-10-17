@@ -1,0 +1,14 @@
+---
+title: "programming_concepts"
+format: html
+---
+
+## Loops
+
+```{r}
+for (i in seq(4)){
+	print(i)
+}
+```
+
+## Functions

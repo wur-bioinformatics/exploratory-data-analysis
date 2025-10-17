@@ -1,0 +1,8 @@
+---
+title: "debugging"
+format: html
+---
+
+## Validating code
+
+## Debugging / Error handling
