@@ -11,7 +11,7 @@ Conventional way first.
 
 ```{r}
 library(datasets)
-dataset(iris)
+data(iris)
 head(iris)
 ```
 
