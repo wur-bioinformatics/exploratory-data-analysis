@@ -1,1 +1,38 @@
 # Preface  {.unnumbered}
+
+
+```{mermaid}
+flowchart TB
+  w1_1[Loading data]
+  w1_2[Inspecting a dataset]
+  w1_3[Computing summary statistics]
+  
+  w2_1[Functions]
+  w2_2[Loops]
+  w2_3[Making analyses reproducible]
+  
+  w3_1[Plot types]
+  w3_2[Grammar of graphics]
+  
+  
+  subgraph Working with Data
+    direction TB
+    w1_1-->w1_2
+    w1_2-->w1_3
+  end
+  
+  
+  subgraph Programming
+    direction TB
+    w2_1-->w2_3
+    w2_2-->w2_3
+  end
+  
+  subgraph Visualization
+    direction TB
+    w3_1 --> w3_2
+  end
+  
+  
+  w1_1-->w2_3
+```

@@ -15,21 +15,22 @@ book:
     style: docked
   chapters:
     - index.qmd
-    - part: week1.qmd
+    - part: week1/week1.qmd
       chapters: 
-        - summary_statistics.qmd
-    - part: week2.qmd
+        - week1/summary_statistics.qmd
+    - part: week2/week2.qmd
       chapters: 
-        - programming_concepts.qmd
-        - debugging.qmd
-    - part: week3.qmd
+        - week2/programming_concepts.qmd
+        - week2/debugging.qmd
+    - part: week3/week3.qmd
       chapters: 
-        - visualization.qmd
-        - unsupervised_analysis.qmd
-    - part: week4.qmd
+        - week3/visualization.qmd
+        - week3/unsupervised_analysis.qmd
+    - part: week4/week4.qmd
       chapters: 
-        - regression_classification.qmd
-        - workflows.qmd
+        - week4/regression_classification.qmd
+        - week4/workflows.qmd
+    - references.qmd
 
 bibliography: references.bib
 
