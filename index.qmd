@@ -8,9 +8,16 @@ This online book is the main study material for the course 'BIF20806: Explorator
 
 ## Data analysis in the plant sciences
 There is no plant science without data, and working with data has always been an essential skill for any plant scientist.
-Historically, this would not have involved talking about programming languages. However, insights on reproducibility and the ever increasing volume of data in the plant sciences make that plant scientists these days reach for their computer when analysing their data.
+Historically, this would not have involved talking about programming languages.
+However, increasing awareness of reproducibility and the ever-growing volume of data in the plant sciences mean that plant scientists today routinely turn to computers when analysing their data.
 
+One of the most famous experiments in plant science is Gregor Mendel’s work on pea plants in the mid-19th century. 
+Mendel carefully crossed plants with different observable traits (such as seed colour or shape) and systematically counted how often each trait appeared in the offspring.
+These experiments later proved foundational for the development of Mendel’s theories on genetic inheritance.
 
-:::{.callout-tip title="Analysing Gregor Mendel's Pea experiment" appearance='simple'}
-One of the most famous experiments done on plants is Gregor Mendel's early work on Peas. 
-:::
+What makes Mendel’s work particularly relevant here is not the biological theory that later emerged from it, but the way he worked with data.
+Mendel designed controlled experiments, collected quantitative observations, organised his results in tables, and searched for patterns in those data before proposing any formal explanation.
+In modern terms, much of this would now be described as exploratory data analysis.
+
+If Mendel were working today, he would likely store his data in a spreadsheet or data frame, visualise trait frequencies with plots, and use simple statistical summaries to explore variation and uncertainty.
+The tools would be different, but the underlying questions would be the same.
