@@ -1,43 +1,16 @@
 ---
-format:
-  html: default
+format: html
 ---
 
-# Preface  {.unnumbered}
+# Introduction
+
+This online book is the main study material for the course 'BIF20806: Exploratory Data Analysis in R'. This course is taught at Wageningen University and targets $2^{nd}$ year students in the BSc program Plant Sciences (BPW). The aim of this book and the course is to provide sufficient information and background so that after finishing, students can work independently on data analysis projects with R, using datasets that are typically encountered in the plant sciences.
+
+## Data analysis in the plant sciences
+There is no plant science without data, and working with data has always been an essential skill for any plant scientist.
+Historically, this would not have involved talking about programming languages. However, insights on reproducibility and the ever increasing volume of data in the plant sciences make that plant scientists these days reach for their computer when analysing their data.
 
 
-```{mermaid}
-flowchart TB
-  w1_1[Loading data]
-  w1_2[Inspecting a dataset]
-  w1_3[Computing summary statistics]
-  
-  w2_1[Functions]
-  w2_2[Loops]
-  w2_3[Making analyses reproducible]
-  
-  w3_1[Plot types]
-  w3_2[Grammar of graphics]
-  
-  
-  subgraph Working with Data
-    direction TB
-    w1_1-->w1_2
-    w1_2-->w1_3
-  end
-  
-  
-  subgraph Programming
-    direction TB
-    w2_1-->w2_3
-    w2_2-->w2_3
-  end
-  
-  subgraph Visualization
-    direction TB
-    w3_1 --> w3_2
-  end
-  
-  
-  w1_1-->w2_3
-```
+:::{.callout-tip title="Analysing Gregor Mendel's Pea experiment" appearance='simple'}
+One of the most famous experiments done on plants is Gregor Mendel's early work on Peas. 
+:::
