@@ -22,8 +22,8 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
       
-      - name: Set up LaTeX and mermaid js dependencies
-        run: quarto install tinytex chromium
+      - name: Set up LaTeX dependencies
+        run: quarto install tinytex
       
       - name: Install Noto Sans font
         run: |
