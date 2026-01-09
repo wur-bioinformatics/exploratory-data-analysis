@@ -2,7 +2,7 @@
 format: html
 ---
 
-# Introduction
+# Introduction {.unnumbered}
 
 This online book is the main study material for the course 'BIF20806: Exploratory Data Analysis in R'. This course is taught at Wageningen University and targets $2^{nd}$ year students in the BSc program Plant Sciences (BPW). The aim of this book and the course is to provide sufficient information and background so that after finishing, students can work independently on data analysis projects with R, using datasets that are typically encountered in the plant sciences.
 
@@ -21,3 +21,25 @@ In modern terms, much of this would now be described as exploratory data analysi
 
 If Mendel were working today, he would likely store his data in a spreadsheet or data frame, visualise trait frequencies with plots, and use simple statistical summaries to explore variation and uncertainty.
 The tools would be different, but the underlying questions would be the same.
+
+## About the course
+In this course, we focus on modern tools for asking and answering questions from data. We discuss strategies to acquire, process, explore, visualize, and analyse data for a variety of plant science related data sets.
+In addition, we work on making data analysis projects reproducible: by using the R programming language, we create reproducible analysis workflows. 
+
+:::{.callout-note appearance='simple' }
+### Why R?
+
+R is widely used in the plant sciences and related fields because it combines data handling, statistical analysis, and visualisation in a single environment.
+Unlike point-and-click software, analyses in R are expressed explicitly as code.
+This makes every step of an analysis transparent and reproducible, and allows analyses to scale from small, simple datasets to large and complex ones.
+Learning R therefore provides not only practical skills for this course, but also a foundation that students can build on in later courses, internships, and research projects.
+:::
+
+This course does not assume prior experience with programming.
+Instead, we approach R as a tool for thinking with data.
+Concepts are introduced gradually, starting from basic data manipulation and visualisation, and building towards more complex analyses.
+Throughout the course, the focus remains on understanding the data and the questions being asked, rather than on writing code for its own sake.
+
+## About the book
+
+## Reading guide
