@@ -37,9 +37,33 @@ Learning R therefore provides not only practical skills for this course, but als
 
 This course does not assume prior experience with programming.
 Instead, we approach R as a tool for thinking with data.
-Concepts are introduced gradually, starting from basic data manipulation and visualisation, and building towards more complex analyses.
+Concepts are introduced gradually, starting from basic data manipulation and simple visualisation, and building towards more complex analyses.
 Throughout the course, the focus remains on understanding the data and the questions being asked, rather than on writing code for its own sake.
 
 ## About the book
+This book is designed to support the learning objectives of the course by providing structured, practice-oriented learning material.
+Each chapter focuses on a specific set of data analysis skills and introduces these through examples based on datasets commonly encountered in the plant sciences.
+The book does not aim to be a comprehensive reference for R, but instead concentrates on methods and techniques that are essential for exploratory data analysis.
+
+Throughout the book, code examples are used to demonstrate standard data analysis workflows.
+
+:::{.callout-tip appearance='simple'}
+### Learning how to program in R
+
+Programming and data analysis are not spectator activities.
+To develop practical skills, it is essential to actively work through the examples in this book and to apply the demonstrated techniques to new datasets.
+By writing, running, and modifying code yourself, you will build the proficiency needed to use R effectively and to carry out reproducible data analyses.
+:::
+
+Just like the course, the book does not assume any prior knowledge on programming skills or working with R.
+To gradually build up to a level of independent data analysis, the book is structured into four main sections, aligning with the four weeks of the course.
 
 ## Reading guide
+
+Throughout the book, you will find a mix of examples, stories, theory, and assignments.
+All the study material for the course is available in the book.
+This means that by completing the material of one section of the book, you should be able to successfully perform the graded assignment of the accompanying week.
+
+To provide additional structure to the material in the book, you will find various 'boxes': these are intended to either highlight important information, or provide additional background material.
+
+In general, blue boxes are core material, green boxes are additional bonus information.
