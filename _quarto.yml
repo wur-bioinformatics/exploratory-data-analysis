@@ -33,6 +33,7 @@ book:
     - references.qmd
 
 bibliography: references.bib
+csl: nature.csl
 
 format:
   html:
@@ -46,6 +47,7 @@ format:
     highlight-style: github
     mainfont: "Noto Sans"
     engine: xelatex
+    cite-method: biblatex
 
 
 

@@ -11,7 +11,7 @@ There is no plant science without data, and working with data has always been an
 Historically, this would not have involved talking about programming languages.
 However, increasing awareness of reproducibility and the ever-growing volume of data in the plant sciences mean that plant scientists today routinely turn to computers when analysing their data.
 
-One of the most famous experiments in plant science is Gregor Mendel’s work on pea plants in the mid-19th century. 
+One of the most famous experiments in plant science is Gregor Mendel’s work on pea plants in the mid-19th century [@Mendel1866]. 
 Mendel carefully crossed plants with different observable traits (such as seed colour or shape) and systematically counted how often each trait appeared in the offspring.
 These experiments later proved foundational for the development of Mendel’s theories on genetic inheritance.
 
