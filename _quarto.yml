@@ -18,6 +18,8 @@ book:
     - part: week1/week1.qmd
       chapters: 
         - week1/summary_statistics.qmd
+        - week1/BIF20806_day1.qmd
+        - week1/BIF20806_day2.qmd
     - part: week2/week2.qmd
       chapters: 
         - week2/programming_concepts.qmd

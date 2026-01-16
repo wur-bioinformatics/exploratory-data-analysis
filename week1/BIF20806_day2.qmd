@@ -1,0 +1,378 @@
+---
+title: "BIF20806 - Day 2"
+author: "Mark Sterken"
+date: "2025-12-24"
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+---
+
+## Exploratory Data analysis in R - week 1, day 2: From messy to cleanFr
+
+### Introduction
+
+#### Geneneral introduction to week 1
+In this course you will learn how to conduct data analysis in R. As such, this tutorial is meant to take you through the steps of data analysis. Furthermore, it introduces concepts and ways to work with R.
+
+In the first week, the goals are:
+
+1. Built basic knowledge on using R and R studio
+
+2. Be able to recognize and load common data formats
+
+3. Apply common statistical tools for inspecting and analysing data
+
+4. Be able to document your code in a clear & concise way.
+
+5. Apply the data-science cycle (load, inspect, clean, analyse, present)
+
+To work through the assignments, simply keep scrolling down. you see that the code-chunks are hidden at first, and by clicking the button, you can reveal them. However, to get better, first see if you can find a solution by yourself. 
+
+
+#### Introduction to day 2
+Today we will continue with goal 1 (Built basic knowledge on using R and R studio) and start with goal 2 (Be able to recognize and load common data formats) and goal 3 (Apply common statistical tools for inspecting and analysing data)
+
+We will make use of a fragmented simulated dataset. You need to puzzle it together using a couple of functions. Therafter you can analyze it further. It is a dataset of potato plants that were infected with a virulent and an avirulent _Globodera pallida_ population. You can read more about the background in [Schaveling _et al._](https://doi.org/10.1101/2025.07.23.664352).
+
+
+### Set up your R environment
+Your analysis starts with making a script and thereafter you follow the standard steps in data analysis 
+
+1. Loading
+2. Inspecting
+3. Cleaning
+4. Analyzing 
+5. Presenting
+
+For the tutorials and later in the practicals, it's important that you built an R-script. For that you find a template below, which you can copy paste into the text editor in R-studio.
+
+```{r w1d2_script, eval=FALSE, class.source = 'fold-show'}
+
+# BIF20806 - Day 2 ---------------------------------
+
+
+
+# set a work directory ----------------------------------
+
+    ###this function you can use to automatically set a location
+    ###see tutorial 1, day 1 for more instructions
+    #setwd("D:/")
+    
+
+
+# Install packages ----------------------------------------------------
+
+    ###see tutorial 1, day 1 for more explanation
+
+# Load data -----------------------------------------------------------
+
+
+# Clean data ----------------------------------------------------------
+   
+    ### Inspect the data ##############################################
+
+
+    ### Repair errors and remove outliers #############################
+
+# Analyzing -----------------------------------------------------------
+        
+    ### Normal distribution ###########################################
+
+
+    ### ANOVA #########################################################
+
+
+    ### Post-hoc test #################################################
+
+
+    ### Simple linear model ###########################################
+
+
+# Presenting ----------------------------------------------------------
+
+    ### Simple box-plot ###############################################
+
+
+    ### A bit more fancy box-plot #####################################
+
+
+# The Van Sluijs dataset ----------------------------------------------
+
+
+```
+
+
+### Analysis of (a)virulence of _Globodera pallida_
+
+
+
+#### Loading data into R
+
+In this tutorial, we will start with loading different types of data files into R. This is an essential skill for working with real-world data. We'll cover a couple of file-types that are common. *Each of you has their data in these formats*. If you are familiar with R, this might be easy. 
+
+- Excel files (`.xlsx`)
+- Comma-separated values (`.csv`)
+- Semicolon-separated CSV files (`.csv`)
+- Tab-delimited text files (`.txt` or `.tsv`) (you encountered this filetype yesterday)
+
+Before we start, make sure you have the following packages installed:
+
+```{r w1d2_packages_readxl, eval=FALSE, class.source = 'fold-show'}
+    # Install the package
+    install.packages("readxl")    # For reading Excel files
+    install.packages("tidyverse") # For wrangling data and plotting
+    install.packages("ggpubr")    # For statistics within ggplot2 plots
+```
+
+To make this part of the course realistic, *we have provided you with data in these four formats*. The reason being that this is also how it works in practice. Finding out the format of the data and loading it into memory is a crucial step in using any data-analysis pipeline. 
+
+You now need to load in data from all four data formats.
+
+##### Loading data from an excel file (.xlsx)
+
+To read Excel files, we use the `read_excel()` function from the readxl package. Excel files are very common but also very tricky. Namely, these files are mostly made by persons and people do not automatically follow conventions that are clear for a programming language. Therefore always check the excel file before loading it in.
+
+```{r w1d2_load_xlsx, include = TRUE,eval=FALSE, class.source = 'fold-show'}
+library(readxl) # first activate the package
+
+    # Replace with the path to your Excel file
+    data_excel <- readxl::read_excel("data/YOURFILENAME.xlsx")
+
+```
+
+##### Loading data from a CSV File (Comma-separated)
+CSV files are very common as format for data. Here each column is separated by a comma, rows are typically observations. We use the `read.csv()` function to load the data.
+
+```{r w1d2_load_csv, include = TRUE,eval=FALSE, class.source = 'fold-show'}
+
+    # Replace with the path to your csv file
+    data_csv <- read.csv("data/YOURFILENAME.csv")
+
+```
+
+##### Loading data from a CSV file (semicolon-separated)
+Some CSV files (especially from European systems) use a semicolon (;) instead of a comma. Use `read.csv2()` for these files 
+
+```{r w1d2_load_csv2, include = TRUE,eval=FALSE, class.source = 'fold-show'}
+
+    # Replace with the path to your csv file
+    data_csv2 <- read.csv2("data/YOURFILENAME.csv")
+
+```
+
+##### Loading a Tab-delimited File
+These files use tabs to separate values. They often have a .txt or .tsv extension.
+
+```{r w1d2_load_tabdelim, include = TRUE,eval=FALSE, class.source = 'fold-show'}
+
+    # Replace with the path to your csv file
+    data_tsv <- read.delim("data/YOURFILENAME.txt")
+
+```
+
+
+#### Inspecting data part 1
+
+##### Inspecting data using functions
+Last time we used `head()`, `tail()`, and `summarise()`. Again apply these functions. But now we also want to check which piece is which. For that the functions `length`, `ncol()`, `nrow()`, and `dim()` are handy.
+
+```{r w1d2_check_the_data_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+    # Check the first 6 rows
+    head(data_csv)
+
+    # Check the last 6 rows
+    tail(data_csv)
+    
+    # get a summary of the data
+    summary(data_csv)
+ 
+    # get the length of a vector
+    length(data_csv)
+    
+    # get the number of columns
+    ncol(data_csv)
+    
+    # get the number of rows
+    nrow(data_csv)
+    
+    # get the dimensions of an object
+    dim(data_csv)
+    
+```
+
+##### Inspecting data using histograms
+Like last time, plot a histogram using [ggplot2](https://ggplot2.tidyverse.org/).
+
+```{r w1d2_make_a_ggplot2_histogram_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+        ggplot2::ggplot(YOUROBJECT,aes(x=Gpal_vir)) +
+        geom_histogram()
+
+        ggplot2::ggplot(YOUROBJECT,aes(x=Gpal_avir)) +
+        geom_histogram()
+    
+```
+
+
+#### Cleaning and preparing the data
+Now you have the dimensions of the puzzle pieces. You can combine them in only one way. First you need to join the two pieces (1 and 2) with the equal number of rows using `cbind()`. Second, you need to add the piece (3) that now has the same number of columns using `rbind()`. Finally, you need to add the last piece (4) of data using `merge()`.
+
+```{r w1d2_combine_pieces_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+        ### bind objects together over columns
+        pheno_data <- cbind(YOURPIECE1,YOURPIECE2)
+        
+        ### binds objects together over rows
+        pheno_data <- rbind(pheno_data,YOURPIECE3)
+        
+        ### merges objects, seeks for the same identitier, or you can provide it using by.x and by.y
+        pheno_data <- merge(pheno_data,YOURPIECE4)
+    
+```
+
+After combining, you can inspect the data again, for instance using `geom_histogram()`.
+
+
+#### Analyzing
+        
+##### Normal distribution 
+Same as before, let's figure out whether the data is normally distributed. For this we can use the functions `stat_qq()` and `stat_qq_line()`.
+
+```{r w1d2_qqplot_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+    ggplot(pheno_data,aes(sample=Gpal_vir)) + 
+    stat_qq() + stat_qq_line()
+
+    ggplot(pheno_data,aes(sample=Gpal_avir)) + 
+    stat_qq() + stat_qq_line()
+
+```
+
+Of course, you can also use a Shapiro-Wilk test (`shapiro.test`), this calculates the likelyhood whether the data follows a normal distribution.
+
+```{r w1d2_shapiro_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+    shapiro.test(pheno_data$eggmass)
+
+```
+
+
+##### Wilcoxon test
+As the data is not exactly normally distributed, let's deal with that in the proper way. Now we can use a Wilcoxon Rank Sum test to compare between two samples. We first need to transform the dataset, as we do not have a single observation per row currently. For this you can use the `gather()` function from the {tidyr} package. Use functions like `head()` and `tail()` to check what happened.
+
+```{r w1d2_gather_pallida, include = TRUE,eval=FALSE, class.source = 'fold-show'}
+
+    data.test <- tidyr::gather(pheno_data,key="pallida",value="juveniles",-ID,-Experiment)
+
+```
+
+Now we can test how the potato plants performed against virulent versus avirulent _G. pallida_. Using `wilcox.test()`
+
+```{r w1d2_Wilcox_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+    wilcox.test(juveniles~pallida,data=data.test)
+    ###you should have a very low p-value
+
+```
+
+
+#### Presenting
+Can you now also make a plot of what you just tested? Use `geom_boxplot()` to visualize the distribution and `geom_jitter()` to show the individual measurements.
+
+```{r w1d2_wilcoxplot_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+    ggplot(data.test,aes(x=pallida,y=juveniles)) +
+    geom_boxplot() + geom_jitter(height=0,width=0.25)
+
+
+```
+
+There is another variable in the data as well 'Experiment'. Use `facet_grid()` to split this out. Figure out how using the [ggplot2 website](https://ggplot2.tidyverse.org/).
+
+```{r w1d2_wilcoxplot_facet_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+    ggplot(data.test,aes(x=pallida,y=juveniles)) +
+    geom_boxplot() + geom_jitter(height=0,width=0.25) +
+    facet_grid(~Experiment)
+
+```
+
+Now we can add p-value as well using `annotate()`.
+
+
+```{r w1d2_wilcoxplot_pval_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+    ###I'm getting the statistics here
+    tmp <- tapply(data.test[,c("pallida","juveniles")],data.test$Experiment,function(x){
+                                broom::tidy(wilcox.test(x$juveniles~x$pallida))})
+   
+    statplot <- do.call(rbind,tmp) %>%
+                mutate(Experiment=1:3,pallida=1.5,juveniles=max(data.test$juveniles),
+                       label=paste("p =",signif(p.value,2)))
+
+    p1 <- ggplot(data.test,aes(x=pallida,y=juveniles)) +
+          geom_boxplot() + geom_jitter(height=0,width=0.25) +
+          facet_grid(~Experiment) + geom_text(aes(label=label),data=statplot)
+
+```
+
+##### Saving plots
+Now save the plot, check back at Tutorial 1
+
+```{r w1d2_pdf_of_pallida_plot, include = TRUE, eval=FALSE}
+
+    pdf(file="Figure_pallida.pdf",width=3,height=4)
+        print(p1)
+    dev.off()   
+        
+```
+
+#### Inspecting data part 2
+
+##### Correlation analysis
+
+
+
+```{r w1d2_correlation_analysis_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+
+
+```
+
+##### Clustering
+
+```{r w1d2_clustering_analysis_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+
+
+```
+
+
+##### heatmap
+
+```{r w1d2_heatmap, include = TRUE,eval=FALSE}
+
+
+
+```
+
+
+##### Plot of correlation
+
+
+
+```{r w1d2_correlation_plot, include = TRUE,eval=FALSE}
+
+
+
+```
+
+
+
+
+
+
+
