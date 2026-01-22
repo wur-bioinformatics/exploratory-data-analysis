@@ -1,5 +1,5 @@
 ---
-title: 'Week 2, programming and scripting basics'
+title: 'II: programming and scripting basics'
 format: html
 ---
 

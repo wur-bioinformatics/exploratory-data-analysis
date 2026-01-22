@@ -1,5 +1,5 @@
 ---
-title: "BIF20806 - Day 2"
+title: "From messy to clean"
 author: "Mark Sterken"
 date: "2025-12-24"
 output: 
@@ -9,27 +9,9 @@ output:
     toc_float: true
 ---
 
-## Exploratory Data analysis in R - week 1, day 2: From messy to cleanFr
+## From messy to clean
 
 ### Introduction
-
-#### Geneneral introduction to week 1
-In this course you will learn how to conduct data analysis in R. As such, this tutorial is meant to take you through the steps of data analysis. Furthermore, it introduces concepts and ways to work with R.
-
-In the first week, the goals are:
-
-1. Built basic knowledge on using R and R studio
-
-2. Be able to recognize and load common data formats
-
-3. Apply common statistical tools for inspecting and analysing data
-
-4. Be able to document your code in a clear & concise way.
-
-5. Apply the data-science cycle (load, inspect, clean, analyse, present)
-
-To work through the assignments, simply keep scrolling down. you see that the code-chunks are hidden at first, and by clicking the button, you can reveal them. However, to get better, first see if you can find a solution by yourself. 
-
 
 #### Introduction to day 2
 Today we will continue with goal 1 (Built basic knowledge on using R and R studio) and start with goal 2 (Be able to recognize and load common data formats) and goal 3 (Apply common statistical tools for inspecting and analysing data)

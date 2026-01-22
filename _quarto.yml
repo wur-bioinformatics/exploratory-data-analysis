@@ -3,7 +3,12 @@ project:
 
 book:
   title: "Exploratory Data Analysis"
-  author: "Rens Holmer"
+  version: 0.1.0
+  author: 
+    - "Rens Holmer"
+    - "Mark Sterken"
+    - "Harm Nijveen"
+    - "Peter Bourke"
   date: "7/15/2025"
   page-navigation: true
   search: true
@@ -13,16 +18,18 @@ book:
   license: CC-BY-NC 4.0
   sidebar:
     style: docked
+    tools:
+      - icon: github
+        href: "https://github.com/wur-bioinformatics/exploratory-data-analysis"
   chapters:
     - index.qmd
     - part: week1/week1.qmd
       chapters: 
-        - week1/summary_statistics.qmd
-        - week1/BIF20806_day1.qmd
-        - week1/BIF20806_day2.qmd
+        - week1/day1.qmd
+        - week1/day2.qmd
     - part: week2/week2.qmd
       chapters: 
-        - week2/programming_concepts.qmd
+        - week2/summary_statistics_and_functions.qmd
         - week2/debugging.qmd
     - part: week3/week3.qmd
       chapters: 
@@ -39,10 +46,12 @@ csl: nature.csl
 
 format:
   html:
+    number-depth: 2
     theme:
       - pandoc
     font:
       google: "Noto Sans"
+    repo: "https://github.com/wur-bioinformatics/exploratory-data-analysis"
   pdf:
     documentclass: scrreprt
     papersize: letter

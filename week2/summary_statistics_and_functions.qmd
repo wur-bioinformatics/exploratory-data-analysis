@@ -1,0 +1,49 @@
+---
+title: "Summary statistics and functions"
+format: html
+---
+
+## Introduction
+
+A simple but effective way of starting to explore a dataset is to compute a few summary statistics. In the previous week we already encountered a few summary statistics: we looked at e.g. the numbers of rows and columns of a table. In this section we will explore a few numerical summary techniques, such as computing the mean and standard deviation of a numeric variable, or counts/frequencies of a categorical variable. At the same time, we will look into one of the more powerful features of using a programming language: the possibility to create functions.
+
+```{r}
+remotes::install_github('wur-bioinformatics/planteda')
+library(planteda)
+data('corre_continuous')
+```
+
+## Summary statistics
+
+Perhaps one of the simplest and most intuitive summary statistics is the mean (typically indicated with the greek letter $\mu$). 
+The mean can be calculated as the sum of all values in a variable divided by the number of values in that variable.
+
+$$\mu = \frac{1}{N}\sum_{i}{x_i}$$ 
+A common interpretation of the mean is that it represents the expected value of a variable.
+In other words: if you have no other information, the mean would be your best guess on average.
+In the example below this would mean that your best guess of the leaf nitrogen content of a plant, without knowing anything else about that plant, would be 22.9.
+
+Being a statistical programming language, R comes with a default function to calculate the mean:
+```{r}
+# Calculate the average leaf nitrogen content
+mean(corre_continuous[['leaf_N']])
+```
+
+:::{.callout-note appearance='simple'}
+### Implementing the mean calculation in a custom function
+
+Since R already comes with a default function to calculate the mean this example might seem redundant.
+At the same time, this gives us the opportunity to check whether our custom implementation return the correct result.
+```{r}
+# Here we define a function to perform the calculation of the mean, 
+# closely following the mathematical description
+myMean <- function(input){
+  total = sum(input)
+  number = length(input)
+  return(total / number)
+}
+
+# This should give the same result as using the default `mean` from R
+myMean(corre_continuous[['leaf_N']])
+```
+:::
