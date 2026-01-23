@@ -1,0 +1,62 @@
+---
+title: "Base R cheatsheet"
+format: html
+---
+
+## Atomic Data Types
+
+| Type      | Example     | Check             |
+|-----------|-------------|-------------------|
+| logical   | `TRUE`      | `is.logical(x)`   |
+| integer   | `5L`        | `is.integer(x)`   |
+| double    | `3.14`      | `is.double(x)`    |
+| character | `"a"`       | `is.character(x)` |
+| complex   | `1+2i`      | `is.complex(x)`   |
+| raw       | `as.raw(1)` | `is.raw(x)`       |
+
+## Special Values
+
+| Value          | Meaning          |
+|----------------|------------------|
+| `NA`           | Missing          |
+| `NaN`          | Undefined number |
+| `Inf`          | Infinity         |
+| `NULL`         | No object        |
+| `length(NULL)` | 0                |
+
+## Data structures
+
+| Structure  | Dim  | Homogeneous?              | Example                      |
+|------------|------|---------------------------|------------------------------|
+| vector     | $1D$ | Yes                       | `c(1, 2, 3)`                 |
+| list       | $1D$ | No                        | `list(1, "a")`               |
+| matrix     | $2D$ | Yes                       | `matrix(1:4, 2)`             |
+| array      | $nD$ | Yes                       | `array(1:8, c(2, 2, 2))`     |
+| data.frame | $2D$ | Yes (columns) / No (rows) | `data.frame(a = 1, b = "x")` |
+| tibble     | $2D$ | No                        | `tibble(a = 1, b = "x")`     |
+| factor     | $1D$ | Yes                       | `factor(c("a", "b"))`        |
+
+## Subsetting rules
+
+| Object     | `[ ]`    | `[[ ]]` |
+|------------|----------|---------|
+| vector     | subset   | element |
+| list       | sublist  | element |
+| data.frame | df slice | column  |
+| tibble     | tibble   | vector  |
+
+## Type Coercion
+
+logical --\> integer --\> double --\> character
+
+*Examples*
+
+```{r}
+#| eval = FALSE
+c(TRUE, 2)
+# becomes: c(1, 2)
+
+c(1, "a")
+# becomes: c("1", "a")
+
+```

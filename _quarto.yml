@@ -39,6 +39,13 @@ book:
       chapters: 
         - week4/regression_classification.qmd
         - week4/workflows.qmd
+    - part: appendices/appendices.qmd
+      chapters:
+        - appendices/base-r-cheatsheet.qmd
+        - appendices/tidyverse-cheatsheet.qmd
+        - appendices/ggplot-cheatsheet.qmd
+        - appendices/datasets.qmd
+        
     - references.qmd
 
 bibliography: references.bib
