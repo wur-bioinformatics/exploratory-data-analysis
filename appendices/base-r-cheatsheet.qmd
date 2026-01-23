@@ -1,8 +1,4 @@
----
-title: "Base R cheatsheet"
-format: html
-numbered: false
----
+# Base R Cheatsheet {.unnumbered}
 
 ## Atomic Data Types
 
@@ -34,7 +30,7 @@ numbered: false
 | matrix     | $2D$ | Yes                       | `matrix(1:4, 2)`             |
 | array      | $nD$ | Yes                       | `array(1:8, c(2, 2, 2))`     |
 | data.frame | $2D$ | Yes (columns) / No (rows) | `data.frame(a = 1, b = "x")` |
-| tibble     | $2D$ | No                        | `tibble(a = 1, b = "x")`     |
+| tibble^[Tidyverse only]     | $2D$ | No                        | `tibble(a = 1, b = "x")`     |
 | factor     | $1D$ | Yes                       | `factor(c("a", "b"))`        |
 
 ## Subsetting rules
@@ -61,3 +57,57 @@ c(1, "a")
 # becomes: c("1", "a")
 
 ```
+
+## Operators
+
+| Category | Operator | Name / Meaning | Notes |
+|----------|----------|----------------|-------|
+| **ARITHMETIC OPERATORS** |
+|  | `+` | Addition | Element-wise |
+|  | `-` | Subtraction | Element-wise |
+|  | `*` | Multiplication | Element-wise |
+|  | `/` | Division | Element-wise |
+|  | `^`, `**` | Power | Right associative |
+|  | `%%` | Modulo | Remainder |
+|  | `%/%` | Integer division | Floor division |
+| **COMPARISON OPERATORS** |
+|  | `==` | Equal | Vectorised |
+|  | `!=` | Not equal | Vectorised |
+|  | `<` | Less than | Vectorised |
+|  | `<=` | Less or equal | Vectorised |
+|  | `>` | Greater than | Vectorised |
+|  | `>=` | Greater or equal | Vectorised |
+| **LOGICAL OPERATORS** |
+|  | `&` | AND | Vectorised |
+|  | `|` | OR | Vectorised |
+|  | `!` | NOT | Vectorised |
+|  | `&&` | AND | Short-circuit |
+|  | `||` | OR | Short-circuit |
+| **ASSIGNMENT OPERATORS** |
+|  | `<-` | Assign | Standard |
+|  | `=` | Assign | Contextual |
+|  | `->` | Right assign | Rare |
+|  | `<<-` | Super assign | Parent env |
+|  | `->>` | Super right assign | Parent env |
+| **SUBSETTING / EXTRACTION** |
+|  | `[` | Subset | Preserves type |
+|  | `[[` | Extract | Single element |
+|  | `$` | Named extract | Lists / data frames |
+| **SPECIAL INFIX OPERATORS** |
+|  | `%in%` | Membership | Set inclusion |
+|  | `%*%` | Matrix multiply | Linear algebra |
+|  | `%%` | Modulo | Arithmetic |
+|  | `%/%` | Integer division | Arithmetic |
+|  | `%>%` | Pipe (magrittr) | Tidyverse |
+|  | `%<>%` | Compound pipe | Tidyverse |
+| **PIPE (BASE R)** |
+|  | `|>` | Base pipe | R ≥ 4.1 |
+| **FORMULA / MODELING** |
+|  | `~` | Formula | Symbolic relation |
+| **NAMESPACE OPERATORS** |
+|  | `::` | Exported access | Package API |
+|  | `:::` | Internal access | Non-exported |
+| **INTROSPECTION / OOP / Help** |
+|  | `@` | S4 slot access | Formal classes |
+|  | `?` | Help | Documentation |
+|  | `??` | Search help | Full-text |

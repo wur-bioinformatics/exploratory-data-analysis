@@ -1,6 +1,1 @@
----
-title: "Tidyverse cheatsheet"
-format: html
-numbered: false
----
-
+# Tidyverse Cheatsheet {.unnumbered}
