@@ -11,11 +11,9 @@ jobs:
       contents: read
       id-token: write
       pages: write
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: Set GitHub PAT
-        env:
-          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Check out repository
         uses: actions/checkout@v4
       
