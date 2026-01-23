@@ -15,35 +15,58 @@ data('corre_continuous')
 
 ## Summary statistics
 
-Perhaps one of the simplest and most intuitive summary statistics is the mean (typically indicated with the greek letter $\mu$). 
-The mean can be calculated as the sum of all values in a variable divided by the number of values in that variable.
+Perhaps one of the simplest and most intuitive summary statistics is the mean (typically indicated with the greek letter $\mu$). The mean can be calculated as the sum of all values in a variable divided by the number of values in that variable (@eq-mean).
 
-$$\mu = \frac{1}{N}\sum_{i}{x_i}$$ 
-A common interpretation of the mean is that it represents the expected value of a variable.
-In other words: if you have no other information, the mean would be your best guess on average.
-In the example below this would mean that your best guess of the leaf nitrogen content of a plant, without knowing anything else about that plant, would be 22.9.
+$$
+Mean(X) = \mu = \frac{1}{N}\sum_{i=1}^{n}{x_i}
+$$ {#eq-mean}
+
+A common interpretation of the mean is that it represents the expected value of a variable. In other words: if you have no other information, the mean would be your best guess on average. In the example below this would mean that your best guess of the leaf nitrogen content of a plant, without knowing anything else about that plant, would be 22.9.
 
 Being a statistical programming language, R comes with a default function to calculate the mean:
+
 ```{r}
 # Calculate the average leaf nitrogen content
 mean(corre_continuous[['leaf_N']])
 ```
 
-:::{.callout-note appearance='simple'}
+::: {.callout-note appearance="simple"}
 ### Implementing the mean calculation in a custom function
 
-Since R already comes with a default function to calculate the mean this example might seem redundant.
-At the same time, this gives us the opportunity to check whether our custom implementation return the correct result.
+Since R already comes with a default function to calculate the mean this example might seem redundant. At the same time, this gives us the opportunity to check whether our custom implementation returns the correct result.
+
 ```{r}
 # Here we define a function to perform the calculation of the mean, 
 # closely following the mathematical description
-myMean <- function(input){
+custom_mean <- function(input){
   total = sum(input)
   number = length(input)
   return(total / number)
 }
 
 # This should give the same result as using the default `mean` from R
-myMean(corre_continuous[['leaf_N']])
+custom_mean(corre_continuous[['leaf_N']])
+```
+:::
+
+$$
+Variance(X) = \sigma^2 = \frac{1}{N}\sum_{i=1}^{n}{(\mu-x_i)^2}
+$$ {#eq-variance}
+
+
+$$
+StandardDeviation(X) = \sigma = \sqrt{\frac{1}{N}\sum_{i=1}^{n}{(\mu-x_i)^2}}
+$$ {#eq-standard-deviation}
+
+::: {#exr-variance}
+### Implement the variance calculation in a custom function
+
+```{r}
+#| eval = FALSE
+custom_variance <- function(input){
+  # ... some initial calculation goes here
+  variance <- # ... final calculation goes here
+  return(variance)
+}
 ```
 :::
