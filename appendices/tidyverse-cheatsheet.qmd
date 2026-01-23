@@ -1,5 +1,6 @@
 ---
 title: "Tidyverse cheatsheet"
 format: html
+numbered: false
 ---
 

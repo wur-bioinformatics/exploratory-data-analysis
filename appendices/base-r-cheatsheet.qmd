@@ -1,6 +1,7 @@
 ---
 title: "Base R cheatsheet"
 format: html
+numbered: false
 ---
 
 ## Atomic Data Types

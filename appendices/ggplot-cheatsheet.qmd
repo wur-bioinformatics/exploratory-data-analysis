@@ -1,5 +1,6 @@
 ---
 title: "GGplot cheatsheet"
 format: html
+numbered: false
 ---
 
