@@ -172,6 +172,12 @@ repeat {
 }
 ```
 
+__The apply functions__
+```{r}
+#| eval = FALSE
+
+```
+
 __Error handling__
 ```{r}
 #| eval = FALSE

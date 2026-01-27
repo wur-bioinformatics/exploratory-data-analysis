@@ -116,3 +116,86 @@ The IQR is defined as the difference between the third quartile and the first qu
 In other words: it measures how much the middle 50% of the data vary.
 In the example below this would quantify the spread of leaf nitrogen values for the central half of the plants.
 
+```{r}
+x <- corre_continuous[['leaf_N']]
+percentile <- 0.5
+percentile_index <- length(x) %/% (1 / percentile)
+sort(x)[percentile_index]
+```
+```{r}
+library(ggplot2)
+library(grid)
+
+specific_leaf_area <- na.omit(corre_continuous$SLA)
+
+m <- mean(specific_leaf_area)
+s <- sd(specific_leaf_area)
+qs <- quantile(specific_leaf_area, c(0.25, 0.75))
+
+stats <- c(
+  mean = m,
+  mean_plus_sd = m + s,
+  mean_min_sd  = m - s,
+  median = median(leaf_dm),
+  q1 = qs[[1]],
+  q3 = qs[[2]]
+)
+
+line_data <- data.frame(
+  stat = names(stats),
+  value = unname(stats),
+  legend = c("Mean", "SD", "SD", "Median", "IQR", "IQR"),
+  row.names = NULL
+)
+
+line_data$legend <- factor(
+  line_data$legend,
+  levels = c("Mean", "SD", "Median", "IQR")
+)
+
+ggplot(data.frame(leaf_dm), aes(x = leaf_dm)) +
+  geom_density(fill = "lightgrey", alpha = 0.3, adjust = 5) +
+  geom_rug(alpha = 0.1) +
+  
+  geom_vline(
+    data = line_data,
+    aes(
+      xintercept = value, 
+      linetype = legend, 
+      colour = legend),
+    linewidth = 1
+  ) +
+  
+  scale_linetype_manual(
+    values = c(
+      Mean    = "solid",
+      SD      = "3113",
+      Median  = "42",
+      IQR     = "11"
+    )
+  ) +
+  
+  scale_colour_manual(
+    values = c(
+      Mean    = "purple",
+      SD      = "purple",
+      Median  = "darkgreen",
+      IQR     = "darkgreen"
+    )
+  ) +
+  
+  guides(
+    colour = guide_legend(
+      override.aes = list(linetype = c("solid","3113","42","11"))),
+    linetype = "none"
+  ) +
+  
+  labs(
+    title = "Distribution of Specific Leaf Area",
+    x = "Specific Leaf Area",
+    y = "Density",
+    colour = "Statistic"
+  ) +
+  theme_minimal()
+
+```
