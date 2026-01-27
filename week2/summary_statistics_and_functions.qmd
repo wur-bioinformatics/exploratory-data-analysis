@@ -136,7 +136,7 @@ stats <- c(
   mean = m,
   mean_plus_sd = m + s,
   mean_min_sd  = m - s,
-  median = median(leaf_dm),
+  median = median(specific_leaf_area),
   q1 = qs[[1]],
   q3 = qs[[2]]
 )
@@ -153,7 +153,7 @@ line_data$legend <- factor(
   levels = c("Mean", "SD", "Median", "IQR")
 )
 
-ggplot(data.frame(leaf_dm), aes(x = leaf_dm)) +
+ggplot(data.frame(specific_leaf_area), aes(x = specific_leaf_area)) +
   geom_density(fill = "lightgrey", alpha = 0.3, adjust = 5) +
   geom_rug(alpha = 0.1) +
   
