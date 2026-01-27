@@ -91,3 +91,28 @@ custom_variance <- function(input){
 }
 ```
 :::
+
+The mean and variance summarize the data by combining all values using arithmetic operations.
+In contrast, some summary statistics depend only on the _relative order_ of the values, not on how large or small individual observations are.
+These order-based statistics often behave more robustly when extreme values are present.
+In the following section we discuss the median, its generalization into quantiles, and the accompanying interquartile range.
+
+The simplest and most direct interpretation of the median is that it represents the middle value of a variable.
+More precisely, the median is the value that splits the data into two equally sized parts when the observations are sorted.
+In other words: half of the observations are smaller than the median, and half are larger.
+In the example below this would mean that half of the plants have a leaf nitrogen content below the median value of 21.7, and half above.
+
+```{r}
+# Calculate the median leaf nitrogen content
+median(corre_continuous[['leaf_N']])
+```
+Quantiles generalize the idea of the median by describing values at fixed positions in the sorted data.
+A q-quantile is the value below which a fraction $q$ of the observations fall.
+In other words: a q-quantile splits the data into a lower part containing a fraction $q$ of the observations and an upper part containing the remaining fraction.
+For example, the 0.25-quantile (also called the first _quartile_) is the value below which 25% of the data lie.
+
+A commonly used measure of spread in the data based on quantiles is the interquartile range (IQR).
+The IQR is defined as the difference between the third quartile and the first quartile.
+In other words: it measures how much the middle 50% of the data vary.
+In the example below this would quantify the spread of leaf nitrogen values for the central half of the plants.
+
