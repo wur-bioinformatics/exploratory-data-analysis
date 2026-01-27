@@ -1,5 +1,5 @@
 ---
-title: 'II: programming and scripting basics'
+title: 'II: Getting familiar with programming'
 format: html
 ---
 

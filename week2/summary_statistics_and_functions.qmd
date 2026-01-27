@@ -5,7 +5,10 @@ format: html
 
 ## Introduction
 
-A simple but effective way of starting to explore a dataset is to compute a few summary statistics. In the previous week we already encountered a few summary statistics: we looked at e.g. the numbers of rows and columns of a table. In this section we will explore a few numerical summary techniques, such as computing the mean and standard deviation of a numeric variable, or counts/frequencies of a categorical variable. At the same time, we will look into one of the more powerful features of using a programming language: the possibility to create functions.
+A simple but effective way of starting to explore a dataset is to compute a few summary statistics.
+In the previous week we already encountered a few summary statistics: we looked at e.g. the numbers of rows and columns of a table.
+In this section we will explore a few numerical summary techniques, such as computing the mean and standard deviation of a numeric variable, or counts/frequencies of a categorical variable.
+At the same time, we will look into one of the more powerful features of using a programming language: the possibility to create functions.
 
 ```{r}
 remotes::install_github('wur-bioinformatics/planteda')
@@ -15,13 +18,17 @@ data('corre_continuous')
 
 ## Summary statistics
 
-Perhaps one of the simplest and most intuitive summary statistics is the mean (typically indicated with the greek letter $\mu$). The mean can be calculated as the sum of all values in a variable divided by the number of values in that variable (@eq-mean).
+Perhaps one of the simplest and most intuitive summary statistics is the mean (typically indicated with the greek letter $\mu$).
+The mean can be calculated as the sum of all values in a variable divided by the number of values in that variable (@eq-mean).
 
 $$
 Mean(X) = \mu = \frac{1}{N}\sum_{i=1}^{n}{x_i}
 $$ {#eq-mean}
 
-A common interpretation of the mean is that it represents the expected value of a variable. In other words: if you have no other information, the mean would be your best guess on average. In the example below this would mean that your best guess of the leaf nitrogen content of a plant, without knowing anything else about that plant, would be 22.9.
+The simplest and most direct interpretation of the mean is that it represents the average value of a variable.
+A slightly more statistically oriented interpretation is that the mean represents the expected value.
+In other words: if you have no other information, the mean would be your best guess^["Best guess" is kept informal here. A full probabilistic treatment exists, but is beyond the scope of this book] on average.
+In the example below this would mean that your best guess of the leaf nitrogen content of a plant, without knowing anything else about that plant, would be 22.9.
 
 Being a statistical programming language, R comes with a default function to calculate the mean:
 
@@ -49,10 +56,20 @@ custom_mean(corre_continuous[['leaf_N']])
 ```
 :::
 
+Where the mean describes the average value of a variable, the variance describes how much individual data points differ from the mean.
+More precisely, the variance is defined as the average of the squared differences between each observation and the mean (@eq-variance).
+In other words: for each value we compute how far it is from the mean, square this difference, and then average these squared deviations.
+In our example on leaf nitrogen content, the variance quantifies how much individual plants differ from the average leaf nitrogen content.
+Note that squaring the difference has two important consequences: positive and negative differences contribute equally, and large differences contribute relatively more than small differences.
+A consequence of this last property is that the variance is relatively sensitive to outliers in the data.
 $$
 Variance(X) = \sigma^2 = \frac{1}{N}\sum_{i=1}^{n}{(\mu-x_i)^2}
 $$ {#eq-variance}
 
+One slight downside in interpreting the variance is that the _units_ are squared compared to the data points.
+In our example, leaf nitrogen content is measured in _g/g_, and as a consequence the means is also in _g/g_.
+However, the variance is in _(g/g)^2_, which makes interpretation less straightforward.
+A common and useful solution is to take the square root of the variance, which results in the standard deviation(@eq-standard-deviation).
 
 $$
 StandardDeviation(X) = \sigma = \sqrt{\frac{1}{N}\sum_{i=1}^{n}{(\mu-x_i)^2}}
@@ -60,9 +77,13 @@ $$ {#eq-standard-deviation}
 
 ::: {#exr-variance}
 ### Implement the variance calculation in a custom function
+Just like in the previous example on the mean, R has a built-in function to calculate the variance (`var`).
+To practice implementing custom functions, in this exercise you will implement the calculation of the variance yourself.
+Compare the output of your custom function to the output of the built-in `var` function to check your work.
 
 ```{r}
 #| eval = FALSE
+# Implement the calculation of the variance in a custom function
 custom_variance <- function(input){
   # ... some initial calculation goes here
   variance <- # ... final calculation goes here
