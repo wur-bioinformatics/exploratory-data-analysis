@@ -78,19 +78,37 @@ accessions <- rhdf5::h5read("imputed_snps_binary.hdf5","accessions")
 positions <- rhdf5::h5read("imputed_snps_binary.hdf5","positions")
 ```
 
+## Big data in R
+
+R is not famed for its capacities to deal with big data. In R, "big" usually means taking up lots of working memory. For example, if we try to allocate a very large vector within R, at some point we will get an error message (on my computer this occurs for i = 10 in the following call):
+
+```{r}
+#| error: true
+
+for(i in 1:10){
+  t <- system.time(temp <- rep("memorytest",10^i))
+  message(paste0("A vector with 10^",i," elements takes ",round(t[3],1)," seconds to generate and store."))  
+  cat("____________________________________________________________________\n")
+}
+```
+
+In today's example, we will be looking at the effect of different subsetting / data simplification strategies on the results we obtain (mainly in terms of population genetics).
+
 ## Subsetting the SNP data
 
-We are going to use a subset of the SNP data today, sampling 10k SNPs from the total set to work with. For consistency between results, let's set a random seed using the number 1234:
+To handle this "big-dataset" and generate results quickly, we are going to use a subset of the SNP data today, sampling 10k SNPs from the total set to work with. 
+
+For consistency between our results, let's set a random number generator seed e.g. 1234:
 
 ```{r}
 set.seed(1234)
 ```
 
-This ensures that our results are comparable (and reproducible).
+This ensures that our results will be identical (i.e. the results generated here are reproducible).
 
-Our first approach will be to randomly `sample()` ten thousand SNPs.
+Our first approach is to randomly `sample()` ten thousand SNPs.
 
--   Save this (pseudo-random) selection in an object called `snp_index`:
+Save this (pseudo-random) selection in an object called `snp_index`, using something like the following code (completed of course!):
 
 ```{r}
 #| eval: false
@@ -98,7 +116,7 @@ nSNP <- 1e4 #target total number of SNPs.
 snp_index <- NA #you need to replace this with R code that samples 1e4 SNPs!
 ```
 
-We are going to read in these positions using the same function as before. Out of interest, try to time this step on your computer too, by wrapping the code with the `system.time()` function.
+We are going to read in these positions using the same function as before. Out of interest, try to time this step on your computer, by wrapping the code with the `system.time()` function:
 
 ```{r}
 #| eval: false

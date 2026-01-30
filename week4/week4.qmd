@@ -12,20 +12,5 @@ In this final week, we will consolidate a lot of what was learnt in the first 3 
 
 -   **Friday** (day 5): Conclusion of the course, Assessment
 
-## Day 1: Exploring genetic and phenotypic diversity in *Arabidopsis thaliana*
+There are separate chapters for each of the first 3 days. 
 
-Intro...
-
-## Big data in R
-
-R is not famed for its capacities to deal with big data. In R, "big" usually means taking up lots of working memory. For example, if we try to allocate a very large vector within R, at some point we will get an error message (on my computer this occurs for i = 10 in the following call):
-
-```{r}
-#| error: true
-
-for(i in 1:10){
-  t <- system.time(temp <- rep("memorytest",10^i))
-  message(paste0("A vector with 10^",i," elements takes ",round(t[3],1)," seconds to generate and store."))  
-  cat("____________________________________________________________________\n")
-}
-```
