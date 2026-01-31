@@ -31,6 +31,7 @@ book:
       chapters: 
         - week2/summary_statistics_and_functions.qmd
         - week2/debugging.qmd
+        - week2/diving_into_the_tidyverse.qmd
     - part: week3/week3.qmd
       chapters: 
         - week3/day1.qmd
@@ -46,6 +47,7 @@ book:
         - appendices/tidyverse-cheatsheet.qmd
         - appendices/ggplot-cheatsheet.qmd
         - appendices/datasets.qmd
+        - appendices/qmd-notebooks-cheatsheet.qmd
         
     - references.qmd
 
@@ -57,6 +59,7 @@ format:
     number-depth: 2
     theme:
       - pandoc
+      - custom_styles.scss
     font:
       google: "Noto Sans"
     repo: "https://github.com/wur-bioinformatics/exploratory-data-analysis"

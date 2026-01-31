@@ -1,5 +1,5 @@
 ---
-title: "debugging"
+title: "Debugging"
 format: html
 ---
 
