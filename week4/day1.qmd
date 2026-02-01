@@ -1,14 +1,8 @@
 ---
 title: "Week 4 Day 1 - Arabidopsis diversity"
 author: "Peter Bourke"
-format:
-  html:
-    css: styles.css
-    embed-resources: true
-editor: visual
-engine: knitr
-callout-icon: false
-bibliography: refs.bib
+execute:
+  eval: FALSE
 ---
 
 ## Install R packages (dependencies)
@@ -96,7 +90,7 @@ In today's example, we will be looking at the effect of different subsetting / d
 
 ## Subsetting the SNP data
 
-To handle this "big-dataset" and generate results quickly, we are going to use a subset of the SNP data today, sampling 10k SNPs from the total set to work with. 
+To handle this "big-dataset" and generate results quickly, we are going to use a subset of the SNP data today, sampling 10k SNPs from the total set to work with.
 
 For consistency between our results, let's set a random number generator seed e.g. 1234:
 

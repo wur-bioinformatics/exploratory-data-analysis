@@ -1,0 +1,101 @@
+---
+title: "Debugging and testing"
+---
+
+Programming and scripting for data analysis is _not only_ about writing code that runs.
+It is perhaps even more important to write code that produces correct and interpretable results.
+
+Errors in code can become especially dangerous when they silently produce wrong results without throwing errors.
+In this chapter we will go over different types of errors and warnings and how you can solve and prevent them.
+
+We will work on two complementary skill sets:
+
+- Debugging and error handling:
+- Testing and validating: 
+
+```{r}
+#| echo: FALSE
+options(error = recover)
+```
+
+## Debugging and error handling
+
+### Syntax errors
+These class often pop up when you are in the process of writing some new code. 
+Simply put, a syntax error is any form of mistake where your code does not follow the syntax definitions of the R language.
+As a consequence, the code cannot be parsed and executed by the interpreter. 
+These error are caught relatively easy, because any syntax error will break the execution of your code.
+In addition, when viewing the full error message (see note [...]), a syntax error always starts with `Error in parse(text = input): [...]` indicating that _parsing_ of the code failed.
+
+```{r}
+#| error: TRUE
+# Syntax error example 1, missing closing bracket
+collection <- c(1,2,3,
+```
+
+Note that in R, code is interpreted and potentially executed on a line-by-line basis. 
+Executing syntax error example 2 (below) in a clean environment will crash on the second line, but the first line will already have executed when the crash happens.
+As a result, in this example the variable `collection` _will_ exist when the crash happens.
+
+
+```{r}
+#| error: TRUE
+# Syntax error example 2, the last line is missing the closing bracket
+collection <- c(1,2,3)
+collection[1
+```
+An exception to the line-by-line interpretation and execution is how code blocks are treated. Examples 3 and 4 show examples of syntax errors in code blocks: function definitions and loops are first completely interpreted before they are executed.
+
+```{r}
+#| error: TRUE
+# Syntax error example 3, using incorrect bracket types
+my_function <- function(arg){
+  return(arg + 1)
+]
+
+```
+```{r}
+#| error: TRUE
+# Syntax error example 4, a syntax error in a loop
+for (i in 1:3){
+  print(i)
+  print('There is a syntax error on this line)
+}
+```
+### Runtime errors
+A class of errors that will also break execution of your code are the runtime errors. 
+Unlike syntax errors, the code can be parsed and interpreted, but there is an underlying problem when trying to execute the code that causes the interpreter to crash.
+
+```{r}
+#| error: TRUE
+# Runtime error example 1: mismatched types
+1 + "2"
+```
+
+```{r}
+#| error: TRUE
+# Runtime error example 2: trailing commas/empty arguments are valid syntax but can break at runtime
+collection <- c(1,2,3,)
+```
+
+Runtime errors are defined in code and make your code crash when some checks are failing. 
+It is relatively straightforward to implement a check and produce an error, we will use this more strategically in the @testing section.
+
+```{r}
+#| error: TRUE
+# Runtime error example 3: implementing a custom check and producing a runtime error
+my_function <- function(arg){
+  if (arg > 3) {
+    stop("arg must be <= 3, got ", arg)
+  }
+  print(arg)
+}
+my_function(2)
+my_function(4)
+```
+
+### Logical errors
+
+### Warnings
+
+## Testing and validating

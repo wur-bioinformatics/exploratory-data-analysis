@@ -35,7 +35,7 @@ mean(corre_continuous$leaf_N)
 ```
 
 ::: {.callout-note appearance="simple"}
-### Implement the mean calculation in a custom function
+### Example: implementing the mean calculation in a custom function
 
 Since R already comes with a default function to calculate the mean this example might seem redundant. At the same time, this gives us the opportunity to check whether our custom implementation returns the correct result.
 

@@ -1,6 +1,7 @@
 /*-- scss:defaults --*/
-$callout-color-note: #0A89FF;
-$callout-color-tip: #07B07B;
+$blue: #0A89FF;
+$green: #07B07B;
+$red:#D33F49;
 
 /*-- scss:rules --*/
 .exercise {
@@ -8,4 +9,13 @@ $callout-color-tip: #07B07B;
   padding: 0.125rem 0.5rem 0rem 0.5rem;
   border-radius: 0.25rem;
   border: 0.075rem solid #d9d9d9;
+}
+
+.cell-output-error {
+  border-radius: 0.25rem;
+  border: 0.075rem solid $red;
+  border-left-color: $red;
+  border-left-width: 0.25rem;
+  border-left-style: solid;
+  // border: 0.075rem solid #d9d9d9;
 }

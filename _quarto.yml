@@ -30,7 +30,7 @@ book:
     - part: week2/week2.qmd
       chapters: 
         - week2/summary_statistics_and_functions.qmd
-        - week2/debugging.qmd
+        - week2/debugging_and_testing.qmd
         - week2/diving_into_the_tidyverse.qmd
     - part: week3/week3.qmd
       chapters: 
@@ -39,8 +39,7 @@ book:
         - week3/unsupervised_analysis.qmd
     - part: week4/week4.qmd
       chapters: 
-        - week4/regression_classification.qmd
-        - week4/workflows.qmd
+        - week4/day1.qmd
     - part: appendices/appendices.qmd
       chapters:
         - appendices/base-r-cheatsheet.qmd
@@ -48,7 +47,6 @@ book:
         - appendices/ggplot-cheatsheet.qmd
         - appendices/datasets.qmd
         - appendices/qmd-notebooks-cheatsheet.qmd
-        
     - references.qmd
 
 bibliography: references.bib
