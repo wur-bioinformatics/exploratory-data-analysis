@@ -26,10 +26,18 @@ jobs:
       - name: Set up LaTeX dependencies
         run: quarto install tinytex
       
-      - name: Install Noto Sans font and pandoc
+      - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y fonts-noto fontconfig pandoc
+          sudo apt-get install -y \
+            fonts-noto \
+            fontconfig \
+            pandoc \
+            libproj-dev \
+            libgdal-dev \
+            libudunits2-dev \
+            libfreetype6-dev \
+            libpng-dev
           sudo fc-cache -fv
 
       - name: Install R
