@@ -8,6 +8,21 @@ It is perhaps even more important to write code that produces correct and interp
 Errors in code can become especially dangerous when they silently produce wrong results without throwing errors.
 In this chapter we will go over different types of errors and warnings and how you can solve and prevent them.
 
+:::{.callout-warning appearance='simple'}
+## Data analysis code gone wrong, famous examples
+In the late 2000s, researchers claimed that gene-expression data from cancer cell lines could be used to predict which chemotherapy drugs would work for individual patients. 
+These results were considered so promising that human clinical trials were started based on the predictions.
+Later, independent scientists tried to reproduce the analysis and found that the problem was not the biology or the statistics, but simple bugs in the data-analysis code.
+Gene-expression tables had been misaligned with patient labels, some samples had been accidentally swapped, and categorical variables had been silently reordered by the software.
+Because the analysis pipeline contained no checks that data and labels still matched, these errors went unnoticed.
+The models therefore looked highly accurate, while in reality they were making predictions close to random guessing.
+When the mistakes were corrected, the supposed drug-response signatures disappeared.
+Several papers were withdrawn and the clinical trials were stopped.
+This episode is now a classic warning that small programming errors can lead to large scientific and real-world consequences.
+The take home message: careful debugging and reproducible workflows matter in data-driven biology.
+:::
+
+
 We will work on two complementary skill sets:
 
 - Debugging and error handling:
@@ -79,7 +94,8 @@ collection <- c(1,2,3,)
 ```
 
 Runtime errors are defined in code and make your code crash when some checks are failing. 
-It is relatively straightforward to implement a check and produce an error, we will use this more strategically in the @testing section.
+It is relatively straightforward to implement a check and produce an error (see runtime example 3 below).
+We will use this more strategically in @sec-testing-and-validating.
 
 ```{r}
 #| error: TRUE
@@ -98,4 +114,4 @@ my_function(4)
 
 ### Warnings
 
-## Testing and validating
+## Testing and validating {#sec-testing-and-validating}
