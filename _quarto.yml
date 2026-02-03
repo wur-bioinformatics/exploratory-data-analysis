@@ -9,7 +9,7 @@ book:
     - "Mark Sterken"
     - "Harm Nijveen"
     - "Peter Bourke"
-  date: "7/15/2025"
+  date: today
   page-navigation: true
   search: true
   downloads: [pdf]
