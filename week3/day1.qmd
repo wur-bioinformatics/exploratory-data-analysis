@@ -1,3 +1,181 @@
-This week we will explore a transcriptomics dataset by Kang et al., 
-*“Transcriptome profiling of abiotic responses to heat, cold, salt, and osmotic stress of* **Capsicum annuum** *L.”*  
-([Nature Scientific Data article](https://www.nature.com/articles/s41597-020-0352-7)).
+---
+title: "Gene expression analysis: salt and heat stress in Arabidopsis"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    code-tools: true
+editor: visual
+execute:
+  warning: false
+  message: false
+---
+
+## Introduction
+
+Gene expression analyses can shed light on all kinds of biological processes and environmental responses. In this session we will analyze RNA-seq gene expression data from *Arabidopsis thaliana* plants exposed to:
+
+-   no stress (control)
+-   salt stress
+-   heat stress
+-   a combination of salt and heat stress
+
+The data originate from the study:\
+**ABA Is Required for Plant Acclimation to a Combination of Salt and Heat Stress**\
+<https://doi.org/10.1371/journal.pone.0147625>
+
+We do not have to start from scratch, the gene-level counts are available through the **EMBL-EBI Expression Atlas** at <https://www.ebi.ac.uk/gxa/experiments/E-GEOD-72806/>
+
+We will use this dataset for:
+
+-   exploratory RNA-seq analysis
+-   clustering and PCA
+-   differential gene expression (DGE)
+
+------------------------------------------------------------------------
+
+## Installing and loading required packages
+
+First we need to install and load some packages
+
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE)) 
+  install.packages("BiocManager")
+
+BiocManager::install(c(
+  "ExpressionAtlas",
+  "SummarizedExperiment",
+  "DESeq2",
+  "pheatmap",
+  "dendextend",
+  "tidyverse",
+  "GGally"
+))
+
+library(ExpressionAtlas)
+library(SummarizedExperiment)
+library(DESeq2)
+library(tidyverse)
+library(pheatmap)
+library(dendextend)
+library(GGally)
+```
+
+we can download the data directly from the EMBL-EBI Expression Atlas using the getAltasExperiment method in the ExpressionAtlas library method:
+
+```{r}
+exp <- getAtlasExperiment("E-GEOD-72806")
+```
+
+This returns a list (SimpleList) of data structures, in this case only one, lets extract that:
+
+```{r}
+  se <- exp[[1]]
+```
+
+To further explore the resulting data structure, use the class() method to see what kind of data we are dealing with, use the str() and show() methods to get more information about the content.
+
+To get the actual expression data, we can use the assay method:
+
+```{r}
+counts <- assay(se) # genes x samples
+```
+
+This returns a matrix with rows representing genes and columns representing samples. Let's look at the dimensions:
+
+```{r}
+dim(counts)
+```
+
+There are 12 samples with various treatments. To get the information for the samples, the "metadata", we can use the colData method:
+
+```{r}
+coldata <- as.data.frame(colData(se)) # sample metadata
+head(coldata)
+```
+
+Now to get some idea of the expression values, we can can plot their distribution. First flatten the matrix into one vector:
+
+```{r}
+expr <- as.vector(counts)
+```
+
+And plot this as a histogram:
+
+```{r}
+df_expr <- tibble(expr = expr)
+ggplot(df_expr, aes(x = expr)) +
+  geom_histogram(bins = 100) +
+  labs(title = "Distribution of raw gene counts",
+  x = "Counts", y = "Frequency")
+```
+
+This is not very informative, is it? To bring the values in the same range, we can log transform them:
+
+```{r}
+ggplot(df_expr, aes(x = expr)) +
+  geom_histogram(bins = 100) +
+  scale_x_log10() +
+  labs(title = "Distribution of raw gene counts (log10 x-axis)",
+    x = "Counts", y = "Frequency")
+```
+
+or using log1p:
+
+```{r}
+ggplot(df_expr, aes(x = log1p(expr))) +
+  geom_histogram(bins = 100, fill = "steelblue") +
+  labs(title = "Distribution of log1p-transformed gene counts",
+    x = "log1p(count)", y = "Frequency")
+```
+
+What is the difference with the previous plot?
+
+For further analyses, we are not interested in genes that have little to no expression, so let's filter these out:
+
+```{r}
+keep <- rowSums(counts >= 10) >= 3
+counts_filt <- counts[keep, ]
+```
+
+How many genes are left?
+
+For most purposes we do not want highly expressed genes to dominate the analyses, so we will continue with log transformed counts:
+
+```{r}
+logcounts <- log1p(counts_filt)
+```
+
+To validate, create a histogram of the resulting filtered and log transformed counts.
+
+## Clustering
+
+The 12 samples represent 4 treatments, and per treatment there are 3 replicates. We expect the replicates to have similar gene expression. To check this, we can cluster samples based on their expression pattern. There are two common ways to cluster, hierarchical and k-means. Lets try both.
+
+In clustering we group samples together that are similar, so we need a similarity measure. This is usually derived from a distance measure, which is inversely related to the similarity.
+
+### Euclidean distance.
+
+A common distance measure is the Euclidean distance, which is simple the straight-line distance between two points. If we define a sample by only two specific genes, x and y, for the Euclidean distance we can simply rely on **Pythagoras**:
+
+$$
+d(\text{sample}_1, \text{sample}_2)
+=
+\sqrt{
+  (x_1 - x_2)^2
+  +
+  (y_1 - y_2)^2
+}
+$$
+
+We can extend this to include all remaining genes: $$
+d(\mathbf{x}, \mathbf{y})
+=
+\sqrt{
+\sum_{i=1}^{p}
+\left( x_i - y_i \right)^2
+}
+$$
+
+Where: $p$ = number of genes $x_1$, $x_2$ = expression of gene $i$ in two samples
