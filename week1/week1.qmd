@@ -1,6 +1,7 @@
 # I: A first look at R
 
 ## The goals for week 1
+
 In this course you will learn how to conduct data analysis in R. As such, the assignments in this book are meant to take you through the steps of data analysis. Furthermore, it introduces concepts and ways to work with R.
 
 In the first week, the goals are:
@@ -11,42 +12,42 @@ In the first week, the goals are:
 4.  Document your code in a clear & concise way.
 5.  Apply the data-science cycle (load, inspect, clean, analyse, present)
 
-:::{.callout-tip appearance='simple'}
+::: {.callout-tip appearance="simple"}
 ### What is the 'data-science cycle'?
 
-You are familiar with collecting data, even with some analysis and interpretation. For instance, in [Plant Science in Practice](https://studyhandbook.wur.nl/modules/NEM11305?type=Cursory) you gathered a dataset on wild plants via fieldwork and in [Reproduction of Plants](https://studyhandbook.wur.nl/modules/CLB10803?type=Cursory) you carry out a small experiment in a laboratory setting. 
-In Labwork you follow a particular protocol, and it is no different for data-analysis. We use an iterative cycle of loading, inspecting, cleaning, analysing, and presenting data. It is normal to go back and forth in the cycle. The main assumption is that any dataset is imperfect and has issues. In the first week, we will not bother with imperfection in what you use, but we will discuss it.
+You are familiar with collecting data, even with some analysis and interpretation. For instance, in [Plant Science in Practice](https://studyhandbook.wur.nl/modules/NEM11305?type=Cursory) you gathered a dataset on wild plants via fieldwork and in [Reproduction of Plants](https://studyhandbook.wur.nl/modules/CLB10803?type=Cursory) you carry out a small experiment in a laboratory setting. In Labwork you follow a particular protocol, and it is no different for data-analysis. We use an iterative cycle of loading, inspecting, cleaning, analysing, and presenting data. It is normal to go back and forth in the cycle. The main assumption is that any dataset is imperfect and has issues. In the first week, we will not bother with imperfection in what you use, but we will discuss it.
 :::
 
-
 ## How week 1 is organized
+
 The material you are supposed to work through each day is a chapter in the book. During the scheduled tutorials background and context will be given. Also, there will be help available if you get stuck with the coding.
 
-There will be three days of working through the chapters (Monday - Wednesday).  The excercises in this book require you to use data. This data is available via a link on [Brightspace](https://brightspace.wur.nl/). For each day of the course, there is a dataset available. 
+There will be three days of working through the chapters (Monday - Wednesday). The excercises in this book require you to use data. This data is available via a link on [Brightspace](https://brightspace.wur.nl/). For each day of the course, there is a dataset available.
 
-1. For [Chapter 1](week1/day1.htlm) we all work on the same dataset[@Warmerdam2018].
-2. For [Chapter 2](week1/day2.htlm) you have your own, personal dataset based on [@Schaveling2026].
-3. For [Chapter 3](week1/day3.htlm), we start with a shared dataset[@Willig2023]. For the assignment, you will also have your own, personal dataset[@Willig2023]. This dataset you find in a folder under your own name.
+1.  For [Chapter 1](week1/day1.htlm) we all work on the same dataset[@Warmerdam2018].
+2.  For [Chapter 2](week1/day2.htlm) you have your own, personal dataset based on [@Schaveling2026].
+3.  For [Chapter 3](week1/day3.htlm), we start with a shared dataset[@Willig2023]. For the assignment, you will also have your own, personal dataset[@Willig2023]. This dataset you find in a folder under your own name.
 
 The answers to the assignments will be posted on Brightspace the morning after (so the answers for Chapter 1 will appear on Tuesday).
 
 ### The assignment
-At the end of Wednesday (23:59), a coding peer-feedback assignment is due, which you submit via [Brightspace](https://brightspace.wur.nl/). Your assignment will be reviewed by two students, as you will review the assignment of two other students. The instructions for this assignment you find in [Chapter 3](week1/day3.html). Completing the assignment and participation in the code-review is mandatory.
 
-The code-review (peer-feedback via [Brightspace](https://brightspace.wur.nl/)) is due Thursday at 13:00. 
+At the end of Wednesday (23:59), a coding peer-feedback assignment is due, which you submit via feedback fruits on [Brightspace](https://brightspace.wur.nl/). Your assignment will be reviewed by two students, as you will review the assignment of two other students. The instructions for this assignment you find in [Chapter 3](week1/day3.html). Completing the assignment and participation in the code-review is mandatory.
+
+The code-review (peer-feedback via [Brightspace](https://brightspace.wur.nl/)) is due Thursday at 13:00.
 
 ### The exam
+
 The exam of week 1 does not count for your final grade of the course. It does however show how the exams in this course go, and you will also receive feedback and a grade (again, it will not count) on what you hand in. The assignment on Wednesday will prepare you for the exam on Friday.
 
 At the end of week 1 we expect you to be able to:
-- Complete a given .qmd file with answers and completed code-blocks
-- Start a data-analysis project in R (set a work directory, install and activate packages)
-- Load the data formats covered in week 1 (.tsv, .csv, .xlsx)
-- perform and interpret the outcome of basic checks on loaded data using functions (e.g. `dim()`, `ncol()`, `summary()`, ...)
-- Combine objects that in essence fit together (`cbind()`, `rbind()`)
-- Conduct a t-test (`t.test()`)
-- Translate a p-value to a biological interpretation.
-- Complete {ggplot2} code to make a histogram, a qqplot, and a boxplot
-- Be able read a boxplot, qqplot, and a histogram and translate the figure to a biological interpretation.
 
-
+-   Complete a given .qmd file with answers and completed code-blocks
+-   Start a data-analysis project in R (set a work directory, install and activate packages)
+-   Load the data formats covered in week 1 (.tsv, .csv, .xlsx)
+-   perform and interpret the outcome of basic checks on loaded data using functions (e.g. `dim()`, `ncol()`, `summary()`, ...)
+-   Combine objects that in essence fit together (`cbind()`, `rbind()`)
+-   Conduct a t-test (`t.test()`)
+-   Translate a p-value to a biological interpretation.
+-   Complete {ggplot2} code to make a histogram, a qqplot, and a boxplot
+-   Be able read a boxplot, qqplot, and a histogram and translate the figure to a biological interpretation.

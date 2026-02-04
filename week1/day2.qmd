@@ -163,16 +163,23 @@ These files use tabs to separate values. They often have a .txt or .tsv extensio
 ```
 
 ### Analysis of (a)virulence of *Globodera pallida*
+This set of instructions follows the data analysis cycle, so it also includes setting up the R environment as well as loading in the data. If all is well, you already prepared this when going through the code above.
 
 #### Setup R
 
-Before we start, make sure you have the following packages ready: {tidyverse}, and {ggpubr}. Of course you also need to activate them. If you're not sure how, check [Chapter 1](/week1/day1.qmd).
+Before we start, make sure you have set the work directory and have the following packages ready: {tidyverse}, {readxl}, and {ggpubr}. Of course you also need to activate them. If you're not sure how, check [Chapter 1](/week1/day1.qmd).
 
 ```{r w1d2_packages_readxl}
+#| code-fold: false
+
     ### type the code to install the packages
 
     ### type the code to activate the packages
 ```
+
+#### Load data
+
+Load your data for the tutorial into R, see the exercise above.
 
 #### Inspecting data part 1
 
@@ -180,7 +187,8 @@ Before we start, make sure you have the following packages ready: {tidyverse}, a
 
 Last time we used `head()`, `tail()`, and `summarise()`. Again apply these functions. But now we also want to check which piece is which. For that the functions `length`, `ncol()`, `nrow()`, and `dim()` are handy.
 
-```{r w1d2_check_the_data_ASSIGNMENT, include = TRUE,eval=FALSE}
+```{r w1d2_check_the_data, include = TRUE,eval=FALSE}
+#| code-fold: false
 
     # Check the first 6 rows
     head(data_csv)
@@ -205,25 +213,30 @@ Last time we used `head()`, `tail()`, and `summarise()`. Again apply these funct
     
 ```
 
-##### Inspecting data using histograms
+::: {#exr-check}
+##### Which file is which puzzle piece?
+Inspect the four files you have using `dim()`, `nrow()`, and `ncol()`. Which piece is which?
 
-Like last time, plot a histogram using [ggplot2](https://ggplot2.tidyverse.org/).
+[The puzzle pieces and the functions you will need to combine them further on in the excercise.](Week1_day2_Puzzle.png)
 
-```{r w1d2_make_a_ggplot2_histogram_ASSIGNMENT, include = TRUE,eval=FALSE}
+Answer the following questions (note this is *random* for each personal dataset!). You can deduce which piece is which via their dimensions.
+1. Which 2 files are piece 1 and 2?
+2. which file is piece 3?
+3. Which file is piece 4?
+:::
 
-        ggplot2::ggplot(YOUROBJECT,aes(x=Gpal_vir)) +
-        geom_histogram()
-
-        ggplot2::ggplot(YOUROBJECT,aes(x=Gpal_avir)) +
-        geom_histogram()
-    
-```
 
 #### Cleaning and preparing the data
+Now you have the dimensions of the puzzle pieces. You can combine them in only one way. 
 
-Now you have the dimensions of the puzzle pieces. You can combine them in only one way. First you need to join the two pieces (1 and 2) with the equal number of rows using `cbind()`. Second, you need to add the piece (3) that now has the same number of columns using `rbind()`. Finally, you need to add the last piece (4) of data using `merge()`.
+::: {#exr-combine}
+##### Combine the data
+First you need to join the two pieces (1 and 2) with the equal number of rows using `cbind()`. Second, you need to add the piece (3) that now has the same number of columns using `rbind()`. Finally, you need to add the last piece (4) of data using `merge()`.
+
+Complete the code below
 
 ```{r w1d2_combine_pieces_ASSIGNMENT, include = TRUE,eval=FALSE}
+#| code-fold: false
 
         ### bind objects together over columns
         pheno_data <- cbind(YOURPIECE1,YOURPIECE2)
@@ -235,14 +248,31 @@ Now you have the dimensions of the puzzle pieces. You can combine them in only o
         pheno_data <- merge(pheno_data,YOURPIECE4)
     
 ```
+:::
 
-After combining, you can inspect the data again, for instance using `geom_histogram()`.
+##### Inspecting data using histograms
+After combining, it is smart to inspect the data again to check if everything went well. You can use the same functions as before or, for instance, use `geom_histogram()`.
+
+
+```{r w1d2_make_a_ggplot2_histogram_ASSIGNMENT, include = TRUE,eval=FALSE}
+#| code-fold: false
+
+        ggplot2::ggplot(pheno_data,aes(x=Gpal_vir)) +
+        geom_histogram()
+
+        ggplot2::ggplot(pheno_data,aes(x=Gpal_avir)) +
+        geom_histogram()
+    
+```
+
 
 #### Analyzing
 
+You now have the data complete. As you can see we have two measurements linked to one plant ID. The reason is that this data represents various inbred lines of potato plants tested for both virulent and avirulent *G. pallida* populations.
+
 ##### Normal distribution
 
-Same as before, let's figure out whether the data is normally distributed. For this we can use the functions `stat_qq()` and `stat_qq_line()`.
+Same as before, let's figure out whether the data is normally distributed. For this we can use the functions `stat_qq()` and `stat_qq_line()`. Find the code to do this in [Chapter 1](/week1/day1.qmd) and check the data in the `Gpal_vir` and `Gpal_avir` columns.
 
 ```{r w1d2_qqplot_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
 
@@ -262,11 +292,19 @@ Of course, you can also use a Shapiro-Wilk test (`shapiro.test`), this calculate
 
 ```
 
+::: {#exr-normal_dist}
+#### Does the data follow a normal distribution?
+You now conducted two types of analyses that tell you whether the data is normally distributed. (1) what do you see in the qqplot, and what does it mean? (2) what is the p-value from the Shapiro-Wilk test? (3) what does a p-value mean?
+:::
+
+
+
 ##### Wilcoxon test
 
 As the data is not exactly normally distributed, let's deal with that in the proper way. Now we can use a Wilcoxon Rank Sum test to compare between two samples. We first need to transform the dataset, as we do not have a single observation per row currently. For this you can use the `gather()` function from the {tidyr} package. Use functions like `head()` and `tail()` to check what happened.
 
 ```{r w1d2_gather_pallida, include = TRUE,eval=FALSE, class.source = 'fold-show'}
+#| code-fold: false
 
     data.test <- tidyr::gather(pheno_data,key="pallida",value="juveniles",-ID,-Experiment)
 
@@ -275,17 +313,25 @@ As the data is not exactly normally distributed, let's deal with that in the pro
 Now we can test how the potato plants performed against virulent versus avirulent *G. pallida*. Using `wilcox.test()`
 
 ```{r w1d2_Wilcox_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+#| code-fold: false
 
     wilcox.test(juveniles~pallida,data=data.test)
     ###you should have a very low p-value
 
 ```
 
+::: {#exr-ttest}
+#### How to interpret a p-value?
+You now have tested a null-hypothesis using a non-parametric test and found that the chance his data agrees with this null-hypothesis is very small. What is the *biological interpretation* of this p-value?
+:::
+
+
 #### Presenting
 
 Can you now also make a plot of what you just tested? Use `geom_boxplot()` to visualize the distribution and `geom_jitter()` to show the individual measurements.
 
 ```{r w1d2_wilcoxplot_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+#| code-fold: false
 
     ggplot(data.test,aes(x=pallida,y=juveniles)) +
     geom_boxplot() + geom_jitter(height=0,width=0.25)
@@ -296,16 +342,18 @@ Can you now also make a plot of what you just tested? Use `geom_boxplot()` to vi
 There is another variable in the data as well 'Experiment'. Use `facet_grid()` to split this out. Figure out how using the [ggplot2 website](https://ggplot2.tidyverse.org/).
 
 ```{r w1d2_wilcoxplot_facet_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+#| code-fold: false
 
     ggplot(data.test,aes(x=pallida,y=juveniles)) +
     geom_boxplot() + geom_jitter(height=0,width=0.25) +
-    facet_grid(~Experiment)
+    facet_grid() ### add something in-between the brackets.
 
 ```
 
 Now we can add p-value as well using `annotate()`.
 
 ```{r w1d2_wilcoxplot_pval_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+#| code-fold: false
 
     ###I'm getting the statistics here
     tmp <- tapply(data.test[,c("pallida","juveniles")],data.test$Experiment,function(x){
@@ -321,26 +369,30 @@ Now we can add p-value as well using `annotate()`.
 
 ```
 
-##### Saving plots
-
-Now save the plot, check back at Tutorial 1
+::: {#exr-saveplot}
+##### Save plot
+Now save the plot, check back at [Chapter 1](/week1/day1.qmd).
 
 ```{r w1d2_pdf_of_pallida_plot, include = TRUE, eval=FALSE}
+#| code-fold: false
 
-    pdf(file="Figure_pallida.pdf",width=3,height=4)
-        print(p1)
-    dev.off()   
+    ### use a graphical device (e.g. pdf())
+        print(p1) ### we must use print, as we have a ggplot2 object
+    ### close the graphical device  
         
 ```
+:::
 
 #### Inspecting data part 2
 
 ##### Correlation analysis
+Correlation analysis is useful to discover patterns in large sets of data or between multiple measurements on the same sample (for instance different measurements on the same plant). 
 
-As the data is not exactly normally distributed, we also have to deal with that when calculating correlation. For normal (distribution) correlation, you should use the Pearson method. This is the standard setting for `cor()`. We first need to transform the dataset, as we do not have a single observation per row currently. For this you can use the `gather()` function from the {tidyr} package. Use functions like `head()` and `tail()` to check what happened.
+As the data is not exactly normally distributed, we also have to deal with that when calculating correlation. For normal (distribution) correlation, you should use the Pearson method. This is the standard setting for `cor()`. For data that is not normally distributed, the Spearman method should be used. To do this, you need to specify a parameter within a fuction. If you check the function `cor()` using the `?`, you see that you can specify `method`; `cor(x,y,method="Spearman")`. 
 
 ```{r w1d2 correlation analysis ASSIGNMENT, include = TRUE,eval=FALSE}
-    
+#| code-fold: false 
+   
     data.test <- pheno_data
 
     ### Pearson correlation
@@ -352,31 +404,100 @@ As the data is not exactly normally distributed, we also have to deal with that 
     ### Test of correlation
     ### it is possible you get a warning here; this is not an error.
     cor.test(data.test$Gpal_vir,data.test$Gpal_avir,method = "spearman")
-    
-    
 
 ```
+
+::: {#exr-correlation}
+##### Correlation analysis
+What do you conclude from the correlation analysis, are the two values correlated? What is the *biological* interpretation of this result?
+
+:::
 
 ##### Clustering
+Clustering is another method to explore data. Instead of patterns that move in the same direction, clustering is useful to apply if you expect consistent differences in values.
+
+For clustering we use the functions `dist()` and `hclust()`. The first function calculates the distance matrix, there are multiple methods to calculate the distance-matrix, here we use the standard method ("euclidean"). The second performs the clustering. This process groups the measurements that are most similar.
+
+Because the dataset is too large to perform clustering on all the measurements, we summarise the data by taking the mean per experiment for the virulent and avirulent populations. To achieve this, we group the data per experiment using `dplyr::group_by()`, then we summarise using `dplyr::summarise()`. Then we need to transform the data to long format, for this we use `tidyr::gather()`. To see what happens, the code below includes a before and after inspection of the dataframe. 
 
 ```{r w1d2 clustering analysis ASSIGNMENT, include = TRUE,eval=FALSE}
+#| code-fold: false 
 
+    ### To make the distance matrix, we first need to summarise the data
+    ### otherwise the matrix becomes too large
+    data.test <- dplyr::group_by(pheno_data,Experiment) %>%
+                 dplyr::summarise(Gpal_vir=mean(Gpal_vir),Gpal_avir=mean(Gpal_avir))
+   
+    ###check the shape of the data before gather
+    head(data.test)
+    
+    data.test <- tidyr::gather(key=population,value=reproduction,-Experiment) 
 
+    ###and after gather
+    head(data.test)
+    
+    
+    ### Here we calculate the distance matrix
+    dist_mat <- dist(data.test$reproduction,diag=TRUE,upper=TRUE)
+    
+    ### to give understandable names to the distance matrix we re-write it as matrix
+    dist_mat <- as.matrix(dist_mat)
+        ### these two lines replace the column and row names in the matrix
+        colnames(dist_mat) <- paste(data.test$population,data.test$Experiment)
+        rownames(dist_mat) <- paste(data.test$population,data.test$Experiment)
+    ### to conduct clustering the matrix is re-written als distance matrix
+    dist_mat <- as.dist(dist_mat)
+    
+    ### here we use the base plot-function to look at the clustering
+    plot(hclust(dist_mat))
 
 ```
+
+::: {#exr-correlation}
+##### Clustering analysis
+What do you conclude from the clustering analysis, are there differences between the two *G. pallida* populations? What is the *biological* interpretation of this result?
+
+:::
+
 
 ##### heatmap
+A handy visulization tool for correlation analysis as well as clustering analysis, is a heatmap. There is a basic function in `R`, `heatmap()` that works with matrices. When you run the code below, you get a visualization of the distance matrix. The same can be done with a correlation matrix, but we do not use that today.
 
 ```{r w1d2 heatmap, include = TRUE,eval=FALSE}
+#| code-fold: false 
 
-
+    ### To make the distance matrix, we first need to summarise the data
+    ### otherwise the matrix becomes too large
+    data.test <- dplyr::group_by(pheno_data,Experiment) %>%
+                 dplyr::summarise(Gpal_vir=mean(Gpal_vir),Gpal_avir=mean(Gpal_avir)) %>%
+                 tidyr::gather(key=population,value=reproduction,-Experiment) 
+    
+    ### Here we calculate the distance matrix
+    dist_mat <- dist(data.test$reproduction,diag=TRUE,upper=TRUE)
+    
+    ### to give understandable names to the distance matrix we re-write it as matrix
+    dist_mat <- as.matrix(dist_mat)
+        ### these two lines replace the column and row names in the matrix
+        colnames(dist_mat) <- paste(data.test$population,data.test$Experiment)
+        rownames(dist_mat) <- paste(data.test$population,data.test$Experiment)
+        
+    heatmap(dist_mat)
 
 ```
 
+::: {#exr-correlation}
 ##### Plot of correlation
+Correlation can best be visualized with a scatter plot. complete the code below to generate a scatterplot of your *G. pallida* data.
 
 ```{r w1d2 correlation plot, include = TRUE,eval=FALSE}
 
+    data.plot <- pheno_data
+
+    ggplot(data.plot, aes(x = Gpal_vir, y = AAA, colour=Experiment)) + ###replace the AAA with the correct column name
+    geom_ +  ### add the geom to make a scatter plot
+    scale_color_gradient(low="black",high="grey") + theme_bw()
 
 
 ```
+
+:::
