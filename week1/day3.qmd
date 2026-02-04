@@ -54,6 +54,237 @@ For the basics of setting up your environment, you can check Chapter 1.
 
 
 
+#### Inspecting data part
+
+##### Inspecting data using functions
+Last time we used `head()`, `tail()`, and `summarise()`. Again apply these functions. But now we also want to check which piece is which. For that the functions `length`, `ncol()`, `nrow()`, and `dim()` are handy.
+
+```{r w1d2_check_the_data_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+    # Check the first 6 rows
+    head(data_csv)
+
+    # Check the last 6 rows
+    tail(data_csv)
+    
+    # get a summary of the data
+    summary(data_csv)
+ 
+    # get the length of a vector
+    length(data_csv)
+    
+    # get the number of columns
+    ncol(data_csv)
+    
+    # get the number of rows
+    nrow(data_csv)
+    
+    # get the dimensions of an object
+    dim(data_csv)
+    
+```
+
+##### Inspecting data using histograms
+Like last time, plot a histogram using [ggplot2](https://ggplot2.tidyverse.org/).
+
+```{r w1d2_make_a_ggplot2_histogram_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+        ggplot2::ggplot(YOUROBJECT,aes(x=Gpal_vir)) +
+        geom_histogram()
+
+        ggplot2::ggplot(YOUROBJECT,aes(x=Gpal_avir)) +
+        geom_histogram()
+    
+```
+
+
+#### Cleaning and preparing the data
+Now you have the dimensions of the puzzle pieces. You can combine them in only one way. First you need to join the two pieces (1 and 2) with the equal number of rows using `cbind()`. Second, you need to add the piece (3) that now has the same number of columns using `rbind()`. Finally, you need to add the last piece (4) of data using `merge()`.
+
+```{r w1d2_combine_pieces_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+        ### bind objects together over columns
+        pheno_data <- cbind(YOURPIECE1,YOURPIECE2)
+        
+        ### binds objects together over rows
+        pheno_data <- rbind(pheno_data,YOURPIECE3)
+        
+        ### merges objects, seeks for the same identitier, or you can provide it using by.x and by.y
+        pheno_data <- merge(pheno_data,YOURPIECE4)
+    
+```
+
+After combining, you can inspect the data again, for instance using `geom_histogram()`.
+
+
+#### Analyzing
+        
+##### Normal distribution 
+Same as before, let's figure out whether the data is normally distributed. For this we can use the functions `stat_qq()` and `stat_qq_line()`.
+
+```{r w1d2_qqplot_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+    ggplot(pheno_data,aes(sample=Gpal_vir)) + 
+    stat_qq() + stat_qq_line()
+
+    ggplot(pheno_data,aes(sample=Gpal_avir)) + 
+    stat_qq() + stat_qq_line()
+
+```
+
+Of course, you can also use a Shapiro-Wilk test (`shapiro.test`), this calculates the likelyhood whether the data follows a normal distribution.
+
+```{r w1d2_shapiro_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+    shapiro.test(pheno_data$eggmass)
+
+```
+
+
+##### Wilcoxon test
+As the data is not exactly normally distributed, let's deal with that in the proper way. Now we can use a Wilcoxon Rank Sum test to compare between two samples. We first need to transform the dataset, as we do not have a single observation per row currently. For this you can use the `gather()` function from the {tidyr} package. Use functions like `head()` and `tail()` to check what happened.
+
+```{r w1d2_gather_pallida, include = TRUE,eval=FALSE, class.source = 'fold-show'}
+
+    data.test <- tidyr::gather(pheno_data,key="pallida",value="juveniles",-ID,-Experiment)
+
+```
+
+Now we can test how the potato plants performed against virulent versus avirulent _G. pallida_. Using `wilcox.test()`
+
+```{r w1d2_Wilcox_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+    wilcox.test(juveniles~pallida,data=data.test)
+    ###you should have a very low p-value
+
+```
+
+
+#### Presenting
+Can you now also make a plot of what you just tested? Use `geom_boxplot()` to visualize the distribution and `geom_jitter()` to show the individual measurements.
+
+```{r w1d2_wilcoxplot_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+    ggplot(data.test,aes(x=pallida,y=juveniles)) +
+    geom_boxplot() + geom_jitter(height=0,width=0.25)
+
+
+```
+
+There is another variable in the data as well 'Experiment'. Use `facet_grid()` to split this out. Figure out how using the [ggplot2 website](https://ggplot2.tidyverse.org/).
+
+```{r w1d2_wilcoxplot_facet_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+    ggplot(data.test,aes(x=pallida,y=juveniles)) +
+    geom_boxplot() + geom_jitter(height=0,width=0.25) +
+    facet_grid(~Experiment)
+
+```
+
+Now we can add p-value as well using `annotate()`.
+
+
+```{r w1d2_wilcoxplot_pval_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+    ###I'm getting the statistics here
+    tmp <- tapply(data.test[,c("pallida","juveniles")],data.test$Experiment,function(x){
+                                broom::tidy(wilcox.test(x$juveniles~x$pallida))})
+   
+    statplot <- do.call(rbind,tmp) %>%
+                mutate(Experiment=1:3,pallida=1.5,juveniles=max(data.test$juveniles),
+                       label=paste("p =",signif(p.value,2)))
+
+    p1 <- ggplot(data.test,aes(x=pallida,y=juveniles)) +
+          geom_boxplot() + geom_jitter(height=0,width=0.25) +
+          facet_grid(~Experiment) + geom_text(aes(label=label),data=statplot)
+
+```
+
+##### Saving plots
+Now save the plot, check back at Tutorial 1
+
+```{r w1d2_pdf_of_pallida_plot, include = TRUE, eval=FALSE}
+
+    pdf(file="Figure_pallida.pdf",width=3,height=4)
+        print(p1)
+    dev.off()   
+        
+```
+
+#### Inspecting data part 2
+
+##### Correlation analysis
+As the data is not exactly normally distributed, we also have to deal with that when calculating correlation. For normal (distribution) correlation, you should use the Pearson method. This is the standard setting for `cor()`. We first need to transform the dataset, as we do not have a single observation per row currently. For this you can use the `gather()` function from the {tidyr} package. Use functions like `head()` and `tail()` to check what happened.
+
+
+```{r w1d2 correlation analysis ASSIGNMENT, include = TRUE,eval=FALSE}
+    
+    data.test <- pheno_data
+
+    ### Pearson correlation
+    cor(data.test$Gpal_vir,data.test$Gpal_avir)
+    
+    ### Spearman correlation
+    cor(data.test$Gpal_vir,data.test$Gpal_avir,method = "spearman")
+    
+    ### Test of correlation
+    ### it is possible you get a warning here; this is not an error.
+    cor.test(data.test$Gpal_vir,data.test$Gpal_avir,method = "spearman")
+    
+    
+
+```
+
+##### Clustering
+
+
+
+```{r w1d2 clustering analysis ASSIGNMENT, include = TRUE,eval=FALSE}
+
+
+
+```
+
+
+##### heatmap
+
+```{r w1d2 heatmap, include = TRUE,eval=FALSE}
+
+
+
+```
+
+
+##### Plot of correlation
+
+
+
+```{r w1d2 correlation plot, include = TRUE,eval=FALSE}
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Assignment for code-review week 1
+
+
+
 
 
 
