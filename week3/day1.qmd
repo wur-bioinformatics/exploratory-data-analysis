@@ -179,3 +179,187 @@ d(\mathbf{x}, \mathbf{y})
 $$
 
 Where: $p$ = number of genes $x_1$, $x_2$ = expression of gene $i$ in two samples
+
+To explore this, we can select the two genes that have a stable expression in the dataset (genes having the smallest variance):
+
+```{r}
+gene_var <- apply(logcounts, 1, var)
+genes <- names(sort(gene_var, decreasing = FALSE))[1:2]
+```
+
+and plot the samples according to the expression of these two genes
+
+```{r}
+
+library(ggplot2)
+
+# Extract expression of the two genes and transpose
+expr_df <- as.data.frame(t(logcounts[genes, , drop = FALSE]))
+
+# Add sample names as a column
+expr_df$sample <- rownames(expr_df)
+
+# Remove row names (optional but tidy)
+rownames(expr_df) <- NULL
+
+# Make sure coldata has sample names as a column
+coldata_base <- coldata
+coldata_base$sample <- rownames(coldata_base)
+
+# Merge expression data with metadata
+df <- merge(
+  expr_df,
+  coldata_base,
+  by = "sample",
+  all.x = TRUE   # left join
+)
+
+ggplot(
+  df,
+  aes_string(
+    x = genes[1],
+    y = genes[2],
+    color = "environmental_stress"
+  )
+) +
+  geom_point(size = 4) +
+  geom_text(aes(label = sample), vjust = -0.8, size = 3) +
+  labs(
+    title = "Samples projected onto two genes",
+    x = paste(genes[1], "(log1p expression)"),
+    y = paste(genes[2], "(log1p expression)")
+  ) +
+  theme_bw()
+
+```
+
+This does not really help to group the samples...
+
+We can try the same for the two most variable genes:
+
+```{r}
+genes <- names(sort(gene_var, decreasing = TRUE))[1:2]
+```
+
+Now we could copy the plotting code from above, but copying a block of code is generally not a good idea, it is better to turn that into a function that you can call. So please go ahead and create a function that takes the list of genes as input, as well as the data that is needed to make the plot (logcounts and coldata).
+
+```{r}
+
+# ---- extract expression and transpose ----
+expr_df <- as.data.frame(t(logcounts[genes, , drop = FALSE]))
+expr_df$sample <- rownames(expr_df)
+rownames(expr_df) <- NULL
+
+# ---- prepare metadata ----
+coldata_base <- coldata
+coldata_base$sample <- rownames(coldata_base)
+
+# ---- merge expression with metadata ----
+df <- merge(
+  expr_df,
+  coldata_base,
+  by = "sample",
+  all.x = TRUE
+)
+
+# ---- plotting ----
+p <- ggplot(
+  df,
+  aes_string(
+    x = genes[1],
+    y = genes[2],
+    color = "environmental_stress"
+  )
+) +
+  geom_point(size = 4) +
+  labs(
+    title = "Samples projected onto two genes",
+    x = paste(genes[1], "(log1p expression)"),
+    y = paste(genes[2], "(log1p expression)")
+  ) +
+  theme_bw()
+
+  p <- p +
+    geom_text(aes(label = sample), vjust = -0.8, size = 3)
+
+  
+```
+
+Now we can see that the samples form two groups. Based on their treatments, which stress response would you say that the genes are involved in?
+
+The gene IDs have no information about the kinds of genes that we are dealing with. You can look them up manually at <https://www.arabidopsis.org>. Does it make sense that you find these genes upregulated under the stress condition?
+
+Alternatively, we can extract annotation from an R package called [org.At.tair.db](https://bioconductor.org/packages/release/data/annotation/html/org.At.tair.db.html):
+
+```{r}
+# install package
+BiocManager::install("org.At.tair.db")
+
+library(org.At.tair.db)
+library(AnnotationDbi)
+
+# use the mapIds method to get gene information
+gene_names <- mapIds(
+  org.At.tair.db,
+  keys     = genes,
+  column   = "GENENAME",
+  keytype  = "TAIR",
+  multiVals = "first"
+)
+
+gene_names
+
+```
+
+To do k-means clustering, we should choose $k$, the number of clusters. What seems appropriate here?
+
+```{r}
+set.seed(42)
+
+k <- 2
+
+km <- kmeans(
+  df[, genes],
+  centers = k
+)
+
+df$cluster <- factor(km$cluster)
+```
+
+And we can plot the clusters
+
+```{r}
+ggplot(
+  df,
+  aes_string(
+    x = genes[1],
+    y = genes[2],
+    color = "cluster"
+  )
+) +
+  geom_point(size = 4) +
+  geom_text(aes(label = sample), vjust = -0.8, size = 3) +
+  geom_point(
+    data = as.data.frame(km$centers),
+    aes_string(
+      x = colnames(km$centers)[1],
+      y = colnames(km$centers)[2]
+    ),
+    shape = 4,
+    size = 6,
+    stroke = 2,
+    color = "black",
+    inherit.aes = FALSE
+  ) +
+  labs(
+    title = "k-means clustering in 2-gene expression space",
+    subtitle = paste("k =", k),
+    x = paste(genes[1], "(log1p expression)"),
+    y = paste(genes[2], "(log1p expression)")
+  ) +
+  theme_bw()
+```
+
+## Principle Component Analysis
+
+## Differential Gene Expression
