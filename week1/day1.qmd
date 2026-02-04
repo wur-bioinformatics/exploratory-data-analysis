@@ -47,7 +47,7 @@ In this section of the book, the basics of setting up RStudio are explained. You
 
 
 ::: {.callout-note appearance="simple"}
-### A short intro to RStudio and scripts
+#### A short intro to RStudio and scripts
 
 When you open RStudio, you see four panes.
 
@@ -57,7 +57,7 @@ When you open RStudio, you see four panes.
 Now, check the message you see in the console.The R version displayed is important.
 
 ::: {#exr-Rversion}
-### Getting to grips with R
+#### Getting to grips with R
 Start RStudio and browse through to find out:
 1. Which version of R are you running?
 2. Where can you find which packages are activated?
@@ -82,9 +82,11 @@ Your analysis starts with making a file to document your progress and thereafter
 4.  Analyzing
 5.  Presenting
 
-For the tutorials, assignments, and exams, it's important that you built a file documenting your code. On the first two days, we will provide a full-scale template for you, that you below or - alternatively - you can download on [Brightspace](https://brightspace.wur.nl/). which you can copy paste into the text editor in R-studio.
+For the tutorials, assignments, and exams, it's important that you built a file documenting your code. On the first two days, we will provide a full-scale template for you, that you can find below or - alternatively - you can download on [Brightspace](https://brightspace.wur.nl/). which you can copy paste into the text editor in R-studio.
 
-```{r w1d1_script, eval=FALSE, class.source = 'fold-show'}
+```{r w1d1_script}
+#| code-fold: false
+
 
 # BIF20806 - Day 1 ---------------------------------
 
@@ -131,7 +133,7 @@ For the tutorials, assignments, and exams, it's important that you built a file 
 #### Prepare your documentation
 In RStudio go to File > New File > Quarto document...
 
-Paste the template in and fill in your own information. 
+Paste the template into the editor pane within RStudio and fill in your own information. 
 
 This type of document is also what you will make for the assignments. Furthermore, you will also make your exam based on this template.
 
@@ -148,7 +150,8 @@ If you want to know how to use that function type `?setwd()` into the console.
 
 Run the script below to get information on the `setwd()` function. thereafeter, use it to set the location where R should work from. It is advisable to make a folder on your HDD for items related to this course.
 
-```{r w1d1_set_working_directory, eval=FALSE, class.source = 'fold-show'}
+```{r w1d1_set_working_directory}
+#| code-fold: false
     # Set a work directory
     ?setwd()
 
@@ -173,6 +176,9 @@ In this tutorial we will be making use of various packages. During week 1 we wil
 Install the {readxl} and {tidyverse} packages.
 
 ```{r install_packages_readxl_tidyverse, eval=FALSE, class.source = 'fold-show'}
+#| code-fold: false
+
+
     # Install the package
     install.packages("readxl")    # For reading Excel files
     install.packages("tidyverse") # For wrangling data and generating plots
@@ -186,6 +192,9 @@ Note that you only need to install a package once, and only re-install it if the
 To activate the package, we need to load it into memory:
 
 ```{r w1d1_activate_packages_readxl_tidyverse, eval=FALSE, class.source = 'fold-show'}
+#| code-fold: false
+
+
     # Activate the package
     library("readxl")    
     library("tidyverse") 

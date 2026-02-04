@@ -2,33 +2,44 @@
 title: "From messy to clean"
 author: "Mark Sterken"
 date: "2025-12-24"
-output: 
-  html_document:
-    code_folding: hide
+format:
+  html:
     toc: true
-    toc_float: true
+    toc-depth: 3
+    code-fold: true
+    code-tools: true
+editor: visual
+execute:
+  warning: false
+  message: false
 ---
 
 ## From messy to clean
 
-### Introduction
+### Introduction to day 2
+Today we will continue with goal 1 (Built basic knowledge on using R and R studio) and start with goal 2 (Be able to recognize and load common data formats) and goal 3 (Apply common statistical tools for inspecting and analyzing data)
 
-#### Introduction to day 2
-Today we will continue with goal 1 (Built basic knowledge on using R and R studio) and start with goal 2 (Be able to recognize and load common data formats) and goal 3 (Apply common statistical tools for inspecting and analysing data)
+We will make use of a fragmented simulated dataset. You need to puzzle it together using a couple of functions. Therafter you can analyze it further. 
 
-We will make use of a fragmented simulated dataset. You need to puzzle it together using a couple of functions. Therafter you can analyze it further. It is a dataset of potato plants that were infected with a virulent and an avirulent _Globodera pallida_ population. You can read more about the background in [Schaveling _et al._](https://doi.org/10.1101/2025.07.23.664352).
+::: {.callout-tip appearance="simple"}
+### Potato cyst nematodes, virulent *Globodera pallida* within North-West Europe
 
+One of the current projects that is running at [the Laboratory of Nematology](https://www.wur.nl/en/chair-groups/laboratory-of-nematology), is an investigation into the virulence of the potato cyst nematode *Globodera pallida*. Although plant susceptibility is a complex traits, there are 'Mendelian nuggets' to be found that control these parasites. These 'Mendelian nuggets' are loci (e.g. one or a couple of genes) that have a strong effect on a trait. In this case, a particular resistance gene that was bred into potato and which strongly controls the reproduction of *G. pallida*. 
+
+A PhD in our group, Arno Schaveling (who studied Plant Science at WUR) found out that the Resistance gene GpaV~vrn~ was broadly introduced into potato. This led to massive, parallel selection for virulence of *G. pallida* in the field[@Schaveling2026]. Currently resulting in a virulence outbreak in North-West Europe[@Schaveling2025].
+
+In particular, you can select for virulence in *G. pallida* over subsequent generations in one potato cultivar. Thereafter the ability of the resulting populations to reproduce in many potato cultivars is enhanced. This result meant that the resistance base in potato was relatively narrow.
+
+![Selection on the GpaV~vrn~-containing potato variety Seresta also increases virulence on other commercial potato varieties. (a) The selection experiment that was carried out with four generations of selection on Seresta. The colours indicate the potato variety used (Red Desiree, Orange Seresta), and the circles with the numbers indicate which propagation was used in the standard potato cyst nematode (PCN) resistance test. The numbers indicate the generation of selection. Due to the amount of material required for the standard PCN resistance test, Generation 0 and Generation 1 could not be derived from the selection line Generations 2–4 were on. (b) The outcome of the standard PCN resistance test for selected Generations 1–4. Each dot represents the reproduction (P~f~/P~i~) measured in one 2-l pot inoculated with 10000 larvae. The lines are linear regressions added as a visual aid. Colours indicate varieties, where Seresta and Innovator belong to Cl~SER~ and Libero, Avarna and Festien belong to Cl~FES~. The R~2~ is the amount of variance explained by generation as derived from a PERMANOVA.](Week1day2_Schaveling1)
+
+Next, we were able to identify a region on the *G. pallida* genome that was selected, ultimately identifying the gene ~~Gp-pat-1~~. This gene is currently used as the target for a molecular assay to detect virulence in agricultural fields.
+
+![Single genetic locus is selected after repeated selection on Seresta. (a) Overview of the AMPOP02 (dots) and AMPOP10 (triangles) samples generated in the selection experiment and how many were successfully sequenced. As the larvae from which we isolated DNA underwent either a selection on Desiree (red) or Seresta (orange), we took the final number of generations selected on Seresta along in the analysis. (b) The number of variants that significantly correlate with virulence per scaffold plotted against the scaffold size in million bases (Mb). Dots indicate the variants found in AMPOP02, and triangles indicate variants found in AMPOP10. Text indicates which scaffold of the Rookmaker genome the datapoint belongs to. (c) The significance of the variants on scaffold 28 associated with generation in AMPOP10. The variants are plotted on their location on scaffold 28 (in Mb) vs the significance in −log~10~(P). The variants where the frequency of the alternative allele is decreasing over generations are coloured red, while those where the alternative allele is increasing are coloured blue. Grey variants are not significant. The dashed horizontal line indicates the Bonferroni-corrected threshold. The dashed vertical lines indicate the candidate locus. Note that the y-axis has been cut off at −log~10~(P) < 2.](Week1day2_Schaveling2)
+
+:::
 
 ### Set up your R environment
-Your analysis starts with making a script and thereafter you follow the standard steps in data analysis 
-
-1. Loading
-2. Inspecting
-3. Cleaning
-4. Analyzing 
-5. Presenting
-
-For the tutorials and later in the practicals, it's important that you built an R-script. For that you find a template below, which you can copy paste into the text editor in R-studio.
+For the basics of setting up your environment, you can check [Chapter 1](/week1/day1.qmd). The Markdown file to use for the exercises and documentation of your code is here:
 
 ```{r w1d2_script, eval=FALSE, class.source = 'fold-show'}
 
@@ -99,9 +110,9 @@ In this tutorial, we will start with loading different types of data files into 
 - Semicolon-separated CSV files (`.csv`)
 - Tab-delimited text files (`.txt` or `.tsv`) (you encountered this filetype yesterday)
 
-Before we start, make sure you have the following packages installed:
+Before we start, make sure you have the following packages installed: {readxl}, {tidyverse}, and {ggpubr}. Of course you also need to activate them.
 
-```{r w1d2_packages_readxl, eval=FALSE, class.source = 'fold-show'}
+```{r w1d2_packages_readxl}
     # Install the package
     install.packages("readxl")    # For reading Excel files
     install.packages("tidyverse") # For wrangling data and plotting
@@ -315,18 +326,32 @@ Now save the plot, check back at Tutorial 1
 #### Inspecting data part 2
 
 ##### Correlation analysis
+As the data is not exactly normally distributed, we also have to deal with that when calculating correlation. For normal (distribution) correlation, you should use the Pearson method. This is the standard setting for `cor()`. We first need to transform the dataset, as we do not have a single observation per row currently. For this you can use the `gather()` function from the {tidyr} package. Use functions like `head()` and `tail()` to check what happened.
 
 
+```{r w1d2 correlation analysis ASSIGNMENT, include = TRUE,eval=FALSE}
+    
+    data.test <- pheno_data
 
-```{r w1d2_correlation_analysis_ASSIGNMENT, include = TRUE,eval=FALSE}
-
-
+    ### Pearson correlation
+    cor(data.test$Gpal_vir,data.test$Gpal_avir)
+    
+    ### Spearman correlation
+    cor(data.test$Gpal_vir,data.test$Gpal_avir,method = "spearman")
+    
+    ### Test of correlation
+    ### it is possible you get a warning here; this is not an error.
+    cor.test(data.test$Gpal_vir,data.test$Gpal_avir,method = "spearman")
+    
+    
 
 ```
 
 ##### Clustering
 
-```{r w1d2_clustering_analysis_ASSIGNMENT, include = TRUE,eval=FALSE}
+
+
+```{r w1d2 clustering analysis ASSIGNMENT, include = TRUE,eval=FALSE}
 
 
 
@@ -335,7 +360,7 @@ Now save the plot, check back at Tutorial 1
 
 ##### heatmap
 
-```{r w1d2_heatmap, include = TRUE,eval=FALSE}
+```{r w1d2 heatmap, include = TRUE,eval=FALSE}
 
 
 
@@ -346,12 +371,11 @@ Now save the plot, check back at Tutorial 1
 
 
 
-```{r w1d2_correlation_plot, include = TRUE,eval=FALSE}
+```{r w1d2 correlation plot, include = TRUE,eval=FALSE}
 
 
 
 ```
-
 
 
 
