@@ -37,7 +37,8 @@ jobs:
             libgdal-dev \
             libudunits2-dev \
             libfreetype6-dev \
-            libpng-dev
+            libpng-dev \
+            imagemagick
           sudo fc-cache -fv
 
       - name: Install R
