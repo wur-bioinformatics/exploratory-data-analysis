@@ -1,21 +1,27 @@
 ---
 format: html
+editor: 
+  markdown: 
+    wrap: sentence
 ---
 
 # Introduction {.unnumbered}
 
-This online book is the main study material for the course 'BIF20806: Exploratory Data Analysis in R'. This course is taught at Wageningen University and targets $2^{nd}$ year students in the BSc program Plant Sciences (BPW). The aim of this book and the course is to provide sufficient information and background so that after finishing, students can work independently on data analysis projects with R, using datasets that are typically encountered in the plant sciences.
+This online book is the main study material for the course 'BIF20806: Exploratory Data Analysis in R'.
+This course is taught at Wageningen University and targets $2^{nd}$ year students in the BSc program Plant Sciences (BPW).
+The aim of this book and the course is to provide sufficient information and background so that after finishing, students can work independently on data analysis projects with R, using datasets that are typically encountered in the plant sciences.
 
 ## Data analysis in the plant sciences
+
 There is no plant science without data, and working with data has always been an essential skill for any plant scientist.
 Historically, this would not have involved talking about programming languages.
 However, increasing awareness of reproducibility and the ever-growing volume of data in the plant sciences mean that plant scientists today routinely turn to computers when analysing their data.
 
-One of the most famous experiments in plant science is Gregor Mendel’s work on pea plants in the mid-19th century [@Mendel1866]. 
+One of the most famous experiments in plant science is Gregor Mendel's work on pea plants in the mid-19th century [@Mendel1866].
 Mendel carefully crossed plants with different observable traits (such as seed colour or shape) and systematically counted how often each trait appeared in the offspring.
-These experiments later proved foundational for the development of Mendel’s theories on genetic inheritance.
+These experiments later proved foundational for the development of Mendel's theories on genetic inheritance.
 
-What makes Mendel’s work particularly relevant here is not the biological theory that later emerged from it, but the way he worked with data.
+What makes Mendel's work particularly relevant here is not the biological theory that later emerged from it, but the way he worked with data.
 Mendel designed controlled experiments, collected quantitative observations, organised his results in tables, and searched for patterns in those data before proposing any formal explanation.
 In modern terms, much of this would now be described as exploratory data analysis.
 
@@ -23,10 +29,12 @@ If Mendel were working today, he would likely store his data in a spreadsheet or
 The tools would be different, but the underlying questions would be the same.
 
 ## About the course
-In this course, we focus on modern tools for asking and answering questions from data. We discuss strategies to acquire, process, explore, visualize, and analyse data for a variety of plant science related data sets.
-In addition, we work on making data analysis projects reproducible: by using the R programming language, we create reproducible analysis workflows. 
 
-:::{.callout-note appearance='simple' }
+In this course, we focus on modern tools for asking and answering questions from data.
+We discuss strategies to acquire, process, explore, visualize, and analyse data for a variety of plant science related data sets.
+In addition, we work on making data analysis projects reproducible: by using the R programming language, we create reproducible analysis workflows.
+
+::: {.callout-note appearance="simple"}
 ### Why R?
 
 R is widely used in the plant sciences and related fields because it combines data handling, statistical analysis, and visualisation in a single environment.
@@ -41,13 +49,14 @@ Concepts are introduced gradually, starting from basic data manipulation and sim
 Throughout the course, the focus remains on understanding the data and the questions being asked, rather than on writing code for its own sake.
 
 ## About the book
+
 This book is designed to support the learning objectives of the course by providing structured, practice-oriented learning material.
 Each chapter focuses on a specific set of data analysis skills and introduces these through examples based on datasets commonly encountered in the plant sciences.
 The book does not aim to be a comprehensive reference for R, but instead concentrates on methods and techniques that are essential for exploratory data analysis.
 
 Throughout the book, code examples are used to demonstrate standard data analysis workflows.
 
-:::{.callout-tip appearance='simple'}
+::: {.callout-tip appearance="simple"}
 ### Learning how to program in R
 
 Programming and data analysis are not spectator activities.

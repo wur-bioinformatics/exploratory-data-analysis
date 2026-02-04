@@ -25,7 +25,7 @@ New today, is that you get an assignment. In this assignment, you are expected t
 As on the pervious days, we will be making use of a real data-case.
 
 ::: {.callout-tip appearance="simple"}
-### Plant growth impairment by nematodes.
+#### Plant growth impairment by nematodes.
 
 You already know that plant susceptibility to nematodes is a complex trait, with a lot of variation in susceptibility between individuals of the same species. This variation also exists for the dose-response relation between plants and nematodes. The data you will be using today is derived from a study by Jaap-Jan Willig, who used a camera platform to track the growth of 960 *A. thaliana* plants simultaneously[@Willig2023].
 
@@ -33,6 +33,31 @@ You already know that plant susceptibility to nematodes is a complex trait, with
 
 The goal of this research was to develop a platform that allowed us to track in real-time plant growth under below-ground biotic stress caused by nematode infection. Doing this experiment, we identified a compensation response where, at low levels of infection, plants perform better than in uninfected conditions. 
 :::
+
+
+#### How to do code-review
+
+
+
+
+#### Set up your R environment
+For the basics of setting up your environment, you can check Chapter 1.
+
+
+
+#### Quarto markdown
+
+
+
+### Analysis of plant-growth data 
+
+
+
+
+
+
+
+
 
 
 

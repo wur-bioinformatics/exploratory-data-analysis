@@ -82,7 +82,7 @@ Your analysis starts with making a file to document your progress and thereafter
 4.  Analyzing
 5.  Presenting
 
-For the tutorials, assignments, and exams, it's important that you built a file documenting your code. On the first two days, we will provide a full-scale template for you, that you can find below or - alternatively - you can download on [Brightspace](https://brightspace.wur.nl/). which you can copy paste into the text editor in R-studio.
+For the tutorials, assignments, and exams, it's important that you built a file documenting your code. On the first two days, we will provide a full-scale template for you, that you can find below or - alternatively - you can download on [Brightspace](https://brightspace.wur.nl/). This Quarto markdown template you can copy-paste into the text editor in R-studio.
 
 ```{r w1d1_script}
 #| code-fold: false

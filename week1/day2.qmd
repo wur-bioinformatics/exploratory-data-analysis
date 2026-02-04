@@ -22,7 +22,7 @@ Today we will continue with goal 1 (Built basic knowledge on using R and R studi
 We will make use of a fragmented simulated dataset. You need to puzzle it together using a couple of functions. Therafter you can analyze it further. 
 
 ::: {.callout-tip appearance="simple"}
-### Potato cyst nematodes, virulent *Globodera pallida* within North-West Europe
+#### Potato cyst nematodes, virulent *Globodera pallida* within North-West Europe
 
 One of the current projects that is running at [the Laboratory of Nematology](https://www.wur.nl/en/chair-groups/laboratory-of-nematology), is an investigation into the virulence of the potato cyst nematode *Globodera pallida*. Although plant susceptibility is a complex traits, there are 'Mendelian nuggets' to be found that control these parasites. These 'Mendelian nuggets' are loci (e.g. one or a couple of genes) that have a strong effect on a trait. In this case, a particular resistance gene that was bred into potato and which strongly controls the reproduction of *G. pallida*. 
 
@@ -38,8 +38,8 @@ Next, we were able to identify a region on the *G. pallida* genome that was sele
 
 :::
 
-### Set up your R environment
-For the basics of setting up your environment, you can check [Chapter 1](/week1/day1.qmd). The Markdown file to use for the exercises and documentation of your code is here:
+#### Set up your R environment
+For the basics of setting up your environment, you can check Chapter 1. The Markdown file to use for the exercises and documentation of your code is here:
 
 ```{r w1d2_script, eval=FALSE, class.source = 'fold-show'}
 
@@ -96,28 +96,14 @@ For the basics of setting up your environment, you can check [Chapter 1](/week1/
 
 ```
 
-
-### Analysis of (a)virulence of _Globodera pallida_
-
-
-
 #### Loading data into R
 
-In this tutorial, we will start with loading different types of data files into R. This is an essential skill for working with real-world data. We'll cover a couple of file-types that are common. *Each of you has their data in these formats*. If you are familiar with R, this might be easy. 
+In this tutorial, we will start with loading different types of data files into R. This is an essential skill for working with real-world data. We'll cover a couple of file-types that are common. *Each of you has their data in these formats*, you can find these via the fileshare on [Brightspace](https://brightspace.wur.nl/). If you are familiar with R, this part might be easy. 
 
 - Excel files (`.xlsx`)
 - Comma-separated values (`.csv`)
 - Semicolon-separated CSV files (`.csv`)
 - Tab-delimited text files (`.txt` or `.tsv`) (you encountered this filetype yesterday)
-
-Before we start, make sure you have the following packages installed: {readxl}, {tidyverse}, and {ggpubr}. Of course you also need to activate them.
-
-```{r w1d2_packages_readxl}
-    # Install the package
-    install.packages("readxl")    # For reading Excel files
-    install.packages("tidyverse") # For wrangling data and plotting
-    install.packages("ggpubr")    # For statistics within ggplot2 plots
-```
 
 To make this part of the course realistic, *we have provided you with data in these four formats*. The reason being that this is also how it works in practice. Finding out the format of the data and loading it into memory is a crucial step in using any data-analysis pipeline. 
 
@@ -125,10 +111,14 @@ You now need to load in data from all four data formats.
 
 ##### Loading data from an excel file (.xlsx)
 
-To read Excel files, we use the `read_excel()` function from the readxl package. Excel files are very common but also very tricky. Namely, these files are mostly made by persons and people do not automatically follow conventions that are clear for a programming language. Therefore always check the excel file before loading it in.
+To read Excel files, we use the `read_excel()` function from the readxl package. Excel files are very common but also very tricky. Namely, these files are mostly made by persons and people *do not automatically follow conventions* that are clear for a programming language. Therefore always check the excel file before loading it in.
 
 ```{r w1d2_load_xlsx, include = TRUE,eval=FALSE, class.source = 'fold-show'}
-library(readxl) # first activate the package
+#| code-fold: false
+
+    ### Package
+    install.packages("readxl")    # For reading Excel files
+    library(readxl) # first activate the package
 
     # Replace with the path to your Excel file
     data_excel <- readxl::read_excel("data/YOURFILENAME.xlsx")
@@ -139,6 +129,7 @@ library(readxl) # first activate the package
 CSV files are very common as format for data. Here each column is separated by a comma, rows are typically observations. We use the `read.csv()` function to load the data.
 
 ```{r w1d2_load_csv, include = TRUE,eval=FALSE, class.source = 'fold-show'}
+#| code-fold: false
 
     # Replace with the path to your csv file
     data_csv <- read.csv("data/YOURFILENAME.csv")
@@ -149,6 +140,7 @@ CSV files are very common as format for data. Here each column is separated by a
 Some CSV files (especially from European systems) use a semicolon (;) instead of a comma. Use `read.csv2()` for these files 
 
 ```{r w1d2_load_csv2, include = TRUE,eval=FALSE, class.source = 'fold-show'}
+#| code-fold: false
 
     # Replace with the path to your csv file
     data_csv2 <- read.csv2("data/YOURFILENAME.csv")
@@ -159,10 +151,29 @@ Some CSV files (especially from European systems) use a semicolon (;) instead of
 These files use tabs to separate values. They often have a .txt or .tsv extension.
 
 ```{r w1d2_load_tabdelim, include = TRUE,eval=FALSE, class.source = 'fold-show'}
+#| code-fold: false
 
     # Replace with the path to your csv file
     data_tsv <- read.delim("data/YOURFILENAME.txt")
 
+```
+
+
+
+
+
+
+
+
+### Analysis of (a)virulence of _Globodera pallida_
+
+#### Setup R
+Before we start, make sure you have the following packages ready: {tidyverse}, and {ggpubr}. Of course you also need to activate them. If you're not sure how, check [Chapter 1](/week1/day1.qmd).
+
+```{r w1d2_packages_readxl}
+    ### type the code to install the packages
+
+    ### type the code to activate the packages
 ```
 
 
