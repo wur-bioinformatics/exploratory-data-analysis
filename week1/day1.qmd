@@ -2,9 +2,16 @@
 title: "The importance of data analysis"
 author: "Mark Sterken"
 date: "2026-02-04"
-editor: 
-  markdown: 
-    wrap: sentence
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    code-tools: true
+editor: visual
+execute:
+  warning: false
+  message: false
 ---
 
 ## The importance of data analysis
@@ -33,7 +40,13 @@ We will teach you how to use R via RStudio.
 In particular we will teach you how to write and document code for data analysis.
 By the end of this week, you will have made your first steps towards making documents as you are reading now: [Quarto markdown](https://quarto.org/docs/guide/).
 
-::: {.callout-tip appearance="simple"}
+
+### Set up your R environment
+
+In this section of the book, the basics of setting up RStudio are explained. You are welcome to revisit this section any day of the course.
+
+
+::: {.callout-note appearance="simple"}
 ### A short intro to RStudio and scripts
 
 When you open RStudio, you see four panes.
@@ -43,20 +56,25 @@ When you open RStudio, you see four panes.
 
 Now, check the message you see in the console.The R version displayed is important.
 
-::: {#exr-R version}
-
-which version of R are you currently running?
+::: {#exr-Rversion}
+### Getting to grips with R
+Start RStudio and browse through to find out:
+1. Which version of R are you running?
+2. Where can you find which packages are activated?
+3. Which version of the stats package is active?
+4. Where on your Harddrive is the current (default) working directory?
 
 :::
 
-The script you are using should work with R versions 4.3 and onwards.
+The scripts you are using the first week should work with R versions 4.3 and onwards.
 If your version number is lower, please first shut-down RStudio and install a newer version of R.
-You can find out how to do so [here](https://support.wur.nl/esc?id=kb_article&sysparm_article=KB0010713&table=kb_knowledge&searchTerm=r%20installation).
+You can find out how to do so [here](https://support.wur.nl/esc?id=kb_article&sysparm_article=KB0010713&table=kb_knowledge&searchTerm=r%20installation). RStudio should automatically pick up on the newer installed version. You can check if this worked by checking the version number of R after installation.
 
+It is generally advisable to install a new version of R at the start of a new project (e.g. BSc thesis).
 
-### Set up your R environment
+#### Documenting your code
 
-Your analysis starts with making a script and thereafter you follow the standard steps in data analysis
+Your analysis starts with making a file to document your progress and thereafter you follow the standard steps in data analysis
 
 1.  Loading
 2.  Inspecting
@@ -64,8 +82,7 @@ Your analysis starts with making a script and thereafter you follow the standard
 4.  Analyzing
 5.  Presenting
 
-For the tutorials and later in the practicals, it's important that you built an R-script.
-For that you find a template below, which you can copy paste into the text editor in R-studio.
+For the tutorials, assignments, and exams, it's important that you built a file documenting your code. On the first two days, we will provide a full-scale template for you, that you below or - alternatively - you can download on [Brightspace](https://brightspace.wur.nl/). which you can copy paste into the text editor in R-studio.
 
 ```{r w1d1_script, eval=FALSE, class.source = 'fold-show'}
 
@@ -110,38 +127,62 @@ For that you find a template below, which you can copy paste into the text edito
 
 ```
 
-### Telling R where on the hard drive it should work from.
+::: {#exr-SetTemplate}
+#### Prepare your documentation
+In RStudio go to File > New File > Quarto document...
+
+Paste the template in and fill in your own information. 
+
+This type of document is also what you will make for the assignments. Furthermore, you will also make your exam based on this template.
+
+:::
+
+#### Telling R where on the hard drive it should work from.
 
 First, you need to set a work directory (tell R where on the hard drive you'll be working from).
 This can be done with the function `setwd()`, where you have to fill in the work directory yourself.
 If you want to know how to use that function type `?setwd()` into the console.
 
+::: {#exr-WD}
+#### Set your work directory
+
+Run the script below to get information on the `setwd()` function. thereafeter, use it to set the location where R should work from. It is advisable to make a folder on your HDD for items related to this course.
+
 ```{r w1d1_set_working_directory, eval=FALSE, class.source = 'fold-show'}
     # Set a work directory
     ?setwd()
+
+    ###Now type the function to set a location on your HDD to work from
+
 ```
+:::
 
-You can also use the three dots `...` in the files pane of Rstudio to navigate towards the location you will be working from.
+Alternatively, you can also use the three dots `...` in the top-right corner of the files pane of RStudio to navigate towards the location you will be working from.
 
-### Installing packages.
+#### Installing packages.
 
-Typically R-users use several 'packages'.
-These packages, give extra functionality to R.
-The main repositories are:
+Typically R-users use several 'packages'. These packages, give extra functionality to R. The main repositories are:
 
-1.  CRAN, https://cran.r-project.org/
-2.  Bioconductor, http://www.bioconductor.org/
+1.  [CRAN](https://cran.r-project.org/)
+2.  [Bioconductor](http://www.bioconductor.org/)
 
-In this tutorial we will be making use of various packages.
-Before we start, make sure you have the following packages installed:
+In this tutorial we will be making use of various packages. During week 1 we will make use of the {readxl} and {tidyverse} package each day, including during the exam. By the end of this first week, we expect you are able to install and activate packages.
+
+::: {#exr-install_packages}
+#### Install packages
+Install the {readxl} and {tidyverse} packages.
 
 ```{r install_packages_readxl_tidyverse, eval=FALSE, class.source = 'fold-show'}
     # Install the package
     install.packages("readxl")    # For reading Excel files
     install.packages("tidyverse") # For wrangling data and generating plots
 ```
+:::
 
 Note that you only need to install a package once, and only re-install it if the package has a new version or you install a new version of R.
+
+::: {#exr-activate_packages}
+#### Activate packages
 To activate the package, we need to load it into memory:
 
 ```{r w1d1_activate_packages_readxl_tidyverse, eval=FALSE, class.source = 'fold-show'}
@@ -149,6 +190,9 @@ To activate the package, we need to load it into memory:
     library("readxl")    
     library("tidyverse") 
 ```
+:::
+
+Now you are all set to do data-analysis in R!
 
 ## Analysis of quantitative phenotypic data from an experiment
 
