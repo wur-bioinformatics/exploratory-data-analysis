@@ -23,15 +23,18 @@ $$
 Mean(X) = \mu = \frac{1}{N}\sum_{i=1}^{n}{x_i}
 $$ {#eq-mean}
 
-The simplest and most direct interpretation of the mean is that it represents the average value of a variable. A slightly more statistically oriented interpretation is that the mean represents the expected value. In other words: if you have no other information, the mean would be your best guess[^summary_statistics_and_functions-1] on average. In the example below this would mean that your best guess of the leaf nitrogen content of a plant, without knowing anything else about that plant, would be 22.9.
+The simplest and most direct interpretation of the mean is that it represents the average value of a variable.
+A slightly more statistically oriented interpretation is that the mean represents the expected value.
+In other words: if you have no other information, the mean would be your best guess[^summary_statistics_and_functions-1] on average.
+In the example below this would mean that your best guess of the leaf dry matter content of a plant, without knowing anything else about that plant, would be 0.25$g/g$ (The blue solid line in @fig-summary-stats).
 
 [^summary_statistics_and_functions-1]: "Best guess" is kept informal here. A full probabilistic treatment exists, but is beyond the scope of this book
 
 Being a statistical programming language, R comes with a default function to calculate the mean:
 
 ```{r}
-# Calculate the average leaf nitrogen content
-mean(corre_continuous$leaf_N)
+# Calculate the average leaf dry matter content
+mean(corre_continuous$LDMC)
 ```
 
 ::: {.callout-note appearance="simple"}
@@ -49,19 +52,29 @@ custom_mean <- function(input){
 }
 
 # This should give the same result as using the default `mean` from R
-custom_mean(corre_continuous$leaf_N)
+custom_mean(corre_continuous$LDMC)
 ```
 :::
 
 ### Variance
 
-Where the mean describes the average value of a variable, the variance describes how much individual data points differ from the mean. More precisely, the variance is defined as the average of the squared differences between each observation and the mean (@eq-variance). In other words: for each value we compute how far it is from the mean, square this difference, and then average these squared deviations. In our example on leaf nitrogen content, the variance quantifies how much individual plants differ from the average leaf nitrogen content. Note that squaring the difference has two important consequences: positive and negative differences contribute equally, and large differences contribute relatively more than small differences. A consequence of this last property is that the variance is relatively sensitive to outliers in the data. $$
+Where the mean describes the average value of a variable, the variance describes how much individual data points differ from the mean.
+More precisely, the variance is defined as the average of the squared differences between each observation and the mean (@eq-variance).
+In other words: for each value we compute how far it is from the mean, square this difference, and then average these squared deviations.
+In our example on leaf dry matter content, the variance quantifies how much individual plant species differ from the average leaf dry matter content.
+Note that squaring the difference has two important consequences: positive and negative differences contribute equally, and large differences contribute relatively more than small differences.
+A consequence of this last property is that the variance is relatively sensitive to outliers in the data.
+
+$$
 Variance(X) = \sigma^2 = \frac{1}{N}\sum_{i=1}^{n}{(\mu-x_i)^2}
 $$ {#eq-variance}
 
 ### Standard deviation
 
-One slight downside in interpreting the variance is that the *units* are squared compared to the data points. In our example, leaf nitrogen content is measured in *g/g*, and as a consequence the means is also in *g/g*. However, the variance is in *(g/g)\^2*, which makes interpretation less straightforward. A common and useful solution is to take the square root of the variance, which results in the standard deviation(@eq-standard-deviation).
+One slight downside in interpreting the variance is that the *units* are squared compared to the data points.
+In our example, leaf dry matter content is measured in $[g/g]$, and as a consequence the mean is also in $[g/g]$.
+However, the variance is in $[(g/g)^2]$, which makes interpretation less straightforward.
+A common and useful solution is to take the square root of the variance, which results in the standard deviation (See @eq-standard-deviation and the striped blue lines in @fig-summary-stats).
 
 $$
 StandardDeviation(X) = \sigma = \sqrt{\frac{1}{N}\sum_{i=1}^{n}{(\mu-x_i)^2}}
@@ -70,7 +83,9 @@ $$ {#eq-standard-deviation}
 ::: {#exr-variance}
 ### Implement the variance calculation in a custom function
 
-Just like in the previous example on the mean, R has a built-in function to calculate the variance (`var`). To practice implementing custom functions, in this exercise you will implement the calculation of the variance yourself. Compare the output of your custom function to the output of the built-in `var` function to check your work.
+Just like in the previous example on the mean, R has a built-in function to calculate the variance (`var`).
+To practice implementing custom functions, in this exercise you will implement the calculation of the variance yourself.
+Compare the output of your custom function to the output of the built-in `var` function to check your work.
 
 ```{r}
 #| eval = FALSE
@@ -85,27 +100,43 @@ custom_variance <- function(input){
 
 ### Median
 
-The mean and variance summarize the data by combining all values using arithmetic operations. In contrast, some summary statistics depend only on the *relative order* of the values, not on how large or small individual observations are. These order-based statistics often behave more robustly when extreme values are present. In the following section we discuss the median, its generalization into quantiles, and the accompanying interquartile range.
+The mean and variance summarize the data by combining all values using arithmetic operations.
+In contrast, some summary statistics depend only on the *relative order* of the values, not on how large or small individual observations are.
+These order-based statistics often behave more robustly when extreme values are present (in other words: they are less sensitive to outliers).
+In the following section we discuss the median (the striped blue line in @fig-summary-stats), its generalization into quantiles, and the accompanying interquartile range (the dotted blue lines in @fig-summary-stats).
 
-The simplest and most direct interpretation of the median is that it represents the middle value of a variable. More precisely, the median is the value that splits the data into two equally sized parts when the observations are sorted. In other words: half of the observations are smaller than the median, and half are larger. In the example below this would mean that half of the plants have a leaf nitrogen content below the median value of 21.7, and half above.
+The simplest and most direct interpretation of the median is that it represents the middle value of a variable.
+More precisely, the median is the value that splits the data into two equally sized parts when the observations are sorted.
+In other words: half of the observations are smaller than the median, and half are larger.
+In the example below this would mean that half of the plants have a leaf dry matter content below the median value of 0.24$g/g$, and half above.
 
 ```{r}
-# Calculate the median leaf nitrogen content
-median(corre_continuous$leaf_N)
+# Calculate the median leaf dry matter content
+median(corre_continuous$LDMC)
 ```
 
 ::: {#exr-mean-vs-median}
-When computing the mean and median of the leaf nitrogen content, we observe a (small) difference. How do you interpret this difference?
+When computing the mean and median of the leaf dry matter content, we observe a (small) difference. How do you interpret this difference?
 :::
 
 ### Quantiles
 
-Quantiles generalize the idea of the median by describing values at fixed positions in the sorted data. A q-quantile is the value below which a fraction $q$ of the observations fall. In other words: a q-quantile splits the data into a lower part containing a fraction $q$ of the observations and an upper part containing the remaining fraction. For example, the 0.25-quantile (also called the first *quartile*) is the value below which 25% of the data lie.
+Quantiles generalize the idea of the median by describing values at fixed positions in the sorted data.
+A $q$-quantile is the value below which a fraction $q$ of the observations fall.
+In other words: a $q$-quantile splits the data into a lower part containing a fraction $q$ of the observations and an upper part containing the remaining fraction.
+For example, the 0.25-quantile (also called the first *quartile*) is the value below which 25% of the data lie.
 
 ::: {#exr-quantiles}
 ### Implement quantile calculation in a custom function
 
-In this assignment you will implement the calculation of quantiles for a continuous variable. Once again, you can check your implementation by comparing to the built-in `quantile` function. Unlike the mean, calculating quantiles is not just a sequence of arithmetic. To help you get started, here are some pointers: - The number of elements in a collection can be calculated with `length` - A collection can be sorted with `sort` - Numbers can be rounded with `round`, the resulting integer can be used as an index
+In this assignment you will implement the calculation of quantiles for a continuous variable.
+Once again, you can check your implementation by comparing to the built-in `quantile` function.
+Unlike the mean, calculating quantiles is not just a sequence of arithmetic.
+To help you get started, here are some pointers:
+
+- The number of elements in a collection can be calculated with `length`
+- A collection can be sorted with `sort`
+- Numbers can be rounded with `round`, the resulting integer can be used as an index
 
 ```{r}
 #| eval: FALSE
@@ -120,13 +151,13 @@ custom_quantile(data, quantile_percentage){
 
 ### Interquartile Range (IQR)
 
-A commonly used measure of spread in the data based on quantiles is the interquartile range (IQR). The IQR is defined as the difference between the third quartile and the first quartile. In other words: it measures how much the middle 50% of the data vary. In the example below this would quantify the spread of leaf nitrogen values for the central half of the plants.
+A commonly used measure of spread in the data based on quantiles is the interquartile range (IQR).
+The IQR is defined as the difference between the third quartile and the first quartile. In other words: it measures how much the middle 50% of the data vary.
+In the example below this would quantify the spread of leaf dry matter content values for the central half of the plants (also see the dotted green lines in @fig-summary-stats).
 
 ```{r}
-x <- corre_continuous[['leaf_N']]
-percentile <- 0.5
-percentile_index <- length(x) %/% (1 / percentile)
-sort(x)[percentile_index]
+# Calculate the middle 50% of values (AKA the interquartile range IQR) for leaf dry matter content
+IQR(corre_continuous$LDMC)
 ```
 
 ```{r}
@@ -135,9 +166,9 @@ sort(x)[percentile_index]
 #| fig-cap: "A visualization of various summary statistics computed on the Specific Leaf Area variable in the CoRRE dataset. Purple lines represent the mean and standard deviation, green lines represent the median and the interquartile range. Individual datapoints are indicated on the X axis. The effect of a few large values can be observed in the difference between the mean and the median."
 
 library(ggplot2)
-library(grid)
+#library(grid)
 
-specific_leaf_area <- na.omit(corre_continuous$SLA)
+specific_leaf_area <- na.omit(corre_continuous$LDMC)
 
 m <- mean(specific_leaf_area)
 s <- sd(specific_leaf_area)
@@ -188,10 +219,10 @@ ggplot(data.frame(specific_leaf_area), aes(x = specific_leaf_area)) +
   
   scale_colour_manual(
     values = c(
-      Mean    = "purple",
-      SD      = "purple",
-      Median  = "darkgreen",
-      IQR     = "darkgreen"
+      Mean    = "#0A89FF",
+      SD      = "#0A89FF",
+      Median  = "#07B07B",
+      IQR     = "#07B07B"
     )
   ) +
   
@@ -202,11 +233,27 @@ ggplot(data.frame(specific_leaf_area), aes(x = specific_leaf_area)) +
   ) +
   
   labs(
-    title = "Distribution of Specific Leaf Area",
-    x = "Specific Leaf Area",
+    title = "Distribution and Summary Statistics of Leaf Dry Matter Content",
+    x = "Leaf Dry Matter Content [g/g]",
     y = "Density",
     colour = "Statistic"
   ) +
-  theme_minimal()
+  theme_bw()
+```
 
+### Counts/proportions
+All the summary statistics we have discussed so far apply to numeric variables.
+Of course, not all data is numeric: one commonly encountered type of data is categorical.
+The most commonly used technique to summarize categorical data is to count the number of elements in each category, and potentially convert these counts into proportions.
+In the example below we use the built-in `table` and `proportions` functions to calculate counts and proportions respectively for how many species are known to be clonal.
+
+
+```{r}
+# Counting how many plant species are clonal
+table(corre_categorical$clonal)
+```
+
+```{r}
+# Calculating the proportions of how many plant species are clonal
+proportions(table(corre_categorical$clonal))
 ```
