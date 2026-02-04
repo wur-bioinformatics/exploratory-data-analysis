@@ -1,28 +1,32 @@
 ---
 title: "The importance of data analysis"
 author: "Mark Sterken"
-date: "2025-09-03"
+date: "2026-02-04"
+editor: 
+  markdown: 
+    wrap: sentence
 ---
 
 ## The importance of data analysis
 
 ### Introduction to day 1
-Today we will focus on goal 1 (Built basic knowledge on using R and R studio) and goal 5 [Apply the data-science cycle (load, inspect, ~clean~, analyse, present)].
 
-In order to illustrate some concepts, we will make use of data from this paper:
+Today we will focus on goal 1 (Built basic knowledge on using R and R studio) and goal 5 \[Apply the data-science cycle (load, inspect, ~~clean~~, analyse, present)\].
 
-* [Warmerdam et al, 2018](https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15034).
+In order to illustrate some concepts, we will make use of data from a paper on nematode infections in *Arabidopsis thaliana*[@Warmerdam2018].
+
+-   [Warmerdam et al, 2018](https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15034).
 
 So you understand the data you will initially be working with, read the text related to [Figure 1](https://nph-onlinelibrary-wiley-com.ezproxy.library.wur.nl/cms/asset/63500840-1021-4110-9a8f-633fc41fe67e/nph15034-fig-0001-m.jpg) of the [Warmerdam et al, 2018](https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15034) paper.
 
-
 ### A short intro to R-studio and scripts
-When you open R studio, you see four panes. 
 
-1. On the top-left a text editor to write and document your code in
-2. On the top-right a pane that - for instance - can show which objects are available in the environment
-3. On the bottom-left the console which can execute your code
-4. On the bottom-right a pane where, among others, you can: browse through files, plots, and get an overview of packages.
+When you open R studio, you see four panes.
+
+1.  On the top-left a text editor to write and document your code in
+2.  On the top-right a pane that - for instance - can show which objects are available in the environment
+3.  On the bottom-left the console which can execute your code
+4.  On the bottom-right a pane where, among others, you can: browse through files, plots, and get an overview of packages.
 
 Now, check the message you see in the console.
 The R version displayed is important.
@@ -30,17 +34,18 @@ The script you are using should work with R versions 4.3 and onwards.
 If your version number is lower, please first shut-down RStudio and install a newer version of R.
 You can find out how to do so [here](https://support.wur.nl/esc?id=kb_article&sysparm_article=KB0010713&table=kb_knowledge&searchTerm=r%20installation).
 
-
 ### Set up your R environment
-Your analysis starts with making a script and thereafter you follow the standard steps in data analysis 
 
-1. Loading
-2. Inspecting
-3. Cleaning
-4. Analyzing 
-5. Presenting
+Your analysis starts with making a script and thereafter you follow the standard steps in data analysis
 
-For the tutorials and later in the practicals, it's important that you built an R-script. For that you find a template below, which you can copy paste into the text editor in R-studio.
+1.  Loading
+2.  Inspecting
+3.  Cleaning
+4.  Analyzing
+5.  Presenting
+
+For the tutorials and later in the practicals, it's important that you built an R-script.
+For that you find a template below, which you can copy paste into the text editor in R-studio.
 
 ```{r w1d1_script, eval=FALSE, class.source = 'fold-show'}
 
@@ -86,7 +91,10 @@ For the tutorials and later in the practicals, it's important that you built an 
 ```
 
 ### Telling R where on the hard drive it should work from.
-First, you need to set a work directory (tell R where on the hard drive you'll be working from). This can be done with the function `setwd()`, where you have to fill in the work directory yourself. If you want to know how to use that function type `?setwd()` into the console.
+
+First, you need to set a work directory (tell R where on the hard drive you'll be working from).
+This can be done with the function `setwd()`, where you have to fill in the work directory yourself.
+If you want to know how to use that function type `?setwd()` into the console.
 
 ```{r w1d1_set_working_directory, eval=FALSE, class.source = 'fold-show'}
     # Set a work directory
@@ -95,15 +103,17 @@ First, you need to set a work directory (tell R where on the hard drive you'll b
 
 You can also use the three dots `...` in the files pane of Rstudio to navigate towards the location you will be working from.
 
-
 ### Installing packages.
 
-Typically R-users use several 'packages'. These packages, give extra functionality to R. The main repositories are:
+Typically R-users use several 'packages'.
+These packages, give extra functionality to R.
+The main repositories are:
 
-1. CRAN, https://cran.r-project.org/
-2. Bioconductor, http://www.bioconductor.org/
+1.  CRAN, https://cran.r-project.org/
+2.  Bioconductor, http://www.bioconductor.org/
 
-In this tutorial we will be making use of various packages. Before we start, make sure you have the following packages installed:
+In this tutorial we will be making use of various packages.
+Before we start, make sure you have the following packages installed:
 
 ```{r install_packages_readxl_tidyverse, eval=FALSE, class.source = 'fold-show'}
     # Install the package
@@ -111,7 +121,8 @@ In this tutorial we will be making use of various packages. Before we start, mak
     install.packages("tidyverse") # For wrangling data and generating plots
 ```
 
-Note that you only need to install a package once, and only re-install it if the package has a new version or you install a new version of R. To activate the package, we need to load it into memory:
+Note that you only need to install a package once, and only re-install it if the package has a new version or you install a new version of R.
+To activate the package, we need to load it into memory:
 
 ```{r w1d1_activate_packages_readxl_tidyverse, eval=FALSE, class.source = 'fold-show'}
     # Activate the package
@@ -119,12 +130,15 @@ Note that you only need to install a package once, and only re-install it if the
     library("tidyverse") 
 ```
 
-
 ## Analysis of quantitative phenotypic data from an experiment
 
 ### Loading data into R
 
-During this course, we will load different types of data files into R. This is an essential skill for working with real-world data. In the following days we'll cover a couple of file-types that are common. For today, we have provided you with data in tab-delimited text format. Try to load this data using the funcion `read.delim()`.
+During this course, we will load different types of data files into R.
+This is an essential skill for working with real-world data.
+In the following days we'll cover a couple of file-types that are common.
+For today, we have provided you with data in tab-delimited text format.
+Try to load this data using the funcion `read.delim()`.
 
 ```{r w1d1_load_tabdelim_ASSIGNMENT, include = TRUE, eval=FALSE}
 
@@ -133,8 +147,8 @@ During this course, we will load different types of data files into R. This is a
 
 ```
 
-
 ### Inspecting data
+
 There are a couple of handy functions you should use to check the data you loaded: `head()`, `tail()`, and `summarise()`.
 
 ```{r w1d1_check_the_data, include = TRUE, eval=FALSE, class.source = 'fold-show'}
@@ -150,7 +164,8 @@ There are a couple of handy functions you should use to check the data you loade
     
 ```
 
-As you see above, these functions give a good overview of the dataset. It is important to do these basic checks in order to confirm that your data is in the right shape. 
+As you see above, these functions give a good overview of the dataset.
+It is important to do these basic checks in order to confirm that your data is in the right shape.
 
 You can also specifically check items in an object by using `[]`
 
@@ -170,14 +185,15 @@ You can also specifically check items in an object by using `[]`
     
 ```
 
-
 ### Inspect and clean data using ggplot2 and tidyverse
+
 To actually clean data, you need to inspect it (take a peak).
 I typically make a couple of plots.
 For example, here using ggplot (comes with the tidyverse package).
 You can read more about the plotting functions on their [website](https://ggplot2.tidyverse.org/)
 
 #### Boxplots and histograms
+
 The code below produces a boxplot, great for checking continuous data.
 I notice in the plot that there are a couple of single points (the horizontal stripes) per strain, also, there seem to be a couple of really high values.
 Let's check these.
@@ -201,9 +217,11 @@ Use the [ggplot2 website](https://ggplot2.tidyverse.org/) to figure out how to m
     
 ```
 
-
 #### Use table to inspect observation per genotype
-For the single values per genotype, it can be handy to use the `table()` function. Try to use this function on the column _genotype_. You can use `pheno_data$genotype` to access that column.
+
+For the single values per genotype, it can be handy to use the `table()` function.
+Try to use this function on the column *genotype*.
+You can use `pheno_data$genotype` to access that column.
 
 ```{r w1d1_table_for_genotypes_ASSIGNMENT, include = TRUE,eval=FALSE}
 
@@ -224,15 +242,17 @@ Now use `table()` to check the Line names.
 ```
 
 #### Cleaning and preparing the data
+
 In this example, all data is clean and we will not spend time cleaning it up.
 But it is important to realize that there typically are errors and inconsistencies in datasets.
 Figuring these out and fixing them is a large chunk of doing data analysis.
 
-
 ### Analyzing
-        
-#### Normal distribution 
-Let's figure out whether the data is normally distributed. For this we can use the functions `stat_qq()` and `stat_qq_line()`.
+
+#### Normal distribution
+
+Let's figure out whether the data is normally distributed.
+For this we can use the functions `stat_qq()` and `stat_qq_line()`.
 
 ```{r w1d1_qqplot_ASSIGNMENT, include = TRUE,eval=FALSE}
 
@@ -252,9 +272,14 @@ Alternatively, you can use a Shapiro-Wilk test (`shapiro.test`), this tests the 
 what does the p-value mean?
 
 #### T-test
-Now we can use a t-test to compare between two samples. For that, we first need to generate a smaller set of genotypes. We want to test a genotype versus the _A. thaliana_ reference genotype Col-0. Let's take the also popular Cvi-0 genotype to compare.
 
-In the lines below, we first group (`dplyr::group()`) the batches together (screenings were done at a particular date), then we keep only the screenings with Col-0 and Cvi-0 in them (`dplyr::filter()`). Thereafter we remove the grouping (`dplyr::ungroup()`) and keep only the Col-0 and Cvi-0 observations (again with `dplyr::filter()`).
+Now we can use a t-test to compare between two samples.
+For that, we first need to generate a smaller set of genotypes.
+We want to test a genotype versus the *A. thaliana* reference genotype Col-0.
+Let's take the also popular Cvi-0 genotype to compare.
+
+In the lines below, we first group (`dplyr::group()`) the batches together (screenings were done at a particular date), then we keep only the screenings with Col-0 and Cvi-0 in them (`dplyr::filter()`).
+Thereafter we remove the grouping (`dplyr::ungroup()`) and keep only the Col-0 and Cvi-0 observations (again with `dplyr::filter()`).
 
 ```{r w1d1_filter_Warmerdam, include = TRUE,eval=FALSE, class.source = 'fold-show'}
 
@@ -265,16 +290,19 @@ In the lines below, we first group (`dplyr::group()`) the batches together (scre
 
 ```
 
-Now we can test. See if you can test whether these two _A. thaliana_ genotypes are different in their susceptiblity to _Meloidogyne incognita_. Use `t.test()`
+Now we can test.
+See if you can test whether these two *A. thaliana* genotypes are different in their susceptiblity to *Meloidogyne incognita*.
+Use `t.test()`
 
 ```{r w1d1_ttest_Warmerdam_ASSIGNMENT, include = TRUE,eval=FALSE}
 t.test(eggmass~Line,data=data.test)
 ###you should have p-value = 2.588e-06
 ```
 
-
 ### Presenting
-Can you now also make a plot of what you just tested? Use `geom_boxplot()` to visualize the distribution and `geom_jitter()` to show the individual measurements.
+
+Can you now also make a plot of what you just tested?
+Use `geom_boxplot()` to visualize the distribution and `geom_jitter()` to show the individual measurements.
 
 ```{r w1d1_ttestplot_Warmerdam_ASSIGNMENT, include = TRUE,eval=FALSE}
 
@@ -282,8 +310,8 @@ ggplot(data.test,aes(x=Line,y=eggmass)) +
 geom_boxplot() + geom_jitter(height=0,width=0.25)
 ```
 
-We can make it a bit fancier by plotting the p-value as well. Try to include it into the plot by using the function `annotate()`.
-
+We can make it a bit fancier by plotting the p-value as well.
+Try to include it into the plot by using the function `annotate()`.
 
 ```{r w1d1_ttestplot_pval_Warmerdam_ASSIGNMENT, include = TRUE,eval=FALSE}
 
@@ -297,11 +325,21 @@ p1 <- ggplot(data.test,aes(x=Line, y=eggmass)) +
 ```
 
 #### Saving plots
-Now you have your plot, you need to save it. This also requires attention. There are multiple 'graphical devices' in `R` that you can use to plot. 
 
-The function I use most often in `pdf()`. The reason is that this function produces vectorized pdf's, which means that figures have infinite resolution. When you want to save your plot using this function, either save the figure in a file (as in the previous section), or plot directly within the 'graphical device', if you use {ggplot2}, you often have to explicitly define that you print the plot, by adding the function `print()`. Your entire plotting code than should be included in the brackets.
+Now you have your plot, you need to save it.
+This also requires attention.
+There are multiple 'graphical devices' in `R` that you can use to plot.
 
-I also need to define how wide and high I want to make the plot (in inches). I play around with the dimensions a lot, to get the figure in the right proportions. Note that the plotting is ended with `dev.off()`. This shuts down the graphical device. If you do not do that, it remains open and you will not see any plots appear on your plotting window in Rstudio.
+The function I use most often in `pdf()`.
+The reason is that this function produces vectorized pdf's, which means that figures have infinite resolution.
+When you want to save your plot using this function, either save the figure in a file (as in the previous section), or plot directly within the 'graphical device', if you use {ggplot2}, you often have to explicitly define that you print the plot, by adding the function `print()`.
+Your entire plotting code than should be included in the brackets.
+
+I also need to define how wide and high I want to make the plot (in inches).
+I play around with the dimensions a lot, to get the figure in the right proportions.
+Note that the plotting is ended with `dev.off()`.
+This shuts down the graphical device.
+If you do not do that, it remains open and you will not see any plots appear on your plotting window in Rstudio.
 
 ```{r w1d1_pdf_of_warmerdam_plot, include = TRUE, eval=FALSE, class.source = 'fold-show'}
 
@@ -311,11 +349,12 @@ dev.off()
         
 ```
 
-
 ### A for-loop
 
 #### The basics of a loop
-Within the data there are 332 unique genotypes. Verify this using the function `unique()` to get the unique genotypes and `length()` to count.
+
+Within the data there are 332 unique genotypes.
+Verify this using the function `unique()` to get the unique genotypes and `length()` to count.
 
 ```{r w1d1_check_length_ASSIGNMENT, include = TRUE,eval=FALSE}
 
@@ -325,7 +364,13 @@ length(genotypes)
 
 ```
 
-What if we want to plot all of these versus Col-0? Writing all these plots line-by-line is not doable. For this we can use a for-loop. with the function `for()` you can start a loop. The `for()` function counts along a variable. There are also other loops possible, for instance with `while()` that continues if a condition is met. Let's first look at a simple for-loop.
+What if we want to plot all of these versus Col-0?
+Writing all these plots line-by-line is not doable.
+For this we can use a for-loop.
+with the function `for()` you can start a loop.
+The `for()` function counts along a variable.
+There are also other loops possible, for instance with `while()` that continues if a condition is met.
+Let's first look at a simple for-loop.
 
 ```{r w1d1_for_loop_check, include = TRUE, eval=FALSE, class.source = 'fold-show'}
 
@@ -335,7 +380,8 @@ for(i in 1:30){
 
 ```
 
-That probably went too fast, but it printed the values 1:30 in your console. You can loop over any vector:
+That probably went too fast, but it printed the values 1:30 in your console.
+You can loop over any vector:
 
 ```{r w1d1_for_loop_check2, include = TRUE, eval=FALSE, class.source = 'fold-show'}
 
@@ -348,7 +394,11 @@ for(i in c("N. americanus","E. vermicularis","M. incognita","A. suum",
 
 #### For-loop over t-tests
 
-Now, let's automatize the t-test function. This is a bit simpler than plotting. For this, you need to make a for-loop cycling over the genoypes in `pheno_data`. You can remove Col-0 from the vector using `genotypes <- genotypes[genotypes != "Col-0"]`. Now, with what you read above, write a for-loop doing the t-test of each genotype versus Col-0 and make sure to pint the values in the console (either use `cat()` or `print()`).
+Now, let's automatize the t-test function.
+This is a bit simpler than plotting.
+For this, you need to make a for-loop cycling over the genoypes in `pheno_data`.
+You can remove Col-0 from the vector using `genotypes <- genotypes[genotypes != "Col-0"]`.
+Now, with what you read above, write a for-loop doing the t-test of each genotype versus Col-0 and make sure to pint the values in the console (either use `cat()` or `print()`).
 
 ```{r w1d1_for_loop_t-test_ASSIGNMENT, include = TRUE,eval=FALSE}
 
@@ -368,9 +418,14 @@ for(i in 1:length(genotypes)){
 ```
 
 #### For loop for plotting
-Now we can add a plot, for that we need to save the plots in an object (like we did with p1 before). Now, we will make a specific type of object: a `list`. Note that this `list` is not what you think of as a list.
 
-`Lists` are objects that can contain various other types of objects. For instance, I can place a `vector` or a `dataframe` into a `list`. You can access a location in a list using `[[]]`.
+Now we can add a plot, for that we need to save the plots in an object (like we did with p1 before).
+Now, we will make a specific type of object: a `list`.
+Note that this `list` is not what you think of as a list.
+
+`Lists` are objects that can contain various other types of objects.
+For instance, I can place a `vector` or a `dataframe` into a `list`.
+You can access a location in a list using `[[]]`.
 
 ```{r w1d1_a_list, include = TRUE,eval=FALSE, class.source = 'fold-show'}
 
@@ -404,7 +459,8 @@ output[[1]][8]
     
 ```
 
-Now take the plotting function we wrote before and use it to save plots into an object. Note that this takes a while to run (~2 minutes).
+Now take the plotting function we wrote before and use it to save plots into an object.
+Note that this takes a while to run (\~2 minutes).
 
 ```{r w1d1_for-loop_Warmerdam, include = TRUE,eval=FALSE}
 
@@ -430,9 +486,10 @@ output[[i]] <- ggplot(data.test,aes(x=Line,y=eggmass)) +
 }
 ```
 
-
 #### Save the plots
-We can save the plots in various ways. We can write one big pdf that contains all the plots.
+
+We can save the plots in various ways.
+We can write one big pdf that contains all the plots.
 
 ```{r w1d1_pdf_of_warmerdam_plot_all_vs_Col-0, include = TRUE, eval=FALSE, class.source = 'fold-show'}
 
@@ -455,8 +512,3 @@ for(i in 1:length(output)){
 }
         
 ```
-
-
-
-
-

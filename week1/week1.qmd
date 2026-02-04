@@ -1,6 +1,7 @@
 # I: A first look at R
 
-In this course you will learn how to conduct data analysis in R. As such, this tutorial is meant to take you through the steps of data analysis. Furthermore, it introduces concepts and ways to work with R.
+## The goals for week 1
+In this course you will learn how to conduct data analysis in R. As such, the assignments in this book are meant to take you through the steps of data analysis. Furthermore, it introduces concepts and ways to work with R.
 
 In the first week, the goals are:
 
@@ -10,4 +11,19 @@ In the first week, the goals are:
 4.  Document your code in a clear & concise way.
 5.  Apply the data-science cycle (load, inspect, clean, analyse, present)
 
-To work through the assignments, simply keep scrolling down. You see that the code-chunks are hidden at first, and by clicking the button, you can reveal them. However, to get better, first see if you can find a solution by yourself.
+:::{.callout-tip appearance='simple'}
+### What is the 'data-science cycle'?
+
+You are familiar with collecting data, even with some analysis and interpretation. For instance, in [Plant Science in Practice](https://studyhandbook.wur.nl/modules/NEM11305?type=Cursory) you gathered a dataset on wild plants via fieldwork and in [Reproduction of Plants](https://studyhandbook.wur.nl/modules/CLB10803?type=Cursory) you carry out a small experiment in a laboratory setting. 
+In Labwork you follow a particular protocol, and it is no different for data-analysis. We use an iterative cycle of loading, inspecting, cleaning, analysing, and presenting data. It is normal to go back and forth in the cycle. The main assumption is that any dataset is imperfect and has issues. In the first week, we will not bother with imperfection in what you use, but we will discuss it.
+:::
+
+
+## How week 1 is organized
+The material you are supposed to work through each day is a chapter in the book. During the scheduled tutorials background and context will be given. Also, there will be help available if you get stuck with the coding.
+
+There will be three days of working through the chapters (Monday - Wednesday). At the end of Wednesday, a coding peer-feedback assignment is due, which you submit via [Brightspace](https://brightspace.wur.nl/). Your assignment will be reviewed by two students, as you will review the assignment of two other students. The instructions for this assignment you find 
+
+
+
+, simply keep scrolling down. You see that the code-chunks are hidden at first, and by clicking the button, you can reveal them. However, to get better, first see if you can find a solution by yourself.
