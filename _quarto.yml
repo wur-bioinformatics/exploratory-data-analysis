@@ -27,6 +27,7 @@ book:
       chapters: 
         - week1/day1.qmd
         - week1/day2.qmd
+        - week1/day3.qmd
     - part: week2/week2.qmd
       chapters: 
         - week2/summary_statistics_and_functions.qmd
