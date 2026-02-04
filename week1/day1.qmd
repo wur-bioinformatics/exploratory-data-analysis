@@ -9,11 +9,42 @@ editor:
 
 ## The importance of data analysis
 
+```{r}
+#| echo: FALSE
+
+   install.packages("magick")
+
+```
+
+
 ### Introduction to day 1
 
 Today we will focus on goal 1 (Built basic knowledge on using R and R studio) and goal 5 \[Apply the data-science cycle (load, inspect, ~~clean~~, analyse, present)\].
 
 In order to illustrate some concepts, we will make use of data from a paper on nematode infections in *Arabidopsis thaliana*[@Warmerdam2018].
+
+::: {.callout-tip appearance="simple"}
+### *M. incognita* infections in *A. thaliana*
+Plant susceptibility to nematodes is a complex trait, with a lot of variation in susceptibility between individuals of the same species. At [the Laboratory of Nematology](https://www.wur.nl/en/chair-groups/laboratory-of-nematology), we study this plant-property. The study by Sonja Warmerdam (who, before her PhD, studied plant science)[@Warmerdam2018] was conducted on 340 ecotypes of the model plant *A. thaliana*. These were infected with the tropical root knot nematode *Meloidogyne incognita*. This plant-parasitic nematode is the cause of a major agricultural burden globally[@Jones2013].
+
+```{r}
+#| echo: FALSE
+#| label: Warmerdam dataset
+#| fig-cap: "Fig. 1 Quantitative variation in susceptibility of *Arabidopsis thaliana* to the root-knot nematode *Meloidogyne incognita*. Boxplot of the number of egg masses per plant. The thick bar indicates the median and the box indicates the 25 and 50 percent quantiles. The dots represent the individual observations on 340 ecotypes of Arabidopsis (accessions) at 6 wk after inoculation with $2^{nd}$ stage juveniles of *M. incognita*. The black boxplot and dots indicate the number of egg masses per plant for Col-0, which was used as a reference throughout this study."
+   
+   library(magick)
+
+   data.plot <- magick::image_read("./week1/Week1_day1_Warmerdam.tiff")
+   image_ggplot(data.plot)
+
+```
+
+
+Programming and data analysis are not spectator activities.
+To develop practical skills, it is essential to actively work through the examples in this book and to apply the demonstrated techniques to new datasets.
+By writing, running, and modifying code yourself, you will build the proficiency needed to use R effectively and to carry out reproducible data analyses.
+:::
+
 
 -   [Warmerdam et al, 2018](https://nph.onlinelibrary.wiley.com/doi/full/10.1111/nph.15034).
 
