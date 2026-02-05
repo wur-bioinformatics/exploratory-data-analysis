@@ -32,17 +32,16 @@ A PhD in our group, Arno Schaveling (who studied Plant Science at WUR) found out
 
 In particular, you can select for virulence in *G. pallida* over subsequent generations in one potato cultivar. Thereafter the ability of the resulting populations to reproduce in many potato cultivars is enhanced. This result meant that the resistance base in potato was relatively narrow.
 
-![Selection on the GpaV~vrn~-containing potato variety Seresta also increases virulence on other commercial potato varieties. (a) The selection experiment that was carried out with four generations of selection on Seresta. The colours indicate the potato variety used (Red Desiree, Orange Seresta), and the circles with the numbers indicate which propagation was used in the standard potato cyst nematode (PCN) resistance test. The numbers indicate the generation of selection. Due to the amount of material required for the standard PCN resistance test, Generation 0 and Generation 1 could not be derived from the selection line Generations 2--4 were on. (b) The outcome of the standard PCN resistance test for selected Generations 1--4. Each dot represents the reproduction (P~f~/P~i~) measured in one 2-l pot inoculated with 10000 larvae. The lines are linear regressions added as a visual aid. Colours indicate varieties, where Seresta and Innovator belong to Cl~SER~ and Libero, Avarna and Festien belong to Cl~FES~. The R~2~ is the amount of variance explained by generation as derived from a PERMANOVA.](Week1_day2_Schaveling1.jpeg)
+![Selection on the GpaV~vrn~-containing potato variety Seresta also increases virulence on other commercial potato varieties. (a) The selection experiment that was carried out with four generations of selection on Seresta. The colours indicate the potato variety used (Red Desiree, Orange Seresta), and the circles with the numbers indicate which propagation was used in the standard potato cyst nematode (PCN) resistance test. The numbers indicate the generation of selection. Due to the amount of material required for the standard PCN resistance test, Generation 0 and Generation 1 could not be derived from the selection line Generations 2--4 were on. (b) The outcome of the standard PCN resistance test for selected Generations 1--4. Each dot represents the reproduction (P~f~/P~i~) measured in one 2-l pot inoculated with 10000 larvae. The lines are linear regressions added as a visual aid. Colours indicate varieties, where Seresta and Innovator belong to Cl~SER~ and Libero, Avarna and Festien belong to Cl~FES~. The R~2~ is the amount of variance explained by generation as derived from a PERMANOVA.](Week1_day2_Schaveling1.jpeg){#fig-schaveling1}
 
 Next, we were able to identify a region on the *G. pallida* genome that was selected, ultimately identifying the gene *Gp-pat-1*. This gene is currently used as the target for a molecular assay to detect virulence in agricultural fields.
 
-![Single genetic locus is selected after repeated selection on Seresta. (a) Overview of the AMPOP02 (dots) and AMPOP10 (triangles) samples generated in the selection experiment and how many were successfully sequenced. As the larvae from which we isolated DNA underwent either a selection on Desiree (red) or Seresta (orange), we took the final number of generations selected on Seresta along in the analysis. (b) The number of variants that significantly correlate with virulence per scaffold plotted against the scaffold size in million bases (Mb). Dots indicate the variants found in AMPOP02, and triangles indicate variants found in AMPOP10. Text indicates which scaffold of the Rookmaker genome the datapoint belongs to. (c) The significance of the variants on scaffold 28 associated with generation in AMPOP10. The variants are plotted on their location on scaffold 28 (in Mb) vs the significance in −log~10~(P). The variants where the frequency of the alternative allele is decreasing over generations are coloured red, while those where the alternative allele is increasing are coloured blue. Grey variants are not significant. The dashed horizontal line indicates the Bonferroni-corrected threshold. The dashed vertical lines indicate the candidate locus. Note that the y-axis has been cut off at −log~10~(P) \< 2.](Week1_day2_Schaveling2.jpeg)
+![Single genetic locus is selected after repeated selection on Seresta. (a) Overview of the AMPOP02 (dots) and AMPOP10 (triangles) samples generated in the selection experiment and how many were successfully sequenced. As the larvae from which we isolated DNA underwent either a selection on Desiree (red) or Seresta (orange), we took the final number of generations selected on Seresta along in the analysis. (b) The number of variants that significantly correlate with virulence per scaffold plotted against the scaffold size in million bases (Mb). Dots indicate the variants found in AMPOP02, and triangles indicate variants found in AMPOP10. Text indicates which scaffold of the Rookmaker genome the datapoint belongs to. (c) The significance of the variants on scaffold 28 associated with generation in AMPOP10. The variants are plotted on their location on scaffold 28 (in Mb) vs the significance in −log~10~(P). The variants where the frequency of the alternative allele is decreasing over generations are coloured red, while those where the alternative allele is increasing are coloured blue. Grey variants are not significant. The dashed horizontal line indicates the Bonferroni-corrected threshold. The dashed vertical lines indicate the candidate locus. Note that the y-axis has been cut off at −log~10~(P) \< 2.](Week1_day2_Schaveling2.jpeg){#fig-schaveling2}
 :::
 
 ### Set up your R environment
 
 For the basics of setting up your environment, you can check [Chapter 1](week1/day1.qmd). The Markdown file to use for the exercises and documentation of your code is [here](day2_student_notebook.qmd).
-
 
 ### Loading data into R
 
@@ -77,7 +76,6 @@ To read Excel files, we use the `read_excel()` function from the readxl package.
 
 ```
 :::
-
 
 ::: {#exr-csv}
 #### Loading data from a CSV File (Comma-separated)
@@ -131,6 +129,7 @@ These files use tabs to separate values. They often have a .txt or .tsv extensio
 :::
 
 ## Analysis of (a)virulence of *Globodera pallida*
+
 This set of instructions follows the data analysis cycle, so it also includes setting up the R environment as well as loading in the data. If all is well, you already prepared this when going through the code above.
 
 ### Setup R
@@ -183,22 +182,21 @@ Last time we used `head()`, `tail()`, and `summarise()`. Again apply these funct
 
 ::: {#exr-check}
 #### Which file is which puzzle piece?
+
 Inspect the four files you have using `dim()`, `nrow()`, and `ncol()`. Which piece is which?
 
 [The puzzle pieces and the functions you will need to combine them further on in the excercise.](Week1_day2_Puzzle.png)
 
-Answer the following questions (note this is *random* for each personal dataset!). You can deduce which piece is which via their dimensions.
-1. Which 2 files are piece 1 and 2?
-2. which file is piece 3?
-3. Which file is piece 4?
+Answer the following questions (note this is *random* for each personal dataset!). You can deduce which piece is which via their dimensions. 1. Which 2 files are piece 1 and 2? 2. which file is piece 3? 3. Which file is piece 4?
 :::
 
-
 ### Cleaning and preparing the data
-Now you have the dimensions of the puzzle pieces. You can combine them in only one way. 
+
+Now you have the dimensions of the puzzle pieces. You can combine them in only one way.
 
 ::: {#exr-combine}
 #### Combine the data
+
 First you need to join the two pieces (1 and 2) with the equal number of rows using `cbind()`. Second, you need to add the piece (3) that now has the same number of columns using `rbind()`. Finally, you need to add the last piece (4) of data using `merge()`.
 
 Complete the code below
@@ -218,10 +216,9 @@ Complete the code below
 ```
 :::
 
-
 #### Inspecting data using histograms
-After combining, it is smart to inspect the data again to check if everything went well. You can use the same functions as before or, for instance, use `geom_histogram()`.
 
+After combining, it is smart to inspect the data again to check if everything went well. You can use the same functions as before or, for instance, use `geom_histogram()`.
 
 ```{r w1d2_make_a_ggplot2_histogram_ASSIGNMENT, include = TRUE,eval=FALSE}
 #| code-fold: false
@@ -233,7 +230,6 @@ After combining, it is smart to inspect the data again to check if everything we
     geom_histogram()
     
 ```
-
 
 ### Analyzing
 
@@ -265,10 +261,9 @@ Of course, you can also use a Shapiro-Wilk test (`shapiro.test`), this calculate
 
 ::: {#exr-normal_dist}
 #### Does the data follow a normal distribution?
+
 You now conducted two types of analyses that tell you whether the data is normally distributed. (1) what do you see in the qqplots, and what does it mean? (2) what are the p-values from the Shapiro-Wilk test? (3) what does a p-value mean?
 :::
-
-
 
 #### Wilcoxon test
 
@@ -293,13 +288,14 @@ Now we can test how the potato plants performed against virulent versus avirulen
 
 ::: {#exr-ttest}
 #### How to interpret a p-value?
+
 You now have tested a null-hypothesis using a non-parametric test and found that the chance his data agrees with this null-hypothesis is very small. What is the *biological interpretation* of this p-value?
 :::
-
 
 ### Presenting
 
 #### Boxplot
+
 Can you now also make a plot of what you just tested? Use `geom_boxplot()` to visualize the distribution and `geom_jitter()` to show the individual measurements.
 
 ```{r w1d2_wilcoxplot_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
@@ -311,9 +307,9 @@ Can you now also make a plot of what you just tested? Use `geom_boxplot()` to vi
 
 ```
 
-
 ::: {#exr-facet_grid}
 #### Boxplot with facet_grid()
+
 There is another variable in the data as well 'Experiment'. Use `facet_grid()` to split this out. Figure out how using the [ggplot2 website](https://ggplot2.tidyverse.org/).
 
 ```{r w1d2_wilcoxplot_facet_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
@@ -327,6 +323,7 @@ There is another variable in the data as well 'Experiment'. Use `facet_grid()` t
 :::
 
 #### Fancier boxplot
+
 Now we can add p-value as well using `annotate()`.
 
 ```{r w1d2_wilcoxplot_pval_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
@@ -353,6 +350,7 @@ Now we can add p-value as well using `annotate()`.
 
 ::: {#exr-saveplot}
 #### Save plot
+
 Now save the plot, check back at [Chapter 1](/week1/day1.qmd). Use a graphical device to save the plot with dimensions of 7 (width) by 4 (height).
 
 ```{r w1d2_pdf_of_pallida_plot, include = TRUE, eval=FALSE}
@@ -368,9 +366,10 @@ Now save the plot, check back at [Chapter 1](/week1/day1.qmd). Use a graphical d
 ### Inspecting data part 2
 
 #### Correlation analysis
-Correlation analysis is useful to discover patterns in large sets of data or between multiple measurements on the same sample (for instance different measurements on the same plant). 
 
-As the data is not exactly normally distributed, we also have to deal with that when calculating correlation. For normal (distribution) correlation, you should use the Pearson method. This is the standard setting for `cor()`. For data that is not normally distributed, the Spearman method should be used. To do this, you need to specify a parameter within a fuction. If you check the function `cor()` using the `?`, you see that you can specify `method`; `cor(x,y,method="Spearman")`. 
+Correlation analysis is useful to discover patterns in large sets of data or between multiple measurements on the same sample (for instance different measurements on the same plant).
+
+As the data is not exactly normally distributed, we also have to deal with that when calculating correlation. For normal (distribution) correlation, you should use the Pearson method. This is the standard setting for `cor()`. For data that is not normally distributed, the Spearman method should be used. To do this, you need to specify a parameter within a fuction. If you check the function `cor()` using the `?`, you see that you can specify `method`; `cor(x,y,method="Spearman")`.
 
 ```{r w1d2 correlation analysis ASSIGNMENT, include = TRUE,eval=FALSE}
 #| code-fold: false 
@@ -391,16 +390,17 @@ As the data is not exactly normally distributed, we also have to deal with that 
 
 ::: {#exr-correlation}
 #### Correlation analysis interpretation
-What do you conclude from the correlation analysis, are the two values correlated? What is the *biological* interpretation of this result?
 
+What do you conclude from the correlation analysis, are the two values correlated? What is the *biological* interpretation of this result?
 :::
 
 #### Clustering analysis
+
 Clustering is another method to explore data. Instead of patterns that move in the same direction, clustering is useful to apply if you expect consistent differences in values.
 
 For clustering we use the functions `dist()` and `hclust()`. The first function calculates the distance matrix, there are multiple methods to calculate the distance-matrix, here we use the standard method ("euclidean"). The second performs the clustering. This process groups the measurements that are most similar.
 
-Because the dataset is too large to perform clustering on all the measurements, we summarise the data by taking the mean per experiment for the virulent and avirulent populations. To achieve this, we group the data per experiment using `dplyr::group_by()`, then we summarise using `dplyr::summarise()`. Then we need to transform the data to long format, for this we use `tidyr::gather()`. To see what happens, the code below includes a before and after inspection of the dataframe. 
+Because the dataset is too large to perform clustering on all the measurements, we summarise the data by taking the mean per experiment for the virulent and avirulent populations. To achieve this, we group the data per experiment using `dplyr::group_by()`, then we summarise using `dplyr::summarise()`. Then we need to transform the data to long format, for this we use `tidyr::gather()`. To see what happens, the code below includes a before and after inspection of the dataframe.
 
 ```{r w1d2 clustering analysis ASSIGNMENT, include = TRUE,eval=FALSE}
 #| code-fold: false 
@@ -437,12 +437,12 @@ Because the dataset is too large to perform clustering on all the measurements, 
 
 ::: {#exr-correlation}
 #### Clustering analysis
-What do you conclude from the clustering analysis, are there differences between the two *G. pallida* populations? What is the *biological* interpretation of this result?
 
+What do you conclude from the clustering analysis, are there differences between the two *G. pallida* populations? What is the *biological* interpretation of this result?
 :::
 
-
 #### heatmap
+
 A handy visulization tool for correlation analysis as well as clustering analysis, is a heatmap. There is a basic function in `R`, `heatmap()` that works with matrices. When you run the code below, you get a visualization of the distance matrix. The same can be done with a correlation matrix, but we do not use that today.
 
 ```{r w1d2 heatmap, include = TRUE,eval=FALSE}
@@ -469,6 +469,7 @@ A handy visulization tool for correlation analysis as well as clustering analysi
 
 ::: {#exr-correlation}
 #### Plot of correlation
+
 Correlation can best be visualized with a scatter plot. complete the code below to generate a scatterplot of your *G. pallida* data. Add the correct column name for the y-axis and the right geom to plot all data points.
 
 ```{r w1d2 correlation plot, include = TRUE,eval=FALSE}
@@ -481,5 +482,4 @@ Correlation can best be visualized with a scatter plot. complete the code below 
 
 
 ```
-
 :::

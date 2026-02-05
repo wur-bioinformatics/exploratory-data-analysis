@@ -48,6 +48,8 @@ Instead, we approach R as a tool for thinking with data.
 Concepts are introduced gradually, starting from basic data manipulation and simple visualisation, and building towards more complex analyses.
 Throughout the course, the focus remains on understanding the data and the questions being asked, rather than on writing code for its own sake.
 
+![Course overview](course_overview.webp){#fig-course-overview}
+
 ## About the book
 
 This book is designed to support the learning objectives of the course by providing structured, practice-oriented learning material.

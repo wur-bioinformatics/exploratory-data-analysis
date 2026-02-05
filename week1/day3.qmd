@@ -30,7 +30,7 @@ As on the previous days, we will be making use of a real data-case.
 
 You already know that plant susceptibility to nematodes is a complex trait, with a lot of variation in susceptibility between individuals of the same species. This variation also exists for the dose-response relation between plants and nematodes. The data you will be using today is derived from a study by Jaap-Jan Willig, who used a camera platform to track the growth of 960 *A. thaliana* plants simultaneously[@Willig2023].
 
-![The relationship between the inoculation density (P~i~) of *H. schachtii* and green canopy area (relative yield). Nine-day-old Arabidopsis seedlings were inoculated with 20 different densities of *H. schachtii* juveniles (0--100 J2s g^--1^ of dry sand) in 200 ml pots containing 200 g of dry sand. (A) Experimental set up and colour channel decomposition of photos to extract the green leaf surface from the images. (B) Average growth curve of Arabidopsis plants inoculated with different inoculum densities of *H. schachtii* from 0 to 21 dpi. Line fitting was based on a LOESS regression. The red box indicates the data that are used for fitting the Seinhorst yield loss equation (n=10--24). (C) Fitting according to the Seinhorst yield loss equation. Parameter values for Seinhorst's equation for the relationship between initial population density (P~i~) of *H. schachtii* and measured leaf surface area. P~i~ and tolerance limit (TSYLM) are expressed in *H. schachtii* (per g of dry sand) while, the minimal yield (m) is the lowest proportion of the maximum green canopy area (cm^2^) (Ymax) at 21 dpi. The goodness of fit of the model on the data is expressed as the coefficient of determination (R^2^).](Week1_day3_Willig.jpeg)
+![The relationship between the inoculation density (P~i~) of *H. schachtii* and green canopy area (relative yield). Nine-day-old Arabidopsis seedlings were inoculated with 20 different densities of *H. schachtii* juveniles (0--100 J2s g^--1^ of dry sand) in 200 ml pots containing 200 g of dry sand. (A) Experimental set up and colour channel decomposition of photos to extract the green leaf surface from the images. (B) Average growth curve of Arabidopsis plants inoculated with different inoculum densities of *H. schachtii* from 0 to 21 dpi. Line fitting was based on a LOESS regression. The red box indicates the data that are used for fitting the Seinhorst yield loss equation (n=10--24). (C) Fitting according to the Seinhorst yield loss equation. Parameter values for Seinhorst's equation for the relationship between initial population density (P~i~) of *H. schachtii* and measured leaf surface area. P~i~ and tolerance limit (TSYLM) are expressed in *H. schachtii* (per g of dry sand) while, the minimal yield (m) is the lowest proportion of the maximum green canopy area (cm^2^) (Ymax) at 21 dpi. The goodness of fit of the model on the data is expressed as the coefficient of determination (R^2^).](Week1_day3_Willig.jpeg){#fig-willig}
 
 The goal of this research was to develop a platform that allowed us to track in real-time plant growth under below-ground biotic stress caused by nematode infection. Doing this experiment, we identified a compensation response where, at low levels of infection, plants perform better than in uninfected conditions.
 :::
@@ -42,18 +42,19 @@ For the basics of setting up your environment, you can check [Chapter 1](/week1/
 ### Quarto markdown
 
 #### The use of a markdown document
+
 The last two days you have been working with .qmd files ([Quarto markdown](https://quarto.org/docs/guide/)). This is a flavor of markdown, which is a markup language that relies on simple text to produce a layout of a document. As you have a lab-journal for experimental work in the field, greenhouse, or laboratory, a markdown notebook is useful to have when writing code.
 
 The Quarto markdown file you make today, should be handed in on [Brightspace](https://brightspace.wur.nl/) today, before the deadline. You hand in the .qmd file. Your reviewer will go through the file and check if it renders and whether your conclusions are correct.
 
 ::: {#exr-MakeQmd}
 #### Make your own markdown file
-In RStudio go to File > New File > Quarto document...
+
+In RStudio go to File \> New File \> Quarto document...
 
 Based on the documents provided last two days ([Chapter 1](/week1/day1.qmd) and [Chapter 2](/week1/day2.qmd)), make your own markdown file. Include meta information (title, name, registration number) and headings for: setup of the R environment (working directory, packages), and the five steps in the data analysis cycle (see [Chapter 1](/week1/day1.qmd)).
 
 You can choose whether it renders a .html or a .pdf document. For now, settle on .html, this typically renders well and does not require additional programs.
-
 :::
 
 ::: {.callout-tip appearance="simple"}
@@ -62,14 +63,7 @@ Typically, when you make a markdown file, you can make errors. RStudio tries to 
 Many errors were made by me - and the other teachers - in building the book you are now reading. Do ask us about our frustrations in working with R.
 :::
 
-
 ### How to do code-review
-
-
-
-
-
-
 
 ## Analysis of plant-growth data
 
