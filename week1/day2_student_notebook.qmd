@@ -1,0 +1,357 @@
+---
+title: "BIF20806_week1day2_notebook"
+editor: source
+date: ADD
+author: ADD
+registration_number: ADD
+---
+
+# From messy to clean
+
+## Set up your R environment
+
+
+### Set a work directory
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+### Hint: you can copy/paste from previous scripts
+
+```
+
+
+### Packages
+Here you can add notes to help yourself in the future.
+ 
+```{r}
+
+
+```
+
+
+## Loading data into R
+
+### Loading data from an excel file (.xlsx) (excercise)
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+
+```
+
+
+### Loading data from a CSV File (Comma-separated) (excercise)
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+
+```
+
+
+### Loading data from a CSV file (semicolon-separated) (excercise)
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+
+```
+
+
+### Loading a Tab-delimited File (excercise)
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+
+```
+
+## Inspecting data part 1
+
+### Using functions
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+    # Check the first 6 rows
+    head(data_csv)
+
+    # Check the last 6 rows
+    tail(data_csv)
+    
+    # get a summary of the data
+    summary(data_csv)
+ 
+    # get the length of a vector
+    length(data_csv)
+    
+    # get the number of columns
+    ncol(data_csv)
+    
+    # get the number of rows
+    nrow(data_csv)
+    
+    # get the dimensions of an object
+    dim(data_csv)
+    
+    
+```
+
+
+### Which file is which puzzle piece? (excercise)
+Inspect the four files you have using `dim()`, `nrow()`, and `ncol()`. Which piece is which?
+
+Answer the following questions (note this is *random* for each personal dataset!). You can deduce which piece is which via their dimensions.
+1. Which 2 files are piece 1 and 2?
+
+2. which file is piece 3?
+
+3. Which file is piece 4?
+
+
+## Cleaning and preparing the data
+
+### Combine the data (excercise)
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+    ### bind objects together over columns
+    pheno_data <- cbind(YOURPIECE1,YOURPIECE2)
+    
+    ### binds objects together over rows
+    pheno_data <- rbind(pheno_data,YOURPIECE3)
+    
+    ### merges objects, seeks for the same identitier, or you can provide it using by.x and by.y
+    pheno_data <- merge(pheno_data,YOURPIECE4)
+
+```
+
+### Inspecting data using histograms
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+    ggplot2::ggplot(pheno_data,aes(x=Gpal_vir)) +
+    geom_histogram()
+
+    ggplot2::ggplot(pheno_data,aes(x=Gpal_avir)) +
+    geom_histogram()
+    
+```
+
+
+## Analyzing
+
+### Normal distribution
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+### Using a plot
+    ggplot(pheno_data,aes(sample=Gpal_vir)) + 
+    stat_qq() + stat_qq_line()
+
+    ggplot(pheno_data,aes(sample=Gpal_avir)) + 
+    stat_qq() + stat_qq_line()
+
+### Using a statistical test
+    shapiro.test(pheno_data$Gpal_vir)
+    
+    shapiro.test(pheno_data$Gpal_avir)
+
+```
+
+### Does the data follow a normal distribution?
+You now conducted two types of analyses that tell you whether the data is normally distributed. 
+
+(1) what do you see in the qqplots, and what does it mean? 
+
+(2) what are the p-values from the Shapiro-Wilk test? 
+
+(3) what does a p-value mean?
+
+```{r}
+
+
+```
+
+### Wilcoxon test
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+    ### prepare the data
+    head(pheno_data)
+
+    data.test <- tidyr::gather(pheno_data,key="pallida",value="juveniles",-ID,-Experiment)
+
+    head(pheno_data)
+    
+    ### Conduct the statistical test
+    wilcox.test(juveniles~pallida,data=data.test)
+    ###you should have a very low p-value
+
+```
+
+### How to interpret a p-value? (exercise)
+You now have tested a null-hypothesis using a non-parametric test and found that the chance his data agrees with this null-hypothesis is very small. What is the *biological interpretation* of this p-value?
+
+## Presenting
+
+### Boxplot
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+    ### Simple boxplot
+    ggplot(data.test,aes(x=pallida,y=juveniles)) +
+    geom_boxplot() + geom_jitter(height=0,width=0.25)
+```
+
+
+### Boxplot with facet_grid() (exercise)
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+
+```
+
+
+#### Fancier boxplot
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+    ###I'm getting the statistics here
+    tmp <- tapply(data.test[,c("pallida","juveniles")],data.test$Experiment,function(x){
+                                broom::tidy(wilcox.test(x$juveniles~x$pallida))})
+   
+    ### I need to include the facets
+    statplot <- do.call(rbind,tmp) %>%
+                mutate(Experiment=1:3,pallida=1.5,juveniles=max(data.test$juveniles),
+                       label=paste("p =",signif(p.value,2)))
+
+    ###save the plot into an object
+    p1 <- ggplot(data.test,aes(x=pallida,y=juveniles)) +
+          geom_boxplot() + geom_jitter(height=0,width=0.25) +
+          facet_grid(~Experiment) + geom_text(aes(label=label),data=statplot)
+    
+    ###plot the plot
+    p1
+    
+```
+
+
+### Save the plot (exercise)
+Use a graphical device to save the plot with dimensions of 7 (width) by 4 (height).
+
+```{r}
+
+
+
+```
+
+Confirm that you now have a file on your HDD, within the folder you set as your working directory.
+
+
+## Inspecting data part 2
+
+### Correlation analysis
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+    data.test <- pheno_data
+
+    ### Pearson correlation
+    cor(data.test$Gpal_vir,data.test$Gpal_avir)
+    
+    ### Spearman correlation
+    cor(data.test$Gpal_vir,data.test$Gpal_avir,method = "spearman")
+    
+    ### Test of correlation
+    ### it is possible you get a warning here; this is not an error.
+    cor.test(data.test$Gpal_vir,data.test$Gpal_avir,method = "spearman")
+
+```
+
+### Correlation analysis interpretation (exercise)
+What do you conclude from the correlation analysis, are the two values correlated? What is the *biological* interpretation of this result?
+
+
+### Clustering analysis
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+    ### To make the distance matrix, we first need to summarise the data
+    ### otherwise the matrix becomes too large
+    data.test <- dplyr::group_by(pheno_data,Experiment) %>%
+                 dplyr::summarise(Gpal_vir=mean(Gpal_vir),Gpal_avir=mean(Gpal_avir))
+   
+    ###check the shape of the data before gather
+    head(data.test)
+    
+    data.test <- tidyr::gather(key=population,value=reproduction,-Experiment) 
+
+    ###and after gather
+    head(data.test)
+    
+    
+    ### Here we calculate the distance matrix
+    dist_mat <- dist(data.test$reproduction,diag=TRUE,upper=TRUE)
+    
+    ### to give understandable names to the distance matrix we re-write it as matrix
+    dist_mat <- as.matrix(dist_mat)
+        ### these two lines replace the column and row names in the matrix
+        colnames(dist_mat) <- paste(data.test$population,data.test$Experiment)
+        rownames(dist_mat) <- paste(data.test$population,data.test$Experiment)
+    ### to conduct clustering the matrix is re-written als distance matrix
+    dist_mat <- as.dist(dist_mat)
+    
+    ### here we use the base plot-function to look at the clustering
+    plot(hclust(dist_mat))
+
+
+```
+
+### Clustering analysis interpretation (exercise)
+What do you conclude from the clustering analysis, are there differences between the two *G. pallida* populations? What is the *biological* interpretation of this result?
+
+### heatmap
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+    ### To make the distance matrix, we first need to summarise the data
+    ### otherwise the matrix becomes too large
+    data.test <- dplyr::group_by(pheno_data,Experiment) %>%
+                 dplyr::summarise(Gpal_vir=mean(Gpal_vir),Gpal_avir=mean(Gpal_avir)) %>%
+                 tidyr::gather(key=population,value=reproduction,-Experiment) 
+    
+    ### Here we calculate the distance matrix
+    dist_mat <- dist(data.test$reproduction,diag=TRUE,upper=TRUE)
+    
+    ### to give understandable names to the distance matrix we re-write it as matrix
+    dist_mat <- as.matrix(dist_mat)
+        ### these two lines replace the column and row names in the matrix
+        colnames(dist_mat) <- paste(data.test$population,data.test$Experiment)
+        rownames(dist_mat) <- paste(data.test$population,data.test$Experiment)
+        
+    heatmap(dist_mat)
+
+```
+
+
+### Plot of correlation (exercise)
+Add the correct column name for the y-axis and the right geom to plot all data points.
+
+```{r}
+
+
+```
+
+

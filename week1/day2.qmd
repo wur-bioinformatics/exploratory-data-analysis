@@ -1,7 +1,7 @@
 ---
 title: "From messy to clean"
 author: "Mark Sterken"
-date: "2025-12-24"
+date: "2026-02-05"
 format:
   html:
     toc: true
@@ -24,7 +24,7 @@ Today we will continue with goal 1 (Built basic knowledge on using R and R studi
 We will make use of a fragmented simulated dataset. You need to puzzle it together using a couple of functions. Therafter you can analyze it further.
 
 ::: {.callout-tip appearance="simple"}
-#### Potato cyst nematodes, virulent *Globodera pallida* within North-West Europe
+### Potato cyst nematodes, virulent *Globodera pallida* within North-West Europe
 
 One of the current projects that is running at [the Laboratory of Nematology](https://www.wur.nl/en/chair-groups/laboratory-of-nematology), is an investigation into the virulence of the potato cyst nematode *Globodera pallida*. Although plant susceptibility is a complex traits, there are 'Mendelian nuggets' to be found that control these parasites. These 'Mendelian nuggets' are loci (e.g. one or a couple of genes) that have a strong effect on a trait. In this case, a particular resistance gene that was bred into potato and which strongly controls the reproduction of *G. pallida*.
 
@@ -39,66 +39,12 @@ Next, we were able to identify a region on the *G. pallida* genome that was sele
 ![Single genetic locus is selected after repeated selection on Seresta. (a) Overview of the AMPOP02 (dots) and AMPOP10 (triangles) samples generated in the selection experiment and how many were successfully sequenced. As the larvae from which we isolated DNA underwent either a selection on Desiree (red) or Seresta (orange), we took the final number of generations selected on Seresta along in the analysis. (b) The number of variants that significantly correlate with virulence per scaffold plotted against the scaffold size in million bases (Mb). Dots indicate the variants found in AMPOP02, and triangles indicate variants found in AMPOP10. Text indicates which scaffold of the Rookmaker genome the datapoint belongs to. (c) The significance of the variants on scaffold 28 associated with generation in AMPOP10. The variants are plotted on their location on scaffold 28 (in Mb) vs the significance in −log~10~(P). The variants where the frequency of the alternative allele is decreasing over generations are coloured red, while those where the alternative allele is increasing are coloured blue. Grey variants are not significant. The dashed horizontal line indicates the Bonferroni-corrected threshold. The dashed vertical lines indicate the candidate locus. Note that the y-axis has been cut off at −log~10~(P) \< 2.](Week1_day2_Schaveling2.jpeg)
 :::
 
-#### Set up your R environment
+### Set up your R environment
 
-For the basics of setting up your environment, you can check Chapter 1. The Markdown file to use for the exercises and documentation of your code is here:
-
-```{r w1d2_script, eval=FALSE, class.source = 'fold-show'}
-
-# BIF20806 - Day 2 ---------------------------------
+For the basics of setting up your environment, you can check [Chapter 1](week1/day1.qmd). The Markdown file to use for the exercises and documentation of your code is [here](week1/day2_student_notebook.qmd).
 
 
-
-# set a work directory ----------------------------------
-
-    ###this function you can use to automatically set a location
-    ###see tutorial 1, day 1 for more instructions
-    #setwd("D:/")
-    
-
-
-# Install packages ----------------------------------------------------
-
-    ###see tutorial 1, day 1 for more explanation
-
-# Load data -----------------------------------------------------------
-
-
-# Clean data ----------------------------------------------------------
-   
-    ### Inspect the data ##############################################
-
-
-    ### Repair errors and remove outliers #############################
-
-# Analyzing -----------------------------------------------------------
-        
-    ### Normal distribution ###########################################
-
-
-    ### ANOVA #########################################################
-
-
-    ### Post-hoc test #################################################
-
-
-    ### Simple linear model ###########################################
-
-
-# Presenting ----------------------------------------------------------
-
-    ### Simple box-plot ###############################################
-
-
-    ### A bit more fancy box-plot #####################################
-
-
-# The Van Sluijs dataset ----------------------------------------------
-
-
-```
-
-#### Loading data into R
+### Loading data into R
 
 In this tutorial, we will start with loading different types of data files into R. This is an essential skill for working with real-world data. We'll cover a couple of file-types that are common. *Each of you has their data in these formats*, you can find these via the fileshare on [Brightspace](https://brightspace.wur.nl/). If you are familiar with R, this part might be easy.
 
@@ -111,7 +57,8 @@ To make this part of the course realistic, *we have provided you with data in th
 
 You now need to load in data from all four data formats.
 
-##### Loading data from an excel file (.xlsx)
+::: {#exr-excel}
+#### Loading data from an excel file (.xlsx)
 
 To read Excel files, we use the `read_excel()` function from the readxl package. Excel files are very common but also very tricky. Namely, these files are mostly made by persons and people *do not automatically follow conventions* that are clear for a programming language. Therefore always check the excel file before loading it in.
 
@@ -124,10 +71,16 @@ To read Excel files, we use the `read_excel()` function from the readxl package.
 
     # Replace with the path to your Excel file
     data_excel <- readxl::read_excel("data/YOURFILENAME.xlsx")
+    
+    ### Check after loading
+    head(data_excel)
 
 ```
+:::
 
-##### Loading data from a CSV File (Comma-separated)
+
+::: {#exr-csv}
+#### Loading data from a CSV File (Comma-separated)
 
 CSV files are very common as format for data. Here each column is separated by a comma, rows are typically observations. We use the `read.csv()` function to load the data.
 
@@ -137,9 +90,14 @@ CSV files are very common as format for data. Here each column is separated by a
     # Replace with the path to your csv file
     data_csv <- read.csv("data/YOURFILENAME.csv")
 
+    ### Check after loading
+    head(data_csv)
+    
 ```
+:::
 
-##### Loading data from a CSV file (semicolon-separated)
+::: {#exr-csv2}
+#### Loading data from a CSV file (semicolon-separated)
 
 Some CSV files (especially from European systems) use a semicolon (;) instead of a comma. Use `read.csv2()` for these files
 
@@ -149,9 +107,14 @@ Some CSV files (especially from European systems) use a semicolon (;) instead of
     # Replace with the path to your csv file
     data_csv2 <- read.csv2("data/YOURFILENAME.csv")
 
+    ### Check after loading
+    head(data_csv2)
+    
 ```
+:::
 
-##### Loading a Tab-delimited File
+::: {#exr-tab}
+#### Loading a Tab-delimited File
 
 These files use tabs to separate values. They often have a .txt or .tsv extension.
 
@@ -161,12 +124,16 @@ These files use tabs to separate values. They often have a .txt or .tsv extensio
     # Replace with the path to your csv file
     data_tsv <- read.delim("data/YOURFILENAME.txt")
 
+    ### Check after loading
+    head(data_tsv)
+    
 ```
+:::
 
-### Analysis of (a)virulence of *Globodera pallida*
+## Analysis of (a)virulence of *Globodera pallida*
 This set of instructions follows the data analysis cycle, so it also includes setting up the R environment as well as loading in the data. If all is well, you already prepared this when going through the code above.
 
-#### Setup R
+### Setup R
 
 Before we start, make sure you have set the work directory and have the following packages ready: {tidyverse}, {readxl}, and {ggpubr}. Of course you also need to activate them. If you're not sure how, check [Chapter 1](/week1/day1.qmd).
 
@@ -178,13 +145,13 @@ Before we start, make sure you have set the work directory and have the followin
     ### type the code to activate the packages
 ```
 
-#### Load data
+### Load data
 
 Load your data for the tutorial into R, see the exercise above.
 
-#### Inspecting data part 1
+### Inspecting data part 1
 
-##### Inspecting data using functions
+#### Using functions
 
 Last time we used `head()`, `tail()`, and `summarise()`. Again apply these functions. But now we also want to check which piece is which. For that the functions `length`, `ncol()`, `nrow()`, and `dim()` are handy.
 
@@ -215,7 +182,7 @@ Last time we used `head()`, `tail()`, and `summarise()`. Again apply these funct
 ```
 
 ::: {#exr-check}
-##### Which file is which puzzle piece?
+#### Which file is which puzzle piece?
 Inspect the four files you have using `dim()`, `nrow()`, and `ncol()`. Which piece is which?
 
 [The puzzle pieces and the functions you will need to combine them further on in the excercise.](Week1_day2_Puzzle.png)
@@ -227,11 +194,11 @@ Answer the following questions (note this is *random* for each personal dataset!
 :::
 
 
-#### Cleaning and preparing the data
+### Cleaning and preparing the data
 Now you have the dimensions of the puzzle pieces. You can combine them in only one way. 
 
 ::: {#exr-combine}
-##### Combine the data
+#### Combine the data
 First you need to join the two pieces (1 and 2) with the equal number of rows using `cbind()`. Second, you need to add the piece (3) that now has the same number of columns using `rbind()`. Finally, you need to add the last piece (4) of data using `merge()`.
 
 Complete the code below
@@ -239,39 +206,40 @@ Complete the code below
 ```{r w1d2_combine_pieces_ASSIGNMENT, include = TRUE,eval=FALSE}
 #| code-fold: false
 
-        ### bind objects together over columns
-        pheno_data <- cbind(YOURPIECE1,YOURPIECE2)
-        
-        ### binds objects together over rows
-        pheno_data <- rbind(pheno_data,YOURPIECE3)
-        
-        ### merges objects, seeks for the same identitier, or you can provide it using by.x and by.y
-        pheno_data <- merge(pheno_data,YOURPIECE4)
+    ### bind objects together over columns
+    pheno_data <- cbind(YOURPIECE1,YOURPIECE2)
     
+    ### binds objects together over rows
+    pheno_data <- rbind(pheno_data,YOURPIECE3)
+    
+    ### merges objects, seeks for the same identitier, or you can provide it using by.x and by.y
+    pheno_data <- merge(pheno_data,YOURPIECE4)
+
 ```
 :::
 
-##### Inspecting data using histograms
+
+#### Inspecting data using histograms
 After combining, it is smart to inspect the data again to check if everything went well. You can use the same functions as before or, for instance, use `geom_histogram()`.
 
 
 ```{r w1d2_make_a_ggplot2_histogram_ASSIGNMENT, include = TRUE,eval=FALSE}
 #| code-fold: false
 
-        ggplot2::ggplot(pheno_data,aes(x=Gpal_vir)) +
-        geom_histogram()
+    ggplot2::ggplot(pheno_data,aes(x=Gpal_vir)) +
+    geom_histogram()
 
-        ggplot2::ggplot(pheno_data,aes(x=Gpal_avir)) +
-        geom_histogram()
+    ggplot2::ggplot(pheno_data,aes(x=Gpal_avir)) +
+    geom_histogram()
     
 ```
 
 
-#### Analyzing
+### Analyzing
 
 You now have the data complete. As you can see we have two measurements linked to one plant ID. The reason is that this data represents various inbred lines of potato plants tested for both virulent and avirulent *G. pallida* populations.
 
-##### Normal distribution
+#### Normal distribution
 
 Same as before, let's figure out whether the data is normally distributed. For this we can use the functions `stat_qq()` and `stat_qq_line()`. Find the code to do this in [Chapter 1](/week1/day1.qmd) and check the data in the `Gpal_vir` and `Gpal_avir` columns.
 
@@ -289,18 +257,20 @@ Of course, you can also use a Shapiro-Wilk test (`shapiro.test`), this calculate
 
 ```{r w1d2_shapiro_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
 
-    shapiro.test(pheno_data$eggmass)
+    shapiro.test(pheno_data$Gpal_vir)
+
+    shapiro.test(pheno_data$Gpal_avir)
 
 ```
 
 ::: {#exr-normal_dist}
 #### Does the data follow a normal distribution?
-You now conducted two types of analyses that tell you whether the data is normally distributed. (1) what do you see in the qqplot, and what does it mean? (2) what is the p-value from the Shapiro-Wilk test? (3) what does a p-value mean?
+You now conducted two types of analyses that tell you whether the data is normally distributed. (1) what do you see in the qqplots, and what does it mean? (2) what are the p-values from the Shapiro-Wilk test? (3) what does a p-value mean?
 :::
 
 
 
-##### Wilcoxon test
+#### Wilcoxon test
 
 As the data is not exactly normally distributed, let's deal with that in the proper way. Now we can use a Wilcoxon Rank Sum test to compare between two samples. We first need to transform the dataset, as we do not have a single observation per row currently. For this you can use the `gather()` function from the {tidyr} package. Use functions like `head()` and `tail()` to check what happened.
 
@@ -327,8 +297,9 @@ You now have tested a null-hypothesis using a non-parametric test and found that
 :::
 
 
-#### Presenting
+### Presenting
 
+#### Boxplot
 Can you now also make a plot of what you just tested? Use `geom_boxplot()` to visualize the distribution and `geom_jitter()` to show the individual measurements.
 
 ```{r w1d2_wilcoxplot_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
@@ -340,6 +311,9 @@ Can you now also make a plot of what you just tested? Use `geom_boxplot()` to vi
 
 ```
 
+
+::: {#exr-facet_grid}
+#### Boxplot with facet_grid()
 There is another variable in the data as well 'Experiment'. Use `facet_grid()` to split this out. Figure out how using the [ggplot2 website](https://ggplot2.tidyverse.org/).
 
 ```{r w1d2_wilcoxplot_facet_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
@@ -350,7 +324,9 @@ There is another variable in the data as well 'Experiment'. Use `facet_grid()` t
     facet_grid() ### add something in-between the brackets.
 
 ```
+:::
 
+#### Fancier boxplot
 Now we can add p-value as well using `annotate()`.
 
 ```{r w1d2_wilcoxplot_pval_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
@@ -360,19 +336,24 @@ Now we can add p-value as well using `annotate()`.
     tmp <- tapply(data.test[,c("pallida","juveniles")],data.test$Experiment,function(x){
                                 broom::tidy(wilcox.test(x$juveniles~x$pallida))})
    
+    ### I need to include the facets
     statplot <- do.call(rbind,tmp) %>%
                 mutate(Experiment=1:3,pallida=1.5,juveniles=max(data.test$juveniles),
                        label=paste("p =",signif(p.value,2)))
 
+    ###save the plot into an object
     p1 <- ggplot(data.test,aes(x=pallida,y=juveniles)) +
           geom_boxplot() + geom_jitter(height=0,width=0.25) +
           facet_grid(~Experiment) + geom_text(aes(label=label),data=statplot)
+    
+    ###plot the plot
+    p1
 
 ```
 
 ::: {#exr-saveplot}
-##### Save plot
-Now save the plot, check back at [Chapter 1](/week1/day1.qmd).
+#### Save plot
+Now save the plot, check back at [Chapter 1](/week1/day1.qmd). Use a graphical device to save the plot with dimensions of 7 (width) by 4 (height).
 
 ```{r w1d2_pdf_of_pallida_plot, include = TRUE, eval=FALSE}
 #| code-fold: false
@@ -384,9 +365,9 @@ Now save the plot, check back at [Chapter 1](/week1/day1.qmd).
 ```
 :::
 
-#### Inspecting data part 2
+### Inspecting data part 2
 
-##### Correlation analysis
+#### Correlation analysis
 Correlation analysis is useful to discover patterns in large sets of data or between multiple measurements on the same sample (for instance different measurements on the same plant). 
 
 As the data is not exactly normally distributed, we also have to deal with that when calculating correlation. For normal (distribution) correlation, you should use the Pearson method. This is the standard setting for `cor()`. For data that is not normally distributed, the Spearman method should be used. To do this, you need to specify a parameter within a fuction. If you check the function `cor()` using the `?`, you see that you can specify `method`; `cor(x,y,method="Spearman")`. 
@@ -409,12 +390,12 @@ As the data is not exactly normally distributed, we also have to deal with that 
 ```
 
 ::: {#exr-correlation}
-##### Correlation analysis
+#### Correlation analysis interpretation
 What do you conclude from the correlation analysis, are the two values correlated? What is the *biological* interpretation of this result?
 
 :::
 
-##### Clustering
+#### Clustering analysis
 Clustering is another method to explore data. Instead of patterns that move in the same direction, clustering is useful to apply if you expect consistent differences in values.
 
 For clustering we use the functions `dist()` and `hclust()`. The first function calculates the distance matrix, there are multiple methods to calculate the distance-matrix, here we use the standard method ("euclidean"). The second performs the clustering. This process groups the measurements that are most similar.
@@ -455,13 +436,13 @@ Because the dataset is too large to perform clustering on all the measurements, 
 ```
 
 ::: {#exr-correlation}
-##### Clustering analysis
+#### Clustering analysis
 What do you conclude from the clustering analysis, are there differences between the two *G. pallida* populations? What is the *biological* interpretation of this result?
 
 :::
 
 
-##### heatmap
+#### heatmap
 A handy visulization tool for correlation analysis as well as clustering analysis, is a heatmap. There is a basic function in `R`, `heatmap()` that works with matrices. When you run the code below, you get a visualization of the distance matrix. The same can be done with a correlation matrix, but we do not use that today.
 
 ```{r w1d2 heatmap, include = TRUE,eval=FALSE}
@@ -487,8 +468,8 @@ A handy visulization tool for correlation analysis as well as clustering analysi
 ```
 
 ::: {#exr-correlation}
-##### Plot of correlation
-Correlation can best be visualized with a scatter plot. complete the code below to generate a scatterplot of your *G. pallida* data.
+#### Plot of correlation
+Correlation can best be visualized with a scatter plot. complete the code below to generate a scatterplot of your *G. pallida* data. Add the correct column name for the y-axis and the right geom to plot all data points.
 
 ```{r w1d2 correlation plot, include = TRUE,eval=FALSE}
 

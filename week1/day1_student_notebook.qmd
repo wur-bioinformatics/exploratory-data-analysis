@@ -1,0 +1,325 @@
+---
+title: "BIF20806_week1day1_notebook"
+editor: source
+date: ADD
+author: ADD
+registration_number: ADD
+---
+
+# The importance of data analysis
+
+## Set up your R environment
+
+### Getting to grips with R (exercise)
+Start RStudio and browse through to find out:
+
+1. Which version of R are you running?
+
+2. Where can you find which packages are activated?
+
+3. Which version of the stats package is active?
+
+4. Where on your Harddrive is the current (default) working directory?
+
+
+### Prepare your documentation (exercise)
+Open the Quarto markdown template in RStudio and fill in your own information. 
+
+
+### Set a work directory
+Here you can add notes to help yourself in the future.
+
+```{r}
+###this is a code-chunk, where you can write and execute R-code
+
+###this function you can use to automatically set a location; you might not have a D-drive.
+#setwd("D:/")
+
+```
+
+
+### Install packages (excercise)
+Here you can add notes to help yourself in the future.
+ 
+```{r}
+### you find how to do this further in the book
+
+```
+
+
+### Activate packages (excercise)
+Here you can add notes to help yourself in the future.
+
+```{r}
+### you find how to do this further in the book
+
+```
+
+
+## Loading data into R
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+    # Maybe you need to add the path to your tab-delimited file
+    pheno_data <- read.delim("./BIF20806_Warmerdam_dataset.txt")
+
+
+```
+
+
+## Inspecting data
+
+### Using functions
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+### inspection functions
+    # Check the first 6 rows
+    head(pheno_data)
+
+    # Check the last 6 rows
+    tail(pheno_data)
+    
+    # get a summary of the data (per column)
+    summary(pheno_data)
+
+## accessing data
+    # The 18th row
+    pheno_data[18,]
+
+    # The 3rd column
+    pheno_data[,3]
+    
+    # Or combined the 18th row of the 3rd column
+    pheno_data[18,3]
+    
+    # the 18th value of the Line column; as a vector is one-dimensional only 1 coordinate is needed.
+    pheno_data$Line[18]
+    
+```
+
+
+### Inspect and clean data using ggplot2 and tidyverse
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+###Boxplot
+    ggplot2::ggplot(pheno_data,aes(x=genotype,y=eggmass)) +
+    geom_boxplot()
+
+```
+
+
+### Histogram (exercise)
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+
+```
+
+
+### Use table to inspect observation per genotype
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+    ### this way you can figure out how the function works
+    ?table()
+
+    table(pheno_data$genotype)
+
+```
+
+
+### Make a table (excercise)
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+
+```
+
+
+## Cleaning and preparing the data
+Not done in this excercise.
+
+
+## Analyzing
+
+### Normal distribution
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+### Using a plot
+    ggplot(pheno_data,aes(sample=eggmass)) + 
+    stat_qq() + stat_qq_line()
+
+### Using a statistical test
+    shapiro.test(pheno_data$eggmass)
+
+```
+
+### Does the data follow a normal distribution? (exercise)
+You now conducted two types of analyses that tell you whether the data is normally distributed. 
+
+(1) what do you see in the qqplot, and what does it mean? 
+
+(2) what is the p-value from the Shapiro-Wilk test? 
+
+(3) what does a p-value mean?
+
+```{r}
+
+
+```
+
+### T-test
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+    ### filter the data
+    data.test <- dplyr::group_by(pheno_data,screening) %>%
+                 dplyr::filter(("Col-0" %in% Line & "Cvi-0" %in% Line)) %>%
+                 dplyr::ungroup() %>%
+                 dplyr::filter(Line %in% c("Col-0","Cvi-0"))
+
+    ### Conduct the statistical test
+    t.test(eggmass~Line,data=data.test)
+    ###you should have p-value = 2.588e-06
+
+```
+
+### How to interpret a p-value? (exercise)
+You now have tested a null-hypothesis and found that the chance his data agrees with this null-hypothesis is very small. What is the *biological interpretation* of this p-value?
+
+
+## Presenting
+
+### Boxplot
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+    ### Simple boxplot
+    ggplot(data.test,aes(x=Line,y=eggmass)) +
+    geom_boxplot() + geom_jitter(height=0,width=0.25)
+
+    ### Fancier boxplot
+        ###I'm getting the statistics here
+        statplot <- broom::tidy(t.test(eggmass~Line,data=data.test))
+        
+        p1 <- ggplot(data.test,aes(x=Line, y=eggmass)) +
+              geom_boxplot() + 
+              geom_jitter(height=0, width=0.25) +
+              annotate("text", x=1.5, y=max(data.test$eggmass), label=paste("p =", signif(statplot$p.value, 2)))
+        
+        p1
+
+```
+
+
+### Save the plot (exercise)
+Add the code to save the plot
+
+```{r}
+
+
+
+```
+
+Confirm that you now have a file on your HDD, within the folder you set as your working directory.
+
+
+## A for-loop
+
+### For-loop over t-tests
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+    ###Get the unique genotypes to test against Col-0
+    genotypes <- unique(pheno_data$Line)
+    genotypes <- genotypes[genotypes != "Col-0"]
+    
+    ###this makes an empty list
+    output <- as.list(NULL)
+    for(i in 1:length(genotypes)){
+      
+        ### We select the data from one batch
+        data.test <- dplyr::group_by(pheno_data,screening) %>%
+                     dplyr::filter(("Col-0" %in% Line & genotypes[i] %in% Line)) %>%
+                     dplyr::ungroup() %>%
+                     dplyr::filter(Line %in% c("Col-0",genotypes[i]))
+        
+        ### conduct test and print the p-value
+        cat("",t.test(eggmass~Line,data=data.test)$p.value)
+    }
+
+```
+
+
+### For loop for plotting
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+    ###Get the unique genotypes to test against Col-0
+    genotypes <- unique(pheno_data$Line)
+    genotypes <- genotypes[genotypes != "Col-0"]
+    
+    ###this makes an empty list
+    output <- as.list(NULL)
+    for(i in 1:length(genotypes)){
+    
+        ### We select the data from one batch
+        data.test <- dplyr::group_by(pheno_data,screening) %>%
+                     dplyr::filter(("Col-0" %in% Line & genotypes[i] %in% Line)) %>%
+                     dplyr::ungroup() %>%
+                     dplyr::filter(Line %in% c("Col-0",genotypes[i])) %>%
+                     dplyr::mutate(Line = factor(Line,levels=c("Col-0",genotypes[i])))
+        
+        ### conduct test and clean the result with broom::tidy
+        statplot <- broom::tidy(t.test(eggmass~Line,data=data.test))
+        
+        ### Make the plot into the empty list
+        output[[i]] <- ggplot(data.test,aes(x=Line,y=eggmass)) +
+                       geom_boxplot() + geom_jitter(height=0,width=0.25) +
+                       annotate("text",x=1.5,y=max(data.test$eggmass),label=paste("p =",signif(statplot$p.value,2))) +
+                       theme_bw() + 
+                       labs(x=expression(bolditalic("A. thaliana")~bold("genotype")),y=expression(bolditalic("M. incognita")~bold("eggmasses (n)")))
+        }
+
+```
+
+
+### Save the plots
+Here you can add notes to help yourself in the future.
+
+```{r}
+
+    ###One big happy pdf
+    pdf(file="Figure_All_Col0-comparisons.pdf",width=3,height=4)
+        for(i in 1:length(output)){
+            print(output[[i]])
+        }
+    dev.off()   
+
+
+```
+
+
+### Save individual plots (exercise)
+Complete the code, so you can make a .png of each plot individually.
+
+```{r}
+
+
+```
+
+
