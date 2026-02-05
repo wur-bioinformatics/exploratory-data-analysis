@@ -1,5 +1,5 @@
 _book
-
+.DS_Store
 # renv files
 renv/library/
 renv/staging/
