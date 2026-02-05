@@ -67,7 +67,7 @@ Your analysis starts with making a file to document your progress and thereafter
 4.  Analyzing
 5.  Presenting
 
-For the tutorials, assignments, and exams, it's important that you built a file documenting your code. On the first two days, we will provide a full-scale template for you, that you can find [here](week1/day1_student_notebook.qmd) This Quarto markdown template you can open into the text editor in R-studio.
+For the tutorials, assignments, and exams, it's important that you built a file documenting your code. On the first two days, we will provide a full-scale template for you, that you can find [here](day1_student_notebook.qmd) This Quarto markdown template you can open into the text editor in R-studio.
 
 ::: {#exr-SetTemplate}
 #### Prepare your documentation

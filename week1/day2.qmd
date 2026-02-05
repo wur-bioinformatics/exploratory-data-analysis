@@ -41,7 +41,7 @@ Next, we were able to identify a region on the *G. pallida* genome that was sele
 
 ### Set up your R environment
 
-For the basics of setting up your environment, you can check [Chapter 1](week1/day1.qmd). The Markdown file to use for the exercises and documentation of your code is [here](week1/day2_student_notebook.qmd).
+For the basics of setting up your environment, you can check [Chapter 1](week1/day1.qmd). The Markdown file to use for the exercises and documentation of your code is [here](day2_student_notebook.qmd).
 
 
 ### Loading data into R
