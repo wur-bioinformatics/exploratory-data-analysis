@@ -10,7 +10,7 @@ format:
     code-tools: true
 editor: visual
 execute:
-  echo: false
+  eval: false
   warning: false
   message: false
 ---
