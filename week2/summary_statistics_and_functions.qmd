@@ -260,7 +260,6 @@ Of course, not all data is numeric: one commonly encountered type of data is cat
 The most commonly used technique to summarize categorical data is to count the number of elements in each category, and potentially convert these counts into proportions.
 In the example below we use the built-in `table` and `proportions` functions to calculate counts and proportions respectively for how many species are known to be clonal.
 
-
 ```{r}
 # Counting how many plant species are clonal
 table(corre_categorical$clonal)
@@ -270,6 +269,8 @@ table(corre_categorical$clonal)
 # Calculating the proportions of how many plant species are clonal
 proportions(table(corre_categorical$clonal))
 ```
+
+
 
 ## Functions (and other abstractions)
 
