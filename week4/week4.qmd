@@ -1,5 +1,10 @@
 # IV: Going furthR
 
+:::{.callout-caution}
+### WORK IN PROGRESS
+This chapter is not yet finished, come back later for the final product
+:::
+
 In this final week, we will consolidate a lot of what was learnt in the first 3 weeks, with the emphasis on increasing your confidence in writing R code to solve data-related issues. 
 The structure of the week is dataset-driven:
 

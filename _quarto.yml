@@ -36,8 +36,6 @@ book:
     - part: week3/week3.qmd
       chapters: 
         - week3/day1.qmd
-        - week3/visualization.qmd
-        - week3/unsupervised_analysis.qmd
     - part: week4/week4.qmd
       chapters: 
         - week4/day1.qmd

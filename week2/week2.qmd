@@ -1,5 +1,9 @@
 ---
 title: 'II: Getting familiar with programming'
-format: html
 ---
+
+:::{.callout-caution}
+### WORK IN PROGRESS
+This chapter is not yet finished, come back later for the final product
+:::
 

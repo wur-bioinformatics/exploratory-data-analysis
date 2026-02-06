@@ -5,6 +5,11 @@ execute:
   eval: FALSE
 ---
 
+:::{.callout-caution}
+### WORK IN PROGRESS
+This chapter is not yet finished, come back later for the final product
+:::
+
 ## Install R packages (dependencies)
 
 We will be using a number of packages that should ideally be installed at this stage so that any installation issues can be handled together. For reading HDF5 files, there are some packages available via CRAN, but the `rhdf5` package from Bioconductor seems to work well (we first install the `BiocManager` package to handle the `rhdf5` installation).
