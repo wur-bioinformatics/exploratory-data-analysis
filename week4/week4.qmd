@@ -1,4 +1,4 @@
-# IV: Advanced techniques
+# IV: Going furthR
 
 In this final week, we will consolidate a lot of what was learnt in the first 3 weeks, with the emphasis on increasing your confidence in writing R code to solve data-related issues. 
 The structure of the week is dataset-driven:
