@@ -48,8 +48,6 @@ Instead, we approach R as a tool for thinking with data.
 Concepts are introduced gradually, starting from basic data manipulation and simple visualisation, and building towards more complex analyses.
 Throughout the course, the focus remains on understanding the data and the questions being asked, rather than on writing code for its own sake.
 
-![Course overview](course_overview.webp){#fig-course-overview}
-
 ## About the book
 
 This book is designed to support the learning objectives of the course by providing structured, practice-oriented learning material.
@@ -67,7 +65,9 @@ By writing, running, and modifying code yourself, you will build the proficiency
 :::
 
 Just like the course, the book does not assume any prior knowledge on programming skills or working with R.
-To gradually build up to a level of independent data analysis, the book is structured into four main sections, aligning with the four weeks of the course.
+To gradually build up to a level of independent data analysis, the book is structured into four main sections, aligning with the four weeks of the course (@fig-course-overview).
+
+![Course overview](course_overview.svg){#fig-course-overview}
 
 ## Reading guide
 
@@ -76,5 +76,3 @@ All the study material for the course is available in the book.
 This means that by completing the material of one section of the book, you should be able to successfully perform the graded assignment of the accompanying week.
 
 To provide additional structure to the material in the book, you will find various 'boxes': these are intended to either highlight important information, or provide additional background material.
-
-In general, blue boxes are core material, green boxes are additional bonus information.
