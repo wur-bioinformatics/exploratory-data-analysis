@@ -128,8 +128,8 @@ cat("   user  system elapsed
 
 We are going to repeat this procedure, but instead of randomly taking 10k separate SNP positions, we are going to sample 10K SNPs in **chunks** instead, with these chunks evenly spaced over the whole genome. We will subsequently be comparing the results between using the original random set of SNPs, or having the same number of SNPs, but sampled in non-random chunks.
 
-::: callout-tip
-## Exercise 1
+::: {#exr-subsetdata}
+### Subsetting data
 
 -   Try to generate these alternative subsets yourself, while noting how much time it takes to read in 10K SNPs when they are read in chunks rather than singly.
 
