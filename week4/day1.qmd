@@ -11,6 +11,7 @@ This chapter is not yet finished, come back later for the final product
 :::
 
 ## Introduction
+
 This chapter follows a data-driven approach: we will be working with a large genotypic dataset (SNP markers) with accompanying meta-data, and a linked phenotypic dataset of flowering time in *A. thaliana*. You will gain some experience with data subsetting, data curation and visualisation, with spome focus on the choice of colour schemes. Familiar techniques like PCA will be used (already covered in week 3), followed by some possibly less familiar techniques (genome-wide association study). As we will be using data from a previously-published study, part of today's exercises will try to replicate some of the figures from the publication itself.
 
 ## Install R packages (dependencies)
