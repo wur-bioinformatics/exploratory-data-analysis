@@ -1,5 +1,5 @@
 ---
-title: "Week 4 Day 1 - Arabidopsis diversity"
+title: "Genotypic data, colour schemes and GWAS"
 author: "Peter Bourke"
 execute:
   eval: FALSE
@@ -10,9 +10,13 @@ execute:
 This chapter is not yet finished, come back later for the final product
 :::
 
+## This chapter follows a data-driven approach: we will be working with a large genotypic dataset (SNP markers) with accompanying meta-data, and a linked phenotypic dataset of flowering time in *A. thaliana*. You will gain some experience with data subsetting, data curation and visualisation, with spome focus on the choice of colour schemes. Familiar techniques like PCA will be used (already covered in week 3), followed by some possibly less familiar techniques (genome-wide association study). As we will be using data from a previously-published study, part of today's exercises will try to replicate some of the figures from the publication itself.
+
 ## Install R packages (dependencies)
 
-We will be using a number of packages that should ideally be installed at this stage so that any installation issues can be handled together. For reading HDF5 files, there are some packages available via CRAN, but the `rhdf5` package from Bioconductor seems to work well (we first install the `BiocManager` package to handle the `rhdf5` installation).
+We will be using a number of packages that should ideally be installed at this stage so that any installation issues can be handled together. 
+
+For reading HDF5 files, there are some packages available via CRAN, but the `rhdf5` package from Bioconductor seems to work well (we first install the `BiocManager` package to handle the `rhdf5` installation).
 
 Note that in all of the following calls, we first check whether the package has already been installed on our computer (`!requireNamespace()` returns `TRUE`or `FALSE` depending on whether the package is already installed or not).
 
