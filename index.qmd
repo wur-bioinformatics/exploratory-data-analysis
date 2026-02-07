@@ -7,8 +7,8 @@ editor:
 
 # Introduction {.unnumbered}
 
-This online book is the main study material for the course 'BIF20806: Exploratory Data Analysis in R'.
-This course is taught at Wageningen University and targets $2^{nd}$ year students in the BSc program Plant Sciences (BPW).
+This online book is the main study material for the course [BIF20806: Exploratory Data Analysis in R](https://studyhandbook.wur.nl/modules/BIF20806?type=Cursory).
+This course is taught at Wageningen University and targets $2^{nd}$ year students in the BSc program Plant Sciences ([BPW](https://www.wur.nl/nl/onderwijs/bachelor/bachelor-plantenwetenschappen)).
 The aim of this book and the course is to provide sufficient information and background so that after finishing, students can work independently on data analysis projects with R, using datasets that are typically encountered in the plant sciences.
 
 ## Data analysis in the plant sciences
@@ -65,7 +65,9 @@ By writing, running, and modifying code yourself, you will build the proficiency
 :::
 
 Just like the course, the book does not assume any prior knowledge on programming skills or working with R.
-To gradually build up to a level of independent data analysis, the book is structured into four main sections, aligning with the four weeks of the course.
+To gradually build up to a level of independent data analysis, the book is structured into four main sections, aligning with the four weeks of the course (@fig-course-overview).
+
+![Course overview](course_overview.svg){#fig-course-overview}
 
 ## Reading guide
 
@@ -73,6 +75,4 @@ Throughout the book, you will find a mix of examples, stories, theory, and assig
 All the study material for the course is available in the book.
 This means that by completing the material of one section of the book, you should be able to successfully perform the graded assignment of the accompanying week.
 
-To provide additional structure to the material in the book, you will find various 'boxes': these are intended to either highlight important information, or provide additional background material.
-
-In general, blue boxes are core material, green boxes are additional bonus information.
+To provide additional structure to the material in the book, you will find various 'boxes': these are intended to either highlight important information, or provide additional background material.g

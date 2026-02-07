@@ -2,12 +2,31 @@
 title: "Summary statistics and functions"
 ---
 
+:::{.callout-caution}
+### WORK IN PROGRESS
+This chapter is not yet finished, come back later for the final product
+:::
+
 ## Introduction
 
 A simple but effective way to start exploring a dataset is to compute a few summary statistics. In the previous week we already encountered a few summary statistics: we looked at e.g. the numbers of rows and columns of a table. In this section we will explore a few numerical summary techniques, such as computing the mean and standard deviation of a numeric variable, or counts/frequencies of a categorical variable. At the same time, we will look into one of the more powerful features of using a programming language: the possibility to create functions.
 
+:::{#exr-install-dependencies}
+### Installing the dependencies for this chapter
+
 ```{r}
+#| eval: FALSE
+install.packages('remotes')
 remotes::install_github('wur-bioinformatics/planteda')
+library(planteda)
+data('corre_continuous')
+data('corre_categorical')
+```
+:::
+
+```{r}
+#| echo: FALSE
+# this code is only for getting the data into the notebook during publishing
 library(planteda)
 data('corre_continuous')
 data('corre_categorical')
@@ -163,7 +182,7 @@ IQR(corre_continuous$LDMC)
 ```{r}
 #| echo: FALSE
 #| label: fig-summary-stats
-#| fig-cap: "A visualization of various summary statistics computed on the Specific Leaf Area variable in the CoRRE dataset. Purple lines represent the mean and standard deviation, green lines represent the median and the interquartile range. Individual datapoints are indicated on the X axis. The effect of a few large values can be observed in the difference between the mean and the median."
+#| fig-cap: "A visualization of various summary statistics computed on the Leaf Dry Matter Content variable in the CoRRE dataset. Blue lines represent the mean and standard deviation, green lines represent the median and the interquartile range. Individual datapoints are indicated on the X axis. The effect of a few large values can be observed in the difference between the mean and the median."
 
 library(ggplot2)
 #library(grid)
@@ -247,7 +266,6 @@ Of course, not all data is numeric: one commonly encountered type of data is cat
 The most commonly used technique to summarize categorical data is to count the number of elements in each category, and potentially convert these counts into proportions.
 In the example below we use the built-in `table` and `proportions` functions to calculate counts and proportions respectively for how many species are known to be clonal.
 
-
 ```{r}
 # Counting how many plant species are clonal
 table(corre_categorical$clonal)
@@ -257,3 +275,14 @@ table(corre_categorical$clonal)
 # Calculating the proportions of how many plant species are clonal
 proportions(table(corre_categorical$clonal))
 ```
+
+### Putting it all together
+
+
+## Functions (and other abstractions)
+
+TODO: discuss 
+- functions
+- scope
+- OOP (classes, methods, etc.)
+

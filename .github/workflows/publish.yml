@@ -38,7 +38,7 @@ jobs:
             libudunits2-dev \
             libfreetype6-dev \
             libpng-dev \
-            imagemagick
+            librsvg2-bin
           sudo fc-cache -fv
 
       - name: Install R

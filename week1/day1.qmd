@@ -28,7 +28,7 @@ In order to illustrate some concepts, we will make use of data from a paper on n
 
 Plant susceptibility to nematodes is a complex trait, with a lot of variation in susceptibility between individuals of the same species. At [the Laboratory of Nematology](https://www.wur.nl/en/chair-groups/laboratory-of-nematology), we study this plant-property. The study by Sonja Warmerdam (who, before her PhD, studied plant science)[@Warmerdam2018] was conducted on 340 ecotypes of the model plant *A. thaliana*. These were infected with the tropical root knot nematode *Meloidogyne incognita*. This plant-parasitic nematode is the cause of a major agricultural burden globally[@Jones2013]. We will use data from the initial screening (that took over 1.5 years) that was conducted for this research project.
 
-![Fig. 1 Quantitative variation in susceptibility of *Arabidopsis thaliana* to the root-knot nematode *Meloidogyne incognita*. Boxplot of the number of egg masses per plant. The thick bar indicates the median and the box indicates the 25 and 50 percent quantiles. The dots represent the individual observations on 340 ecotypes of Arabidopsis (accessions) at 6 wk after inoculation with 2^nd^ stage juveniles of *M. incognita*. The black boxplot and dots indicate the number of egg masses per plant for Col-0, which was used as a reference throughout this study.](Week1_day1_Warmerdam.png)
+![Quantitative variation in susceptibility of *Arabidopsis thaliana* to the root-knot nematode *Meloidogyne incognita*. Boxplot of the number of egg masses per plant. The thick bar indicates the median and the box indicates the 25 and 50 percent quantiles. The dots represent the individual observations on 340 ecotypes of Arabidopsis (accessions) at 6 wk after inoculation with 2^nd^ stage juveniles of *M. incognita*. The black boxplot and dots indicate the number of egg masses per plant for Col-0, which was used as a reference throughout this study.](Week1_day1_Warmerdam.png){#fig-warmermdam}
 :::
 
 As you gathered by now, this is a course in which we will use the versatile, statistical programming language `R`. We will teach you how to use R via RStudio. In particular we will teach you how to write and document code for data analysis. By the end of this week, you will have made your first steps towards making documents as you are reading now: [Quarto markdown](https://quarto.org/docs/guide/).
@@ -42,7 +42,7 @@ In this section of the book, the basics of setting up RStudio are explained. You
 
 When you open RStudio, you see four panes.
 
-![The Rstudio layout with four panes: (1) On the top-left a text editor to write and document your code in. (2) On the top-right a pane that - for instance - can show which objects are available in the environment. (3) On the bottom-left the console which can execute your code. (4) On the bottom-right a pane where, among others, you can: browse through files, plots, and get an overview of packages.](Week1_day1_RStudio_layout.png)
+![The Rstudio layout with four panes: (1) On the top-left a text editor to write and document your code in. (2) On the top-right a pane that - for instance - can show which objects are available in the environment. (3) On the bottom-left the console which can execute your code. (4) On the bottom-right a pane where, among others, you can: browse through files, plots, and get an overview of packages.](Week1_day1_RStudio_layout.png){#fig-rstudio}
 :::
 
 Now, check the message you see in the console.The R version displayed is important.
@@ -210,7 +210,7 @@ The code below produces a boxplot, great for checking continuous data. A box-plo
 ::: {.callout-note appearance="simple"}
 #### Boxplot
 
-![A boxplot of the Col-0 data from the Warmerdam paper](Week1_day1_Boxplot.png){width="4in"} The thick line in the middle of the box represents the median of the data (the value of the number in the middle when all values are placed in order), the outer lines of the box represent the 25% and 75% quantiles (the values of the numbers at 25 and 75 percent of all values). The lines sticking out of the box ('whiskers') represent the values covering \~95% of the data. If you see dots beyond these whiskers, these represent extreme values within the dataset.
+![A boxplot of the Col-0 data from the Warmerdam paper](Week1_day1_Boxplot.png){#fig-boxplot width="4in"} The thick line in the middle of the box represents the median of the data (the value of the number in the middle when all values are placed in order), the outer lines of the box represent the 25% and 75% quantiles (the values of the numbers at 25 and 75 percent of all values). The lines sticking out of the box ('whiskers') represent the values covering \~95% of the data. If you see dots beyond these whiskers, these represent extreme values within the dataset.
 :::
 
 Now produce the boxplot of all data from the paper[@Warmerdam2018].

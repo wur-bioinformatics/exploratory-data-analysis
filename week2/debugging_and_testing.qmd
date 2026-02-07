@@ -2,6 +2,11 @@
 title: "Debugging and testing"
 ---
 
+:::{.callout-caution}
+### WORK IN PROGRESS
+This chapter is not yet finished, come back later for the final product
+:::
+
 Programming and scripting for data analysis is _not only_ about writing code that runs.
 It is perhaps even more important to write code that produces correct and interpretable results.
 
