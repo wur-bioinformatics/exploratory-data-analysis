@@ -21,7 +21,7 @@ execute:
 
 Today we will continue with goal 1 (Built basic knowledge on using R and R studio) and goal 3 (Apply common statistical tools for inspecting and analyzing data). We will also start with goal 4 (Be able to document your code in a clear & concise way). You will find out that we've already covered this by requiring you to write a script. Now we'll add one more layer to it, the notebook.
 
-New today, is that you get an assignment. In this assignment, you are expected to go over goal 5 \[(Apply the data-science cycle (load, inspect, ~~clean~~, analyse, present)\]. Also, this is not new, we've been doing it for the past two days.
+New today, is that you get an assignment. In this assignment, you are expected to go over goal 5 \[Apply the data-science cycle (load, inspect, ~~clean~~, analyse, present)\]. Also, this is not new, we've been doing it for the past two days.
 
 As on the previous days, we will be making use of a real data-case.
 
@@ -85,11 +85,17 @@ Note that the name of the object you loaded into memory is not the same as the n
 ::: {.callout-note appearance="simple"}
 Up till now, we have been avoiding talking about many of the programming aspects of working with R. But, grasshoppers, I'm afraid it is due.
 
-There are some things you probably noticed by now: any wrong wording, comma's or other 'unintended mistakes' from your side are immediately recognized by R and rewarded with an 'error'. There are also so-called 'warnings'. The difference is that 'error' results in code that does not work (e.g. you will not get the specific calculation/processing executed) and a 'warning' means that you might have done something that was not intended (but you will get output).
+There are some things you probably noticed by now: any wrong wording, comma's or other 'unintended mistakes' from your side are immediately recognized by R and rewarded with an 'error'. There are also so-called 'warnings'. The difference is that 'error' results in code that does not work (e.g. you will not get the specific calculation/processing executed) and a 'warning' means that you might have done something that was not intended (but you will get output). Next week in [Chapter 6](/week2/debugging_and_testing.qmd) we cover this more thoroughly.
 
-The most important step in data-analysis is checking after an operation. Make sure that what you did was what you intended and that what comes back is correct. How often have we, your teachers, not wept when we 'quickly' skipped this and found out that the output we got was incorrect.
+The most important step in data-analysis is checking after an operation. Make sure that what you did was what you intended and that what comes back is correct. How often have we, your teachers, not wept when we 'quickly' skipped this and found out that the output we got was incorrect. 
 
-There are some general measures you can take to reduce risks: 1. Always start with a clean environment. At exit, do not save the environment, but start afresh. This ensures that you *know* which packages you loaded, which files you need to collect, which variables you need to define. 2. When writing a pipe (`%>%`) or any complex set of operations, check each step individually. Was the outcome of your function as intended? 3. Do a pilot. If you run a calculation that takes a long time, run it on a small subset of your data and *thoroughly* check the output. 4. Know what you do, especially with statistics. Always *visualize* the outcome of the analysis if you can. Otherwise it might be that you take a trip into statistical winter-wonder land. 5. Be wary of the class factors. Factors are indexed sets of data. If this indexed set of data is a number, the number on which the calculation is performed is the *index number*, not the actual number you see. In this case, you need to transform the factor to an actual number. You can check if this might be a problem using the function `class()`.
+There are some general measures you can take to reduce risks: 
+
+1. Always start with a clean environment. At exit, do not save the environment, but start afresh. This ensures that you *know* which packages you loaded, which files you need to collect, which variables you need to define. 
+2. When writing a pipe (`%>%`) or any complex set of operations, check each step individually. Was the outcome of your function as intended? 
+3. Do a pilot. If you run a calculation that takes a long time, run it on a small subset of your data and *thoroughly* check the output. 
+4. Know what you do, especially with statistics. Always *visualize* the outcome of the analysis if you can. Otherwise it might be that you take a trip into statistical winter-wonder land. 
+5. Be wary of the class factors. Factors are indexed sets of data. If this indexed set of data is a number, the number on which the calculation is performed is the *index number*, not the actual number you see. In this case, you need to transform the factor to an actual number. You can check if this might be a problem using the function `class()`.
 :::
 
 ### Inspecting data
@@ -113,7 +119,13 @@ Inspect the data using the same functions as in [Chapter 2](/week1/day2.qmd).
 ::: {#exr-headtail}
 #### Inspecting data
 
-Answer these three questions: (1) What do the `head()` and (2) `tail()` function tell you about an object? (3) If you would not know this, what is the command you could execute within the R console to find out?
+Answer these three questions: 
+
+1. What does the `head()` function tell you about an object? 
+
+2. Similarly, what does the `tail()` function tell you about an object? 
+
+3. If you would not know this, what is the command you could execute within the R console to find out?
 :::
 
 ### Cleaning and preparing the data
@@ -183,8 +195,7 @@ Now, let's make a proper plot of correlation.
 
 ```
 
-<div>
-
+::: {#exr-interpretation}
 #### Is the plant-growth correlated with time?
 
 What is the *biological interpretation* of the correlation you calculated and observed?
@@ -194,8 +205,7 @@ What is the *biological interpretation* of the correlation you calculated and ob
 2.  What does the slope represent?
 
 3.  Is a linear model a good fit for plant growth *in general*?
-
-</div>
+:::
 
 ## Assignment for code-review week 1
 
@@ -233,35 +243,49 @@ Load the two data files into the R environment using the appropriate read functi
   
   
 ::: {.callout-tip appearance="simple"}
-The data consists of the growth rates of *A. thaliana* Col-0 when inoculated with either of two plant parasitic nematodes[@Willig_2023]. The two nematode species tested are the beet-cyst nematode *Heterodera schachtii* and the root-knot nematode *Meloidogyne incognita*. Within your personal folder you find the data of the experiment conducted at a particular infection density (Pi) in nematodes g^-1. The measured trait is the day-by-day growth rate, measured between two consecutive days post infection (dpi). For instance between day 2 and day 3. The dpi within the datafile would be 2.5 in that case. This data is given per plant.
+The data consists of the growth rates of *A. thaliana* Col-0 when inoculated with either of two plant parasitic nematodes[@Willig2023]. The two nematode species tested are the beet-cyst nematode *Heterodera schachtii* and the root-knot nematode *Meloidogyne incognita*. Within your personal folder you find the data of the experiment conducted at a particular infection density (Pi) in nematodes g^-1. The measured trait is the day-by-day growth rate, measured between two consecutive days post infection (dpi). For instance between day 2 and day 3. The dpi within the datafile would be 2.5 in that case. This data is given per plant.
 :::
   
   
 ::: {#exr-Assignment_inspect}
 #### Inspect
-
 Inspect the data using functions (no plot required). Based on the output indicate which bind function you need to use to combine the two objects into one.
-:::
+::: 
+
   
+::: {.callout-note appearance="simple"}
+We covered these functions in [Chapter 1](/week1/day1.qmd) and [Chapter 2](/week1/day2.qmd)) under the heading Inspecting data.
+:::
   
 ::: {#exr-Assignment_clean}
 #### Clean (combine)
-
 Use a 'bind' function to combine the two objects into one.
 :::
   
+::: {.callout-note appearance="simple"}
+We covered these functions in [Chapter 2](/week1/day2.qmd)) when combining the four objects.
+:::
   
 ::: {#exr-Assignment_analyse}
 #### Analyse
-
-Compare growth rates of the *A. thaliana* plant when infected with either *H. schachtii* or *M. incognita*, analyse whether these differ using a `t.test()`. Report at least the p-value.
+Compare growth rates of the *A. thaliana* plant when infected with either *H. schachtii* or *M. incognita*, analyse whether these differ using a test that does not assume a normal distribution. Report at least the p-value.
 :::
-  
+
+::: {.callout-tip appearance="simple"}
+We do not ask you to check for normality for this assignment, as that dataset overall is not normally distributed, we give you that your subset is also not. Note that in the paper We deal with this by using a non-parametric test as well[@Willig2023].
+
+![Quantification of the tolerance limit of Col-0 to Meloidogyne incognita based on growth rate. Nine-day-old Arabidopsis seedlings were inoculated with 18 different densities (Pi) of M. incognita juveniles (0–100 juveniles g^–1^ of dry sand. (A) Green canopy area of plants treated with P~i~=0 (blue line) or P~i~=5 (aquamarine line) from 0 to 21 dpi. (B) Rate of growth of plants treated with P~i~=0 (blue line) or P~i~=5 (aquamarine line) from 0 to 21 dpi was calculated using Equation 2 in the manuscript. (C) Rate of growth of plants inoculated with increasing P~i~ values growing from 5 to 16 dpi. (D) Rate of growth of plants inoculated with increasing P~i~ values growing from 17 to 21 dpi. (E) Cumulative growth rate of plants inoculated with increasing Pi values. (C–E) Dots represent individual plants. Data were analysed with a Wilcoxon rank sum test. ns=not significant, *P<0.05, **P<0.01, ***P<0.001 (n=10–12).](Week1_day3_WilligAssignment.jpeg)
+
+:::  
   
 ::: {#exr-Assignment_present}
 #### Present
 
 Make a `ggplot2::` boxplot showing the two nematode species on the x-axis and the growth rate on the y-axis.
+:::
+
+::: {.callout-note appearance="simple"}
+We covered the boxplot function in [Chapter 1](/week1/day1.qmd)) in the presentation section.
 :::
 
 Now you have analysed the difference in growth rates between the two species at a particular density at a particular day of the experiment. Now it is time to draw conclusions.
@@ -291,7 +315,7 @@ You need to review 2 coding assignments of other students within the course. You
 ##### What is feedback?
 Feedback literally means 'giving back'. It is not an euphemism for criticism. Rather, feedback can be described as: information regarding the way my message or behaviour (or coding and interpreting the outcome of data-analysis in this case) has been received and interpreted. Feedback stimulates you to think about and implement possibilities to improve.
 
-Feedback is critical for your own improvement. Peer feedback relies on giving and receiving feedback. Receiving feedback allows you to develop your competences and skills. Well-given feedback can help you asses your strengths and weak points, and allows you to address the weak points from the basis of your strengths. However, giving feedback also ask you to be critical and recognize certain aspects of data analysis, which you can implement again in your own process of analysing data in R.
+Feedback is critical for your own improvement. Peer feedback relies on giving and receiving feedback. Receiving feedback allows you to develop your competences and skills. Well-given feedback can help you asses your strengths and weak points, and allows you to address the weak points from the basis of your strengths. However, giving feedback also ask you to be critical and recognize certain aspects of data analysis, which you can implement again in your own process of analyzing data in R.
 
 ##### How to give feedback
 When giving feedback it is important to:
@@ -308,6 +332,7 @@ When giving feedback it is important to:
 There are many ways in which you can write well-organized code. What all have in common is consistency. Here, I teach you *a way* of doing this. These are the rules that I *generally* follow. I would like to stress that these are guidelines. These guidelines help others to read and understand your code. However, they also help you when you need to re-use or re-run your code.
 
 Check:
+
 - Are clear section-level headings used?
 - are hierarchies indicated with a tab?
 - from non-base R functions, is the package indicated (e.g. `dplyr::`)?
@@ -317,17 +342,20 @@ Check:
 When writing code, leave comments. Especially when you're doing something new / special this is very helpful to you in the future. But also to others that will check or even use your code. It can be very handy to indicate why you use a particular function for instance.
 
 Check:
+
 - Are comments included in the code?
 - Above code chunks, is there an explanation of what is done and why?
 
 #### Properly used code
-This checks whether the functions are used as intended. For instance, you can run a correlation analysis on numbers that are of `class` `factor` (check this by using `class()` on a vector/data frame column). However, correlations should be done using actualy numbers `is.numeric()` should return `TRUE`.
+This checks whether the functions are used as intended. For instance, you can run a correlation analysis on numbers that are of `class` `factor` (check this by using `class()` on a vector/data frame column). However, correlations should be done using actualy numbers `is.numeric()` should return `TRUE`. Another example is whether the correct statistical test was used given the data?
 
 Check:
+
 - Are the correct functions / inputs used?
 
 #### Working code
 Check:
+
 - can you run the code and get the same output?
 
 #### The Biological interpretation
