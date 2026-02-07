@@ -8,7 +8,7 @@ format:
     toc-depth: 3
     code-fold: true
     code-tools: true
-editor: visual
+editor: source
 execute:
   eval: false
   warning: false
@@ -42,18 +42,19 @@ For the basics of setting up your environment, you can check [Chapter 1](/week1/
 ### Quarto markdown
 
 #### The use of a markdown document
+
 The last two days you have been working with .qmd files ([Quarto markdown](https://quarto.org/docs/guide/)). This is a flavor of markdown, which is a markup language that relies on simple text to produce a layout of a document. As you have a lab-journal for experimental work in the field, greenhouse, or laboratory, a markdown notebook is useful to have when writing code.
 
 The Quarto markdown file you make today, should be handed in on [Brightspace](https://brightspace.wur.nl/) today, before the deadline. You hand in the .qmd file. Your reviewer will go through the file and check if it renders and whether your conclusions are correct.
 
 ::: {#exr-MakeQmd}
 #### Make your own markdown file
-In RStudio go to File > New File > Quarto document...
+
+In RStudio go to File \> New File \> Quarto document...
 
 Based on the documents provided last two days ([Chapter 1](/week1/day1.qmd) and [Chapter 2](/week1/day2.qmd)), make your own markdown file. Include meta information (title, name, registration number) and headings for: setup of the R environment (working directory, packages), and the five steps in the data analysis cycle (see [Chapter 1](/week1/day1.qmd)).
 
 You can choose whether it renders a .html or a .pdf document. For now, settle on .html, this typically renders well and does not require additional programs.
-
 :::
 
 ::: {.callout-tip appearance="simple"}
@@ -62,34 +63,33 @@ Typically, when you make a markdown file, you can make errors. RStudio tries to 
 Many errors were made by me - and the other teachers - in building the book you are now reading. Do ask us about our frustrations in working with R.
 :::
 
-
-### How to do code-review
-
-
-
-
-
-
-
 ## Analysis of plant-growth data
 
-Today we want to cover one more aspect of data analysis, namely including the fit of a simple model into a plot. In this case, we will use some plant-growth data. And to be precise, we will use the linear part of the growth curve. It is perfectly possible to fit a growth-model within R, but we want to start a bit simpler with an actual linear curve. you can find the data for this assignment via the fileshare on [Brightspace](https://brightspace.wur.nl/). You need the general file for everyone, not your personal dataset for the code-review assignment.
+Today we want to cover one more aspect of data analysis, namely including the fit of a simple model into a plot. In this case, we will use some plant-growth data. And to be precise, we will use the linear part of the growth curve. It is perfectly possible to fit a growth-model within R, but we want to start a bit simpler with an actual linear curve. you can find the data for this assignment via the fileshare on [Brightspace](https://brightspace.wur.nl/). You need the general file under day 3, not your personal dataset for the code-review assignment.
 
-::: {#exr-loadxlsx}
+::: {#exr-load_robj}
 ### Load the data
 
-Load the data using `readxl::read_xlsx()`. If you forgot how to, go back to [Chapter 2](/week1/day2.qmd).
+Load the data using `load()`. We have not used this function before. Use `?load()` to figure out how this function works.
 
-```{r w1d2_load_xlsx, include = TRUE,eval=FALSE, class.source = 'fold-show'}
+```{r w1d3_load}
 #| code-fold: false
 
-    ### Packages (you need a package for the function)
-
-
-    # Replace with the path to your Excel file
-    pheno_data <- ### here add the code to read the data
+    ### here add the code to read the data
 
 ```
+:::
+
+Note that the name of the object you loaded into memory is not the same as the name of the file you have on your hard disk. The reason is that the filename is inherited from my R-environment. Also note that this can be a major source of annoyance; namely we have been using object name `pheno_data` consistently. If you were to run `load()`, that would also mean you *overwrite* any other file with that name in the R environment.
+
+::: {.callout-note appearance="simple"}
+Up till now, we have been avoiding talking about many of the programming aspects of working with R. But, grasshoppers, I'm afraid it is due.
+
+There are some things you probably noticed by now: any wrong wording, comma's or other 'unintended mistakes' from your side are immediately recognized by R and rewarded with an 'error'. There are also so-called 'warnings'. The difference is that 'error' results in code that does not work (e.g. you will not get the specific calculation/processing executed) and a 'warning' means that you might have done something that was not intended (but you will get output).
+
+The most important step in data-analysis is checking after an operation. Make sure that what you did was what you intended and that what comes back is correct. How often have we, your teachers, not wept when we 'quickly' skipped this and found out that the output we got was incorrect.
+
+There are some general measures you can take to reduce risks: 1. Always start with a clean environment. At exit, do not save the environment, but start afresh. This ensures that you *know* which packages you loaded, which files you need to collect, which variables you need to define. 2. When writing a pipe (`%>%`) or any complex set of operations, check each step individually. Was the outcome of your function as intended? 3. Do a pilot. If you run a calculation that takes a long time, run it on a small subset of your data and *thoroughly* check the output. 4. Know what you do, especially with statistics. Always *visualize* the outcome of the analysis if you can. Otherwise it might be that you take a trip into statistical winter-wonder land. 5. Be wary of the class factors. Factors are indexed sets of data. If this indexed set of data is a number, the number on which the calculation is performed is the *index number*, not the actual number you see. In this case, you need to transform the factor to an actual number. You can check if this might be a problem using the function `class()`.
 :::
 
 ### Inspecting data
@@ -118,7 +118,7 @@ Answer these three questions: (1) What do the `head()` and (2) `tail()` function
 
 ### Cleaning and preparing the data
 
-Not needed here today. We keep it in for completeness though.
+Not needed here today. We keep this heading in for completeness though.
 
 ### Analyzing
 
@@ -154,12 +154,10 @@ We can use the function `summary()` to get the fit of the model.
     data.test <- pheno_data
     
     ### here the linear model is done
-    tested <- lm(Area~day,data=data.test)
+    tested <- lm(value~dpi,data=data.test)
     
     ### use summary to get the fit
     summary(tested)
-    
-    
 
 ```
 
@@ -172,22 +170,163 @@ Now, let's make a proper plot of correlation.
     data.plot <- pheno_data
 
     ###I'm getting the statistics here
-    statplot <- broom::tidy(summary(lm(Area~day,data=data.plot)))
+    statplot <- broom::tidy(summary(lm(value~dpi,data=data.plot)))
 
-    ggplot(data.plot, aes(x = day, y = Area)) 
-    geom_point() + geom_smooth(method = "lm") + 
-    theme_bw() + annotate("text", 
-                          x=1.5, 
-                          y=max(data.plot$Area), 
-                          label=paste("p =", signif(statplot$p.value[2], 2)))
+    p1 <- ggplot(data.plot, aes(x = dpi, y = value)) +
+          geom_point() + geom_smooth(method = "lm") + 
+          theme_bw() + annotate("text", 
+                                x=10, 
+                                y=max(data.plot$value), 
+                                label=paste("p =", signif(statplot$p.value[2], 2)))
+    
+    p1
 
 ```
 
+<div>
+
+#### Is the plant-growth correlated with time?
+
+What is the *biological interpretation* of the correlation you calculated and observed?
+
+1.  What does the intercept represent?
+
+2.  What does the slope represent?
+
+3.  Is a linear model a good fit for plant growth *in general*?
+
+</div>
+
 ## Assignment for code-review week 1
 
-Via the fileshare on [Brightspace](https://brightspace.wur.nl/), you can find your dataset for the code review. We expect that you hand in a Quarto markdown (QMD) file where you provide the code to:
+### The assignment
 
-1.  Load the data
-2.  Inspect the data
-3.  Analyse the data
-4.  Present the data
+Via the fileshare on [Brightspace](https://brightspace.wur.nl/), you can find your dataset for the code review. Everyone of you has their own folder, with their own dataset. This means that the conclusions you draw will be based on your individual dataset. We expect that you hand in a .hmtl file generated using a Quarto Markdown (QMD) file you wrote yourself in R. Within the .hmtl file you provide the code to:
+
+1.  Setup of the R environment
+2.  Load the data
+3.  Inspect the data
+4.  'Clean' the data
+5.  Analyse the data
+6.  Present the data
+
+Also, you should provide a conclusion about the *biological interpretation* of the data. The exercises below take you through the assignment step-by step. Make sure that for the R steps you include code chunks (those started by \`\`\`{r} and ended by ```). If you print figures or execute functions within these blocks, the output will be included in the .html.
+
+::: {.callout-tip appearance="simple"}
+Do not wait untill you are finished to make the first render. At the very start, when your file is still pristine (e.g after adapting a .qmd file from [Chapter 1](/week1/day1.qmd) or [Chapter 2](/week1/day2.qmd)), do a check on whether it renders correctly. 
+:::
+
+::: {#exr-Assignment_setup}
+#### Setup of the R environment
+
+Set the working directory and install and activate the required packages to run the code within the file.
+:::
+
+While going through the exercises, you might encounter steps requiring you to install additional packages. Simply add them to this section of the code one-by-one. You help yourself by being explicit about which package you use (e.g. `dplyr::` or `tidyr::`).
+
+::: {#exr-Assignment_load}
+#### Load the data
+
+Load the two data files into the R environment using the appropriate read function. Make sure that your name is included here, so the reviewers can check if your code works.
+:::
+
+::: {.callout-tip appearance="simple"}
+The data consists of the growth rates of *A. thaliana* Col-0 when inoculated with either of two plant parasitic nematodes[@Willig_2023]. The two nematode species tested are the beet-cyst nematode *Heterodera schachtii* and the root-knot nematode *Meloidogyne incognita*. Within your personal folder you find the data of the experiment conducted at a particular infection density (Pi) in nematodes g^-1. The measured trait is the day-by-day growth rate, measured between two consecutive days post infection (dpi). For instance between day 2 and day 3. The dpi within the datafile would be 2.5 in that case. This data is given per plant.
+:::
+
+::: {#exr-Assignment_inspect}
+#### Inspect
+
+Inspect the data using functions (no plot required). Based on the output indicate which bind function you need to use to combine the two objects into one.
+:::
+
+::: {#exr-Assignment_clean}
+#### Clean (combine)
+
+Use a 'bind' function to combine the two objects into one.
+:::
+
+::: {#exr-Assignment_analyse}
+#### Analyse
+
+Compare growth rates of the *A. thaliana* plant when infected with either *H. schachtii* or *M. incognita*, analyse whether these differ using a `t.test()`. Report at least the p-value.
+:::
+
+::: {#exr-Assignment_present}
+#### Present
+
+Make a `ggplot2::` boxplot showing the two nematode species on the x-axis and the growth rate on the y-axis.
+:::
+
+Now you have analysed the difference in growth rates between the two species at a particular density at a particular day of the experiment. Now it is time to draw conclusions.
+
+::: {#exr-Assignment_interpret}
+#### Interpret
+
+What is the *biological interpretation* of the boxplot and the t-test p-value?
+:::
+
+Once you have worked through all these excercises related to the assignment, you can render the .html file. Check the file (is everything included?). If you run into errors, the 'Background Jobs' window will indicate where the rendering has halted.
+
+### How to do code-review
+
+During code-review, we try to establish if the code that is written:
+1. is well-organized
+2. is well-documented
+3. properly used
+4. works
+
+Next to that, we also check whether the conclusions drawn from the analysis and figure are valid.
+
+#### How to give peer-feedback
+You need to review 2 coding assignments of other students within the course. Your teachers will check your feedback. In the first week, you will get an indication from us whether you give sufficient and clear feedback. You need to get a ‘pass’ for the assignments in week 2-4.
+
+##### What is feedback?
+Feedback literally means 'giving back'. It is not an euphemism for criticism. Rather, feedback can be described as: information regarding the way my message or behaviour (or coding and interpreting the outcome of data-analysis in this case) has been received and interpreted. Feedback stimulates you to think about and implement possibilities to improve.
+
+Feedback is critical for your own improvement. Peer feedback relies on giving and receiving feedback. Receiving feedback allows you to develop your competences and skills. Well-given feedback can help you asses your strengths and weak points, and allows you to address the weak points from the basis of your strengths. However, giving feedback also ask you to be critical and recognize certain aspects of data analysis, which you can implement again in your own process of analysing data in R.
+
+##### How to give feedback
+When giving feedback it is important to:
+1.	Balance your feedback. Mention both positive and constructive aspects (Tops and Tips). It is equally important to know your strengths, as it is to know your weaknesses. Moreover, it is motivating to receive positive feedback.
+2.	Be specific. Feedback is not helpful to the receiver when the feedback is not specifically formulated. Comments such as: "I think it is bad code and it needs revision" does not tell the receiver why it is a bad code. Instead, "I think you arrive at your result in more steps then necessary, I suggest you use function x instead of function y and function z" is much more helpful.
+3.	Connect concrete suggestions for improvement when providing constructive feedback. This can be quite challenging, and requires you to place yourself in the shoes of the someone else. This is very helpful for the receiver, as they receive help on how to improve.
+4.	Provide examples. Link your feedback to specific pieces of code or sentences in the document. In Feedbackfruits you can highlight text and make comments.
+5.	Formulate your feedback to what you observe (objectively) in an open way (without judgement or premature conclusions). For instance: "I noticed that you used the same object name for two different datasets, did you do this for a certain reason?" You can also describe the effect it has on you: "For me, it would be more logical if you use readxl::read_xlsx() to load an .xlsx file instead of read.delim()." 
+6.	Do not generalize. Avoid words like always/never in your feedback e.g. "You always forget to indicate which package a function comes from..."
+
+
+#### Well organized code
+There are many ways in which you can write well-organized code. What all have in common is consistency. Here, I teach you *a way* of doing this. These are the rules that I *generally* follow. I would like to stress that these are guidelines. These guidelines help others to read and understand your code. However, they also help you when you need to re-use or re-run your code.
+
+Check:
+- Are clear section-level headings used?
+- are hierarchies indicated with a tab?
+- from non-base R functions, is the package indicated (e.g. `dplyr::`)?
+- do objects have a clear, understandable, name?
+
+#### Well documented code
+When writing code, leave comments. Especially when you're doing something new / special this is very helpful to you in the future. But also to others that will check or even use your code. It can be very handy to indicate why you use a particular function for instance.
+
+Check:
+- Are comments included in the code?
+- Above code chunks, is there an explanation of what is done and why?
+
+#### Properly used code
+This checks whether the functions are used as intended. For instance, you can run a correlation analysis on numbers that are of `class` `factor` (check this by using `class()` on a vector/data frame column). However, correlations should be done using actualy numbers `is.numeric()` should return `TRUE`.
+
+Check:
+- Are the correct functions / inputs used?
+
+#### Working code
+Check:
+- can you run the code and get the same output?
+
+#### The Biological interpretation
+Do you agree with the biological interpretation given? Note that all of you have different days and Pi's to compare. Thus, the conclusions will probably differ amongst yourselves!
+
+
+
+
+
+
