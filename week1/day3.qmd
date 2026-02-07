@@ -63,11 +63,6 @@ Typically, when you make a markdown file, you can make errors. RStudio tries to 
 Many errors were made by me - and the other teachers - in building the book you are now reading. Do ask us about our frustrations in working with R.
 :::
 
-<<<<<<< HEAD
-=======
-### How to do code-review
-
->>>>>>> cb732e0b1bdfb241dfd57268205c105d50c21708
 ## Analysis of plant-growth data
 
 Today we want to cover one more aspect of data analysis, namely including the fit of a simple model into a plot. In this case, we will use some plant-growth data. And to be precise, we will use the linear part of the growth curve. It is perfectly possible to fit a growth-model within R, but we want to start a bit simpler with an actual linear curve. you can find the data for this assignment via the fileshare on [Brightspace](https://brightspace.wur.nl/). You need the general file under day 3, not your personal dataset for the code-review assignment.
