@@ -215,7 +215,8 @@ Also, you should provide a conclusion about the *biological interpretation* of t
 ::: {.callout-tip appearance="simple"}
 Do not wait untill you are finished to make the first render. At the very start, when your file is still pristine (e.g after adapting a .qmd file from [Chapter 1](/week1/day1.qmd) or [Chapter 2](/week1/day2.qmd)), do a check on whether it renders correctly. 
 :::
-
+  
+  
 ::: {#exr-Assignment_setup}
 #### Setup of the R environment
 
@@ -229,29 +230,34 @@ While going through the exercises, you might encounter steps requiring you to in
 
 Load the two data files into the R environment using the appropriate read function. Make sure that your name is included here, so the reviewers can check if your code works.
 :::
-
+  
+  
 ::: {.callout-tip appearance="simple"}
 The data consists of the growth rates of *A. thaliana* Col-0 when inoculated with either of two plant parasitic nematodes[@Willig_2023]. The two nematode species tested are the beet-cyst nematode *Heterodera schachtii* and the root-knot nematode *Meloidogyne incognita*. Within your personal folder you find the data of the experiment conducted at a particular infection density (Pi) in nematodes g^-1. The measured trait is the day-by-day growth rate, measured between two consecutive days post infection (dpi). For instance between day 2 and day 3. The dpi within the datafile would be 2.5 in that case. This data is given per plant.
 :::
-
+  
+  
 ::: {#exr-Assignment_inspect}
 #### Inspect
 
 Inspect the data using functions (no plot required). Based on the output indicate which bind function you need to use to combine the two objects into one.
 :::
-
+  
+  
 ::: {#exr-Assignment_clean}
 #### Clean (combine)
 
 Use a 'bind' function to combine the two objects into one.
 :::
-
+  
+  
 ::: {#exr-Assignment_analyse}
 #### Analyse
 
 Compare growth rates of the *A. thaliana* plant when infected with either *H. schachtii* or *M. incognita*, analyse whether these differ using a `t.test()`. Report at least the p-value.
 :::
-
+  
+  
 ::: {#exr-Assignment_present}
 #### Present
 
@@ -271,6 +277,7 @@ Once you have worked through all these excercises related to the assignment, you
 ### How to do code-review
 
 During code-review, we try to establish if the code that is written:
+
 1. is well-organized
 2. is well-documented
 3. properly used
@@ -288,6 +295,7 @@ Feedback is critical for your own improvement. Peer feedback relies on giving an
 
 ##### How to give feedback
 When giving feedback it is important to:
+
 1.	Balance your feedback. Mention both positive and constructive aspects (Tops and Tips). It is equally important to know your strengths, as it is to know your weaknesses. Moreover, it is motivating to receive positive feedback.
 2.	Be specific. Feedback is not helpful to the receiver when the feedback is not specifically formulated. Comments such as: "I think it is bad code and it needs revision" does not tell the receiver why it is a bad code. Instead, "I think you arrive at your result in more steps then necessary, I suggest you use function x instead of function y and function z" is much more helpful.
 3.	Connect concrete suggestions for improvement when providing constructive feedback. This can be quite challenging, and requires you to place yourself in the shoes of the someone else. This is very helpful for the receiver, as they receive help on how to improve.
