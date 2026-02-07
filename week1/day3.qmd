@@ -233,35 +233,49 @@ Load the two data files into the R environment using the appropriate read functi
   
   
 ::: {.callout-tip appearance="simple"}
-The data consists of the growth rates of *A. thaliana* Col-0 when inoculated with either of two plant parasitic nematodes[@Willig_2023]. The two nematode species tested are the beet-cyst nematode *Heterodera schachtii* and the root-knot nematode *Meloidogyne incognita*. Within your personal folder you find the data of the experiment conducted at a particular infection density (Pi) in nematodes g^-1. The measured trait is the day-by-day growth rate, measured between two consecutive days post infection (dpi). For instance between day 2 and day 3. The dpi within the datafile would be 2.5 in that case. This data is given per plant.
+The data consists of the growth rates of *A. thaliana* Col-0 when inoculated with either of two plant parasitic nematodes[@Willig2023]. The two nematode species tested are the beet-cyst nematode *Heterodera schachtii* and the root-knot nematode *Meloidogyne incognita*. Within your personal folder you find the data of the experiment conducted at a particular infection density (Pi) in nematodes g^-1. The measured trait is the day-by-day growth rate, measured between two consecutive days post infection (dpi). For instance between day 2 and day 3. The dpi within the datafile would be 2.5 in that case. This data is given per plant.
 :::
   
   
 ::: {#exr-Assignment_inspect}
 #### Inspect
-
 Inspect the data using functions (no plot required). Based on the output indicate which bind function you need to use to combine the two objects into one.
-:::
+::: 
+
   
+::: {.callout-note appearance="simple"}
+We covered these functions in [Chapter 1](/week1/day1.qmd) and [Chapter 2](/week1/day2.qmd)) under the heading Inspecting data.
+:::
   
 ::: {#exr-Assignment_clean}
 #### Clean (combine)
-
 Use a 'bind' function to combine the two objects into one.
 :::
   
+::: {.callout-note appearance="simple"}
+We covered these functions in [Chapter 2](/week1/day2.qmd)) when combining the four objects.
+:::
   
 ::: {#exr-Assignment_analyse}
 #### Analyse
-
-Compare growth rates of the *A. thaliana* plant when infected with either *H. schachtii* or *M. incognita*, analyse whether these differ using a `t.test()`. Report at least the p-value.
+Compare growth rates of the *A. thaliana* plant when infected with either *H. schachtii* or *M. incognita*, analyse whether these differ using a test that does not assume a normal distribution. Report at least the p-value.
 :::
-  
+
+::: {.callout-tip appearance="simple"}
+We do not ask you to check for normality for this assignment, as that dataset overall is not normally distributed, we give you that your subset is also not. Note that in the paper We deal with this by using a non-parametric test as well[@Willig2023].
+
+![Quantification of the tolerance limit of Col-0 to Meloidogyne incognita based on growth rate. Nine-day-old Arabidopsis seedlings were inoculated with 18 different densities (Pi) of M. incognita juveniles (0–100 juveniles g^–1^ of dry sand. (A) Green canopy area of plants treated with P~i~=0 (blue line) or P~i~=5 (aquamarine line) from 0 to 21 dpi. (B) Rate of growth of plants treated with P~i~=0 (blue line) or P~i~=5 (aquamarine line) from 0 to 21 dpi was calculated using Equation 2 in the manuscript. (C) Rate of growth of plants inoculated with increasing P~i~ values growing from 5 to 16 dpi. (D) Rate of growth of plants inoculated with increasing P~i~ values growing from 17 to 21 dpi. (E) Cumulative growth rate of plants inoculated with increasing Pi values. (C–E) Dots represent individual plants. Data were analysed with a Wilcoxon rank sum test. ns=not significant, *P<0.05, **P<0.01, ***P<0.001 (n=10–12).](Week1_day3_WilligAssignment.jpeg)
+
+:::  
   
 ::: {#exr-Assignment_present}
 #### Present
 
 Make a `ggplot2::` boxplot showing the two nematode species on the x-axis and the growth rate on the y-axis.
+:::
+
+::: {.callout-note appearance="simple"}
+We covered the boxplot function in [Chapter 1](/week1/day1.qmd)) in the presentation section.
 :::
 
 Now you have analysed the difference in growth rates between the two species at a particular density at a particular day of the experiment. Now it is time to draw conclusions.
@@ -308,6 +322,7 @@ When giving feedback it is important to:
 There are many ways in which you can write well-organized code. What all have in common is consistency. Here, I teach you *a way* of doing this. These are the rules that I *generally* follow. I would like to stress that these are guidelines. These guidelines help others to read and understand your code. However, they also help you when you need to re-use or re-run your code.
 
 Check:
+
 - Are clear section-level headings used?
 - are hierarchies indicated with a tab?
 - from non-base R functions, is the package indicated (e.g. `dplyr::`)?
@@ -317,6 +332,7 @@ Check:
 When writing code, leave comments. Especially when you're doing something new / special this is very helpful to you in the future. But also to others that will check or even use your code. It can be very handy to indicate why you use a particular function for instance.
 
 Check:
+
 - Are comments included in the code?
 - Above code chunks, is there an explanation of what is done and why?
 
@@ -324,10 +340,12 @@ Check:
 This checks whether the functions are used as intended. For instance, you can run a correlation analysis on numbers that are of `class` `factor` (check this by using `class()` on a vector/data frame column). However, correlations should be done using actualy numbers `is.numeric()` should return `TRUE`.
 
 Check:
+
 - Are the correct functions / inputs used?
 
 #### Working code
 Check:
+
 - can you run the code and get the same output?
 
 #### The Biological interpretation
