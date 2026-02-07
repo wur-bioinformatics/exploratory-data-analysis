@@ -274,6 +274,7 @@ Compare growth rates of the *A. thaliana* plant when infected with either *H. sc
 ::: {.callout-tip appearance="simple"}
 We do not ask you to check for normality for this assignment, as that dataset overall is not normally distributed, we give you that your subset is also not. Note that in the paper We deal with this by using a non-parametric test as well[@Willig2023].
 
+
 ![Quantification of the tolerance limit of Col-0 to Meloidogyne incognita based on growth rate. Nine-day-old Arabidopsis seedlings were inoculated with 18 different densities (Pi) of M. incognita juveniles (0–100 juveniles g^–1^ of dry sand. (A) Green canopy area of plants treated with P~i~=0 (blue line) or P~i~=5 (aquamarine line) from 0 to 21 dpi. (B) Rate of growth of plants treated with P~i~=0 (blue line) or P~i~=5 (aquamarine line) from 0 to 21 dpi was calculated using Equation 2 in the manuscript. (C) Rate of growth of plants inoculated with increasing P~i~ values growing from 5 to 16 dpi. (D) Rate of growth of plants inoculated with increasing P~i~ values growing from 17 to 21 dpi. (E) Cumulative growth rate of plants inoculated with increasing Pi values. (C–E) Dots represent individual plants. Data were analysed with a Wilcoxon rank sum test. ns=not significant, \* P<0.05, \*\* P<0.01, \*\*\* P<0.001 (n=10–12).](Week1_day3_WilligAssignment.jpeg)
 
 :::  
