@@ -210,7 +210,7 @@ Via the fileshare on [Brightspace](https://brightspace.wur.nl/), you can find yo
 5.  Analyse the data
 6.  Present the data
 
-Also, you should provide a conclusion about the *biological interpretation* of the data. The exercises below take you through the assignment step-by step. Make sure that for the R steps you include code chunks (those started by \`\`\`{r} and ended by ```). If you print figures or execute functions within these blocks, the output will be included in the .html.
+Also, you should provide a conclusion about the *biological interpretation* of the data. The exercises below take you through the assignment step-by step. Make sure that for the R steps you include code chunks. If you print figures or execute functions within these blocks, the output will be included in the .html.
 
 ::: {.callout-tip appearance="simple"}
 Do not wait untill you are finished to make the first render. At the very start, when your file is still pristine (e.g after adapting a .qmd file from [Chapter 1](/week1/day1.qmd) or [Chapter 2](/week1/day2.qmd)), do a check on whether it renders correctly. 
