@@ -59,7 +59,7 @@ You now need to load in data from all four data formats.
 ::: {#exr-excel}
 #### Loading data from an excel file (.xlsx)
 
-To read Excel files, we use the `read_excel()` function from the readxl package. Excel files are very common but also very tricky. Namely, these files are mostly made by persons and people *do not automatically follow conventions* that are clear for a programming language. Therefore always check the excel file before loading it in.
+To read Excel files, we use the `read_excel()` function from the readxl package. Excel files are very common but also very tricky. Namely, these files are mostly made by persons and people *do not automatically follow conventions* that are clear for a programming language. Therefore, always check the excel file before loading it in.
 
 ```{r w1d2_load_xlsx, include = TRUE,eval=FALSE, class.source = 'fold-show'}
 #| code-fold: false
@@ -185,7 +185,7 @@ Last time we used `head()`, `tail()`, and `summarise()`. Again apply these funct
 
 Inspect the four files you have using `dim()`, `nrow()`, and `ncol()`. Which piece is which?
 
-[The puzzle pieces and the functions you will need to combine them further on in the excercise.](Week1_day2_Puzzle.png)
+![The puzzle pieces and the functions you will need to combine them further on in the excercise.](Week1_day2_Puzzle.png)
 
 Answer the following questions (note this is *random* for each personal dataset!). You can deduce which piece is which via their dimensions. 1. Which 2 files are piece 1 and 2? 2. which file is piece 3? 3. Which file is piece 4?
 :::
@@ -240,12 +240,11 @@ You now have the data complete. As you can see we have two measurements linked t
 Same as before, let's figure out whether the data is normally distributed. For this we can use the functions `stat_qq()` and `stat_qq_line()`. Find the code to do this in [Chapter 1](/week1/day1.qmd) and check the data in the `Gpal_vir` and `Gpal_avir` columns.
 
 ```{r w1d2_qqplot_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+#| code-fold: false
 
-    ggplot(pheno_data,aes(sample=Gpal_vir)) + 
-    stat_qq() + stat_qq_line()
+    ### Add the code to make the qqplot for Gpal_vir
 
-    ggplot(pheno_data,aes(sample=Gpal_avir)) + 
-    stat_qq() + stat_qq_line()
+    ### Add the code to make the qqplot for Gpal_avir
 
 ```
 

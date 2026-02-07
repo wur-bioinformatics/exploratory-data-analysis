@@ -4,6 +4,8 @@ editor: source
 date: ADD
 author: ADD
 registration_number: ADD
+format: 
+  pdf
 ---
 
 # The importance of data analysis
@@ -173,10 +175,6 @@ You now conducted two types of analyses that tell you whether the data is normal
 
 (3) what does a p-value mean?
 
-```{r}
-
-
-```
 
 ### T-test
 Here you can add notes to help yourself in the future.

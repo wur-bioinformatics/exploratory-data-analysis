@@ -141,6 +141,7 @@ Now the fun starts. We pick up on our old friend `cor()`. To determine which kin
 Same as before, let's figure out whether the data is normally distributed. If you don't know the two tests anymore, check back at [Chapter 2](/week1/day2.qmd).
 
 ```{r w1d2_qqplot_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+#| code-fold: false
 
     ###Use the graphical method
 
@@ -162,6 +163,7 @@ Yesterday we conducted an analysis of correlation using the `cor()` function. Th
 We can use the function `summary()` to get the fit of the model.
 
 ```{r w1d2_gather_pallida, include = TRUE,eval=FALSE, class.source = 'fold-show'}
+#| code-fold: false
 
     data.test <- pheno_data
     
@@ -178,6 +180,7 @@ We can use the function `summary()` to get the fit of the model.
 Now, let's make a proper plot of correlation.
 
 ```{r w1d2_wilcoxplot_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
+#| code-fold: false
 
     data.plot <- pheno_data
 
