@@ -28,6 +28,25 @@ In modern terms, much of this would now be described as exploratory data analysi
 If Mendel were working today, he would likely store his data in a spreadsheet or data frame, visualise trait frequencies with plots, and use simple statistical summaries to explore variation and uncertainty.
 The tools would be different, but the underlying questions would be the same.
 
+:::{.callout-note appearance='simple'}
+### What if Mendel could use R?
+In his seminal experiments, Mendel counted inheritance patters and compared them to a theoretical model. 
+At the time, the statistical tools we would use today had not been developed yet, so he mostly eyeballed the difference.
+These days we would calculate a p-value according to a statistical model to guide our estimation of uncertainty of the outcome.
+If Mendel used R, and had access to modern statistical tools, his approach might look something like the example below.
+
+```{r}
+# Observed counts: dominant vs recessive
+obs <- c(dominant = 547, recessive = 185)
+
+# Expected Mendelian proportions (3:1)
+p <- c(0.75, 0.25)
+
+# Goodness-of-fit test (Mendel did not have this!)
+chisq.test(obs, p = p)
+```
+:::
+
 ## About the course
 
 In this course, we focus on modern tools for asking and answering questions from data.
