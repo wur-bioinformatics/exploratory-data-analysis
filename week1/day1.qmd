@@ -450,7 +450,7 @@ for(i in c("N. americanus","E. vermicularis","M. incognita","A. suum",
 
 A 'cleaner' way to write this (at least in our opinion) is to loop over the index number in the vector with species names `1:8` and then select the species for printing.
 
-```{r w1d1_for_loop_check2, include = TRUE, eval=FALSE, class.source = 'fold-show'}
+```{r w1d1_for_loop_check3, include = TRUE, eval=FALSE, class.source = 'fold-show'}
 #| code-fold: false
 species <- c("N. americanus","E. vermicularis","M. incognita","A. suum",
            "T. semipenetrans","O. volvulvus","D. dipsaci","E. arcuatus")
@@ -546,7 +546,7 @@ As we saw before, you can also access specific locations within these items, sim
 
 We can also write data into a list as output of a for-loop.
 
-```{r w1d1_access_a_list, include = TRUE,eval=FALSE, class.source = 'fold-show'}
+```{r w1d1_looplist, include = TRUE,eval=FALSE, class.source = 'fold-show'}
 #| code-fold: false
     ###this makes an empty list
     output <- as.list(NULL)

@@ -5,12 +5,16 @@ date: ADD
 author: ADD
 registration_number: ADD
 format: 
-  pdf
+  html
 ---
 
 # The importance of data analysis
 
 ## Set up your R environment
+
+```{r setup}
+    options(repos = c(CRAN = "https://cloud.r-project.org"))
+```
 
 ### Getting to grips with R (exercise)
 Start RStudio and browse through to find out:
