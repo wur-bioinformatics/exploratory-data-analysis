@@ -36,8 +36,8 @@ These days we would calculate a p-value according to a statistical model to guid
 If Mendel used R, and had access to modern statistical tools, his approach might look something like the example below.
 
 ```{r}
-# Observed counts: dominant vs recessive
-obs <- c(dominant = 547, recessive = 185)
+# Observed counts in F2: dominant vs recessive
+obs <- c(dominant = 705, recessive = 224)
 
 # Expected Mendelian proportions (3:1)
 p <- c(0.75, 0.25)
@@ -45,6 +45,7 @@ p <- c(0.75, 0.25)
 # Goodness-of-fit test (Mendel did not have this!)
 chisq.test(obs, p = p)
 ```
+From this statistical test we can conclude that the observed counts do not significantly deviate from a 3:1 ratio, confirming Mendel's model of inheritance.
 :::
 
 ## About the course
