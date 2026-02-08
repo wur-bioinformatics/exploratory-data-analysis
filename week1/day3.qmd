@@ -85,7 +85,7 @@ Note that the name of the object you loaded into memory is not the same as the n
 ::: {.callout-note appearance="simple"}
 Up till now, we have been avoiding talking about many of the programming aspects of working with R. But, grasshoppers, I'm afraid it is due.
 
-There are some things you probably noticed by now: any wrong wording, comma's or other 'unintended mistakes' from your side are immediately recognized by R and rewarded with an 'error'. There are also so-called 'warnings'. The difference is that 'error' results in code that does not work (e.g. you will not get the specific calculation/processing executed) and a 'warning' means that you might have done something that was not intended (but you will get output). Next week in [Chapter 6](/week2/debugging_and_testing.qmd) we cover this more thoroughly.
+There are some things you probably noticed by now: any wrong wording, comma's or other 'unintended mistakes' from your side are immediately recognized by R and rewarded with an 'error'. There are also so-called 'warnings'. The difference is that 'error' results in code that does not work (e.g. you will not get the specific calculation/processing executed) and a 'warning' means that you might have done something that was not intended (but you will get output). Next week in [Chapter 5](/week2/debugging_and_testing.qmd) we cover this more thoroughly.
 
 The most important step in data-analysis is checking after an operation. Make sure that what you did was what you intended and that what comes back is correct. How often have we, your teachers, not wept when we 'quickly' skipped this and found out that the output we got was incorrect. 
 
