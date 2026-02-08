@@ -1,5 +1,5 @@
 ---
-title: "Week 4 Day 1 - Arabidopsis diversity"
+title: "Genotypic data, colour schemes and GWAS"
 author: "Peter Bourke"
 execute:
   eval: FALSE
@@ -10,9 +10,15 @@ execute:
 This chapter is not yet finished, come back later for the final product
 :::
 
+## Introduction
+
+This chapter follows a data-driven approach: we will be working with a large genotypic dataset (SNP markers) with accompanying meta-data, and a linked phenotypic dataset of flowering time in *A. thaliana*. You will gain some experience with data subsetting, data curation and visualisation, with spome focus on the choice of colour schemes. Familiar techniques like PCA will be used (already covered in week 3), followed by some possibly less familiar techniques (genome-wide association study). As we will be using data from a previously-published study, part of today's exercises will try to replicate some of the figures from the publication itself.
+
 ## Install R packages (dependencies)
 
-We will be using a number of packages that should ideally be installed at this stage so that any installation issues can be handled together. For reading HDF5 files, there are some packages available via CRAN, but the `rhdf5` package from Bioconductor seems to work well (we first install the `BiocManager` package to handle the `rhdf5` installation).
+We will be using a number of packages that should ideally be installed at this stage so that any installation issues can be handled together. 
+
+For reading HDF5 files, there are some packages available via CRAN, but the `rhdf5` package from Bioconductor seems to work well (we first install the `BiocManager` package to handle the `rhdf5` installation).
 
 Note that in all of the following calls, we first check whether the package has already been installed on our computer (`!requireNamespace()` returns `TRUE`or `FALSE` depending on whether the package is already installed or not).
 
@@ -189,7 +195,7 @@ Out of interest, do you recognise any of the collectors?
 table(meta$collector)
 ```
 
-::: callout-tip
+::: {#exr-ref_allele}
 ## Extra question
 
 -   Which accession carries the reference allele at all sites?
@@ -307,8 +313,8 @@ If we wanted / needed to be more careful, we could extract all the extra argumen
 One final note of interest - in `pca_plot()`, we have already specified some arguments, for example the x and y axis labels, and the x and y axis limits. If we try to override these, we will get an error. Try this for yourself, and see if you understand what the Error message means.
 :::
 
-::: callout-tip
-## Exercise 2
+::: {#exr-pca_plots1}
+### PCA plots
 
 -   Plot the output of the PCA analysis on the random 10k SNPs, giving an appropriate plot title.
 -   Make a second plot of PC1 versus PC3. Do you notice any outliers? Can you identify in which country this accession was collected?
@@ -352,8 +358,8 @@ RColorBrewer::display.brewer.all()
 
 Now that you have some experience with running a PCA, let's investigate how well the PCA results align with the admixture assignments from the original 2016 Cell analysis. We will be using `Set1` from the `RColorBrewer` package, which corresponds closely to the colour palette used in the 2016 Cell paper for the admixure groups.
 
-::: callout-tip
-## Exercise 3
+::: {#exr-col_palette}
+### Colour palette
 
 -   First, check how many admixture groups are in the data. Also check how many colours are provided by the RColorBrewer 'Set1' palette.
 
@@ -384,8 +390,8 @@ admix_pca <- function(pcafit,
 
 ```
 
-::: callout-tip
-## Exercise 4
+::: {#exr-pca_plot2}
+### PCA plots
 
 -   Using the function we have just defined, produce a PCA plot from a PCA fit for each of the 4 genotype datasets. Use the colour palette that you developed, making sure the order is consistent with the publication. Can you identify (some of) the admixture groups easily in the PCA plot?
 :::
@@ -421,18 +427,18 @@ message("Error in st_as_sf.data.frame(data, coords = c(x, y), remove = FALSE, cr
 
 Unfortunately, the `mapview::mapView` function is not able to handle missing values!
 
-::: callout-tip
-## Exercise 5
+::: {#exr-mapview}
+### mapview plot
 
--   Make a new copy of the meta dataset without missing values for the GPS co-ordinates. Use the `mapview::mapView` function to visualise the accessions, using default colour settings (using function call above).
+-   Make a copy of the meta dataset without missing values for the GPS co-ordinates. Use the `mapview::mapView` function to visualise the accessions, using default colour settings (using function call above).
 
 -   If this is (still) not working, try to figure out what is going wrong. For example, Google your Error message to try to solve the issue.
 :::
 
 As you can see, there may still be some unexpected issues that come up when trying to use this package (although these may also have been solved by a package update by the time you attempt this exercise). If you are still stuck here *after* a decent attempt at trying to solve the issue yourself, you can use the R code available via Brightspace. If it is not yet visible, please raise your hand.
 
-::: callout-tip
-## Exercise 6
+::: {#exr-mapview2}
+### mapview plot
 
 -   Re-plot the geographic distribution of accessions using the `mapview::mapView()` function, colouring the points by admixture group using the same colour palette as before (i.e. consistent with the publication). Adjust the settings so that the points are fully opaque.
 :::
@@ -445,8 +451,8 @@ To get some more practice on data manipulation and plotting, we now turn to the 
 
 Regarding colours to use, you are asked to use the "Bright" qualitative palette developed by Paul Tol ([sronpersonalpages.nl/\~pault/](https://sronpersonalpages.nl/~pault/)), namely the colours **blue (4477AA)**, **green (228833)**, **yellow (CCBB44)**, **purple (AA3377)** and **grey (BBBBBB)**.
 
-::: callout-tip
-## Exercise 7
+::: {#exr-seq_provider}
+### Sequence providers
 
 -   How many sequence providers appear more than 100 times in the dataset? What are their names?
 
@@ -473,8 +479,8 @@ The first figure we will try to re-create is relatively straightforward, relying
 
 The authors probably used Adobe Illustrator or Powerpoint (or perhaps Coral draw etc etc.) to overlay the pink arrow showing the possible spread of non-relicts back into continental Europe following the retreat of the glaciers at the end of the last Ice Age. We are not interested in overlaying this arrow and text, but we would like to create the underlying plot that distinguishes between relicts and non-relicts only.
 
-::: callout-tip
-## Exercise 8
+::: {#exr-relicts}
+### mapview relicts
 
 -   Add a new column to your dataset that distinguishes samples as either "relicts" or "non-relicts"
 
@@ -499,8 +505,8 @@ As you can see from the figure caption, the plot shows the mean and standard dev
 
 -   **Can you recall what a Z-score is, how it is calculated, and why they are useful?**
 
-::: callout-tip
-## Exercise 9
+::: {#exr-supp_figure}
+### Reproduce Figure S5
 
 -   Using the random 10K SNPs, first calculate the number of variants (i.e. SNP alternative allele counts) per accession.
 
@@ -527,8 +533,8 @@ We leave the SNP data for now to have a look at the phenotype dataset we downloa
 pheno <- read.csv('values.csv', header = TRUE)
 ```
 
-::: callout-tip
-## Exercise 10
+::: {#exr-ft_compare}
+### FT trait comparison
 
 -   What is the (Pearson) correlation coefficient between the two traits (FT10 and FT16)?
 
@@ -551,8 +557,8 @@ head(pheno)
 
 In order to combine the phenotypic data with the geographic co-ordinates, we need to `merge()` the two datasets. Have a look at the help menu for the function and see whether you can create a merged dataset yourself.
 
-::: callout-tip
-## Exercise 11
+::: {#exr-mapview_ft}
+### mapview FT
 
 -   Using an appropriate colour palette, produce a visual display of the geographic distribution of *Arabidopsis* accessions coloured by flowering time (either FT10 or FT16), again using `mapview::mapView()`.
 
@@ -594,8 +600,8 @@ head(SNP[,1:10])
 
 As we can see, the rownames are the accession IDs, and the column names are bp positions.
 
-::: callout-tip
-## Exercise 12
+::: {#exr-gwas_data}
+### Prepare GWAS data
 
 -   Run `?createGData` and read the **Arguments** section. In what format should `map` be in?
 
@@ -606,8 +612,8 @@ As we can see, the rownames are the accession IDs, and the column names are bp p
 
 Once you have completed these steps, you can remove duplicate markers using the `statgenGWAS::codeMarkers()` function. You are now in a position to run a single trait GWAS model.
 
-::: callout-tip
-## Exercise 13
+::: {#exr-run_gwas}
+### Run GWAS
 
 -   Use the `statgenGWAS::runSingleTraitGwas()` function to perform a GWAS analysis using the SNP data for the traits 'FT10' and 'FT16'.
 
@@ -618,4 +624,3 @@ Once you have completed these steps, you can remove duplicate markers using the 
 -   If time permits, try using a more advanced approach by correcting for kinship chromosome-by-chromosome, as described in the vignette. Does this result in any more QTL being detected? What about (possible) p-value inflation?
 :::
 
-## References
