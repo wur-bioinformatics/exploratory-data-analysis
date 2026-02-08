@@ -1,0 +1,352 @@
+---
+title: "Errors, outliers and simulations"
+author: "Peter Bourke"
+---
+
+## Introduction
+
+The focus of today will be on errors - data points that for one reason or another do not fit in our dataset. We often need to be able to identify errors so that we can remove (or correct) them before running an analysis. This is generally the case for types of analyses or calculations that assume data is error-free (there are more advanced approaches that can explicitly model the possibility of errors in the data e.g. Bayesian methods, but we will not be using them here). Errors could lead to false conclusions being drawn, or a loss of statistical power for testing differences (by inflating the estimates of the variance in the data for example). We will spend some time considering in particular what an "outlier" means, and what to do with them.
+
+We will also be dealing with simulations; initially, using a [simulator](%22https://shiny.wur.nl/content/937deca7-466c-4887-987e-1bb952bc8efb%22) to generate datasets with errors in them. You will have to don your detectives' cap to figure out the error rates in the data.
+
+We first start with a warm-up exercise, detecting errors in data from a study on salt stress in tomato (*Solanum lycopersicum*).
+
+### Tomato salinity experiment
+
+An experimenter investigated the response of three varieties of tomato (Moneymaker, Recordsmen, Rio Grande) to salt stress. Tomato plants were grown in pots with four different salinity levels (0, 50, 100, 150 mM NaCl), with three replicates per treatment.
+
+-   **Q. What is the experimental unit? How many experimental units are there?**
+
+The experimenter measured the following traits after 60 days' growth:
+
+-   total fruit number
+-   total fruit weight (g)
+-   leaf necrosis
+
+The last of these traits was measured on a scale of 0-5, with 0 for healthy leaves and 5 for dead leaves. Per plant, the average necrosis of the top 5 leaves was calculated and recorded.
+
+The dataset that resulted is available to download from [Brightspace](%22https://brightspace.wur.nl/d2l/home/336819%22) under Content -\> Week 4. The filename is "tomato_salinity.csv".
+
+Downloaded this file and save it to your working directory. Let's read in the file and check its dimension and structure:
+
+```{r}
+data <- read.csv("tomato_salinity.csv")
+
+dim(data)
+str(data)
+
+```
+
+::: {#exr-tomatoutliers}
+### Detecting tomato outliers
+
+-   There are four obvious (typing) errors in the dataset. Can you identify them? Can you think of what the values (probably) *should* be?
+:::
+
+## Outliers
+
+There is no strict definition of an outlier, although there are some rules of thumb that are commonly used. For example, Tukey proposed that an outlier is a value that falls beyond 1.5 times the inter-quartile range. If the data is normally-distributed, then values that are more than 3 standard deviations from the mean are very unlikely to occur by chance and are often considered as outliers (the "$3\sigma$ rule").
+
+-   **Question: With *scaled* data, what would the** $3\sigma$ rule imply?
+
+### Boxplots
+
+You have already encountered boxplots earlier in the course, here we return to them in the context of identifying outliers. A typical boxplot looks something like the following:
+
+```{r}
+set.seed(42) #for reproducibility
+v <- rnorm(100,10,5)
+boxplot(v, col = rgb(0.4,0.5,0.6,0.7))
+```
+
+-   **Q. What does the boxplot show? In particular, how are the whiskers defined, and how are the points that are shown identified? Are these outliers?**
+
+If you are unsure, have a look at the `boxplot()` documentation for the details:
+
+```{r}
+#| eval: false
+?boxplot
+```
+
+If you need some reminders on what terms like "median" and "quantile" mean, you can also check back to the [notes from week 2](%22https://wur-bioinformatics.github.io/exploratory-data-analysis/week2/summary_statistics_and_functions.html%22).
+
+We also mentioned the "$3\sigma$ rule", do any of the values fall outside this range? How could you check this? Try this yourself before looking at the **\> Code**!
+
+```{r}
+#| eval: false
+#| code-fold: true
+range(scale(v))
+```
+
+-   **Q. Which outlier criterion is stricter: Tukey's or the** $3\sigma$ rule?
+
+We next look at at toy dataset of car fuel consumption, available via Brightspace (filename: "car_mpg.RData"). Load the data using `load()`:
+
+```{r}
+print(load("car_mpg.RData")) 
+```
+
+-   **Q. Why wrap the `load()` call with `print()`?**
+
+Using the `boxplot()` function, produce boxplots of each of the 4 list elements of the `car_mpg` data. If you are unsure, use the code hidden below.
+
+```{r}
+#| code-fold: true
+#| fig-width: 10
+#| fig-height: 8
+
+par(mar = c(3,3,3,3), mfrow = c(2,2))
+boxplot(mpg ~ car, data = car_mpg$data1,
+        main = "N = 3")
+boxplot(mpg ~ car, data = car_mpg$data2,
+        main = "N = 3")
+boxplot(mpg ~ car, data = car_mpg$data3,
+        main = "N = 4")
+boxplot(mpg ~ car, data = car_mpg$data4,
+        main = "N = 5")
+
+```
+
+In these boxplots a main title was added with the number of observations underlying each box-and-whiskers plot. What do you notice about the data? Why are the bottom two plots so different?
+
+Perhaps this is labouring the point here, but it is always useful to know what you are looking at with such visualisations!
+
+Even in the top left-hand plot (N = 3), it should have been apparent that something was wrong when the median line was at the very bottom of the plot. Boxplots are often now accompanied by the (jittered) underlying datapoints, which would have highlighted the issue better:
+
+```{r}
+boxplot(mpg ~ car, data = car_mpg$data1,
+        main = "N = 3")
+points(jitter(as.numeric(factor(car_mpg$data1$car)),
+              amount = 0.02),
+       car_mpg$data1$mpg)
+```
+
+#### Final note
+
+If you wanted to extract the "outliers" identified in a boxplot (data points beyond the whiskers), you can do this by first capturing the output of the function (it is silently returned by the function, probably using `invisible()`) and extracting relevant parts of the output:
+
+```{r}
+bp <- boxplot(mpg ~ car, data = car_mpg$data4,
+              plot = FALSE) #we don't want the plot again
+
+setNames(bp$out,bp$names[bp$group]) #read the boxplot documentation!
+```
+
+::: callout-tip
+
+### Extra final note - `setNames()`
+`setNames()` is a useful little function to know, it sets the names of a vector:
+
+```{r}
+d <- setNames(1:5,letters[1:5]) 
+d
+```
+:::
+
+
+### Residuals
+
+As a last topic in this section, we will briefly consider how residuals can also tell us something about data quality and the potential presence of outliers. As you may recall, a residual is what is left over after fitting a model, which is often visualised for the case of a simple linear regression as follows:
+
+![](images/residuals_plotted.png){fig-align="center" width="600"}
+
+In this figure, leaf biomass is plotted against yield, and a fitted trendline (fitted using linear regression) has been added in green. The *predicted* yield given a leaf biomass value is the value the line takes at this point. So we can see the residual as the difference between the observed yield values, and those predicted by the model (in this case, a single line). These quantities are represented above as dashed red lines. Large deviations from the line (= larger residuals) suggest that the particular observation in question is not in line with the trend from the rest of the data. This could be by chance, or due to a problematic data-point.
+
+When fitting an ordinary linear model, one assumes certain things about the residuals (often shortened as i.i.d.) - that they are independent of each other and identically distributed, namely that they are drawn from a $N(0,\sigma_e^2)$ distribution (normal distribution with mean 0 and a shared variance). It is good practice to check the residuals (we often do this using residual plots) after running a regression or ANOVA model, to make sure the residuals are distributed as expected. These checks can also highlight potentially problematic data-points (with high residuals, or perhaps with high leverage i.e. having an unduly large influence on the model fit).
+
+We will use a dataset of leaf biomass and yield collected from a field trial in potato (*Solanum tuberosum*) to demonstrate the point.
+
+::: {#exr-potatoyield}
+### Potato yield (part 1)
+
+-   Load the tab-delimited 'potato_yield.dat' dataset provided on Brightspace using the `read.table()` function.
+
+-   Check the **str**ucture of the dataset using `str()`. If there is an experimental factor that is coded as a character string, convert it to a factor (e.g. using `factor()` or `as.factor()`).
+
+-   Generate 2 boxplots, showing yield and leaf biomass split by potato variety. Is there any evidence of outliers?
+
+-   Create a scatter plot of the leaf biomass (x axis) versus yield (y axis) using `plot()`. Can you spot any strange data points / potential outliers?
+
+-   Make the same plot, but now colour the points by potato variety. Can you spot any strange data points / potential outliers?
+:::
+
+For the last of these exercises, you could either produce the plot using the base R `plot()` function, giving something like:
+
+![](images/potato_yield_baseR.png){fig-align="center" width="600"}
+
+... or using `ggplot2::ggplot()`:
+
+![](images/potato_yield_ggplot.png){fig-align="center" width="600"}
+
+If you were unable to complete the steps in the previous exercise after a reasonable attempt, please check Brightspace week 4 for a script file. If it is not yet visible, please raise your hand.
+
+From the above scatter plots, it is not immediately obvious that there are any outlying data-points present. There also seems to be a clear linear relationship between leaf biomass and yield, so this data would appear to be suitable for linear regression. We can already observe that variety 'Oscar' produces more yield for the same leaf biomass as 'Bintje'. We will fit a model with separate lines as we are not yet sure whether separate slopes or separate intercepts (or both) are needed. We can check this after fitting the model.
+
+Our main interest for today is to check whether there are any outliers after model fitting, i.e. data points that lead to high residuals.
+
+To run a linear model in R we will use the `lm()` function, followed by a visual check on the residuals.
+
+Finally, we will check whether any of the Studentised residuals[^1] exceeds 3 (another rule of thumb for identifying potential outliers among the residuals).
+
+[^1]: Studentised residuals are a type of scaled residual (mean 0 and standard deviation 1). The difference between a Studentised and a simply scaled residual is that for Studentised residuals, the scaling division uses an estimate of the standard deviation excluding the data point itself. This is especially useful when trying to identify outliers, as large outliers can lead to an inflated estimate of the standard deviation, which will tend to shrink all residuals when scaling.
+
+The steps to do this in `R` are as follows:
+
+```{r}
+set.seed(1221)
+
+## Make a toy dataset with 2 factors a and b:
+test_data <- data.frame(x = rep(1:10,2),
+                        n = c(rep("a",10),rep("b",10)),
+                        y = c(1:10 + rnorm(10,sd = 3),
+                              seq(1,30,3) + rnorm(10,mean = 4,sd = 3))
+)
+
+test_data$n <- as.factor(test_data$n) #good habit to convert experimental factors to data type factor
+
+## Run a linear model, allowing for separate fitted lines (allow interaction of n and x):
+lm1 <- lm(y ~ n*x, data = test_data)
+
+summary(lm1)
+
+## ggplot2 offers useful functionality for plotting the regression lines:
+library(ggplot2)
+ggplot(data = test_data,
+       aes(x = x, y = y, color = n)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = TRUE)
+
+## Check the residual plots:
+par(mfrow = c(1,2))
+plot(lm1, which = c(1,2))
+
+```
+
+::: {#exr-potatoyield2}
+### Potato yield (part 2)
+
+-   Using a similar approach to the steps outlined above, run a linear model using the `lm()` function for the potato yield dataset, with `yield` as the response variable, allowing for separate fitted lines per variety.
+
+-   Check the residual plots. Are the model assumptions satisfied? Is there any evidence of high residuals?
+
+-   Apply the rule of thumb on the Studentised residuals (*Hint*: use the `rstudent()` function). Are any of the data points potential outliers using this criterion? Which one(s)?
+:::
+
+## Detecting errors in a simulated dataset
+
+We are now going to move on to a "fun activity", namely generating a simulated dataset with errors in it for somebody else to puzzle over.
+
+The simulator is hosted on the [shiny.wur.nl server](%22https://shiny.wur.nl/content/937deca7-466c-4887-987e-1bb952bc8efb%22).
+
+The simulator uses [Shiny](%22https://shiny.posit.co/%22), an R package for developing web applications with R (or Python) running under the hood. The simulation tool itself is quite basic: it allows the user to generate a dataset with user-defined numbers of genotypes & experimental blocks, various genetic, environmental and residual variances, for two measured traits (with the exciting names of 'trait1' and 'trait2'). Finally, you can introduce outliers (generated according to the $3\sigma$ rule) and missing values.
+
+### Running the simulation
+
+The interface is in standard shiny layout, with a side panel for input and a main panel for output.
+
+![](images/ED_header.png)
+
+-   **Step 1**: Select your student ID in the drop-down menu
+
+-   **Step 2**: Choose some interesting settings using the input sliders.
+
+-   **Step 3**: Click on the "Run Simulation" button.
+
+-   **Step 4**: Export your data (both the CSV which has the simulated dataset, and a parameter file in .RDS format which contains a list of the "true" simulation settings that you chose). You need to click *both* download (Export) buttons shown:
+
+![](images/ED_export.png)
+
+If all has gone well, there should be two data files present in your downloads folder.
+
+These need to be uploaded on MS Teams to the appropriate folder (one for the CSV datafile and one for the parameter file):
+
+![](images/Upload_ED.png)
+
+As you may have noticed, the CSV filename has your student ID embedded - this is to help the detective find the correct file (a dataset is assigned based on student ID - this will be done in class). Student ID is then followed by a four-character code (a "filetag"), for example 'AG27'. Note that the accompanying parameter file has a different filename, which is an encrypted version of the same four-character code. This is to avoid possible cheating (otherwise it would be very simple and perhaps tempting to look up the 'true' simulation parameters and correct your asnwers before submitting).
+
+### Analysing the data (Error Detective)
+
+In class you will be randomly assigned another student's simulated dataset to work with.
+
+It is now time to become an Error Detective!
+
+Download the CSV file assigned to you (you will need to look for this file via the studentID - make sure you analyse the correct file, and **not your own one**!).
+
+On MS Teams there is a form that needs to be filled in:
+
+![](images/ED_MSTeams_form.png)
+
+There are in total 10 questions to fill in:
+
+```{r}
+#| echo: false
+knitr::kable(data.frame(Question = 1:10,
+                        Entry = c("Four_character_filetag",
+                                  "N_genotypes",
+                                  "N_blocks",
+                                  "mean_trait1",
+                                  "mean_trait2",
+                                  "rho",
+                                  "outlier_rate_trait1",
+                                  "outlier_rate_trait2",
+                                  "NA_rate_trait1",
+                                  "NA_rate_trait2")
+))
+```
+
+The first of these is simply the four-character (filetag) of the file you analysed. Make sure you type this correctly! Typos here mean your data will be filtered out and not used in the plenary analysis.
+
+The number of genotypes and blocks should be fairly straigtforward to work out (do you know the function `unique()`? If not, check it out!), as well as the mean trait values for trait1 and trait2 (the function `mean()` might help!).
+
+### Genetic correlation, $\rho$
+
+The next item is more tricky - the (Pearson) correlation co-efficient between the traits. Whoever generated the data you are now analysing selected a value for $\rho$ between -1 and 1, but in the simulation app, this was actually the *genetic* correlation between traits, not the correlation between the phenotypes directly.
+
+In many instances we are more interested in this correlation rather than in the phenotypic correlation, as the phenotypes are often affected by other effect, e.g. block effects, other environmental effects, experimental treatments etc. The usual way to estimate the genetic correlation is to fit a multivariate model with an explicit variance-covariance structure that models this. If genome-wide marker information is available, this can also be used to get a better estimation of the genetic correlation, taking into account different levels of genetic correlation between individuals.
+
+Here we will keep it relatively simple - we will estimate $\rho$ by taking the correlation between the estimated genetic effects (the "predicted values" from the fitted model of the genotypes). Check for yourself how $\rho$ compares to the correlation between the raw phenotypes. It should be broadly similar but not identical (unless the block variance was 0 and there was no noise in the data).
+
+You are not expected to be able to write a function to do this yourself - you may use the `estimate_rho()` function given here:
+
+```{r}
+
+estimate_rho <- function(data){
+  ## Start-up checks -- -- -- -- -- -- -- -- --
+  if(!"data.frame" %in% class(data)){
+    warning("input data is not a data frame. Trying to convert..")
+    data <- as.data.frame(data) #try to coerce to a data frame
+  }
+  
+  if(!all(c("block","genotype","trait1","trait2") %in% colnames(data))){
+    stop("Expected colnames 'block', 'genotype', 'trait1' and 'trait2'.\nPlease check the input")
+  }
+  ## End of start-up checks -- -- -- -- -- -- -- -- --
+  
+  ## Convert factors to factors:
+  data$block <- as.factor(data$block) #this is important - block is not numeric!
+  data$genotype <- as.factor(data$genotype) #this is just for good habit forming
+  
+  ## Fit linear model (no interaction):
+  lm1 <- lm(trait1 ~ block + genotype, data = data)
+  lm2 <- lm(trait2 ~ block + genotype, data = data)
+  
+  ## Extract the fitted coefficients (intercept and slopes)
+  coef1 <- lm1$coefficients
+  coef2 <- lm2$coefficients
+  
+  ## Append 0 for the first genotype; the rest are contrasts:
+  fixef1 <- c(0,coef1[grep("genotype",names(coef1))])
+  fixef2 <- c(0,coef2[grep("genotype",names(coef2))])
+  
+  return(cor(fixef1,fixef2))
+}
+
+```
+
+The last four items needed are also relatively straightforward - for example you can identify `NA` values with the `is.na()` function. But you may want to give some thought to how to identify outliers. Should you use a boxplot, the $3\sigma$ rule, or via the residuals? Maybe try all these approaches!
+
+Finally, it may dawn on you that you estimated trait means and genetic correlations *before* identifying potential outliers. This is OK, but perhaps the outliers introduced some bias, in which case simply taking the mean of the data might not be very accurate. 
+
+I leave this up to you to think about.
+
+
