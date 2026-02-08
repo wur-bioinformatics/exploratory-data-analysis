@@ -5,13 +5,16 @@ date: ADD
 author: ADD
 registration_number: ADD
 format: 
-  pdf
+  html
 ---
 
 # From messy to clean
 
 ## Set up your R environment
 
+```{r setup}
+    options(repos = c(CRAN = "https://cloud.r-project.org"))
+```
 
 ### Set a work directory
 Here you can add notes to help yourself in the future.
@@ -174,10 +177,6 @@ You now conducted two types of analyses that tell you whether the data is normal
 
 (3) what does a p-value mean?
 
-```{r}
-
-
-```
 
 ### Wilcoxon test
 Here you can add notes to help yourself in the future.
