@@ -218,7 +218,9 @@ Now produce the boxplot of all data from the paper[@Warmerdam2018].
 ```{r w1d1_make_a_ggplot2_boxplot}
 #| code-fold: false
 
-    ggplot2::ggplot(pheno_data,aes(x=genotype,y=eggmass)) +
+    data.plot <- pheno_data
+
+    ggplot2::ggplot(data.plot,aes(x=genotype,y=eggmass)) +
     geom_boxplot()
     
 ```
@@ -235,8 +237,10 @@ Try to plot a histogram, for that you need to adjust the boxplot code above a bi
 ```{r w1d1_make_a_ggplot2_histogram}
 #| code-fold: false
 
-        ggplot2::ggplot(pheno_data) + aes() + ###select the right set of values to make the plot (hint: you only need the quantitative data)
-        geom_ ###add the right geom
+    data.plot <- pheno_data
+
+    ggplot2::ggplot(data.plot) + aes() + ###select the right set of values to make the plot (hint: you only need the quantitative data)
+    geom_ ###add the right geom
     
 ```
 :::
@@ -260,11 +264,11 @@ This way, you can check the number of observations per genotype.
 ::: {#exr-table}
 #### Make a table
 
-Now use `table()` to check the Line names. For this you need to change the column that is accessed
+Now use `table()` to check the Line names. For this you need to indicate the column that is accessed
 
 ```{r w1d1_table_for_lines_ASSIGNMENT, include = TRUE,eval=FALSE}
 
-    table(pheno_data$) ### you need to change the column you access
+    table(pheno_data) ### you need to indicate the column you access
 
 ```
 :::
@@ -284,6 +288,8 @@ For this we can use the functions `stat_qq()` and `stat_qq_line()`.
 ```{r w1d1_qqplot}
 #| code-fold: false
 
+    data.plot <- pheno_data
+
     ggplot(pheno_data,aes(sample=eggmass)) + 
     stat_qq() + stat_qq_line()
 
@@ -293,8 +299,10 @@ Alternatively, you can use a Shapiro-Wilk test (`shapiro.test`), this tests the 
 
 ```{r w1d1_shapiro_ASSIGNMENT, include = TRUE,eval=FALSE}
 #| code-fold: false
+    
+    data.test <- pheno_data
 
-    shapiro.test(pheno_data$eggmass)
+    shapiro.test(data.test$eggmass)
 
 ```
 
@@ -367,6 +375,7 @@ statplot <- broom::tidy(t.test(eggmass~Line,data=data.test))
 p1 <- ggplot(data.test,aes(x=Line, y=eggmass)) +
       geom_boxplot() + 
       geom_jitter(height=0, width=0.25) +
+      theme_bw() +
       annotate("text", x=1.5, y=max(data.test$eggmass), label=paste("p =", signif(statplot$p.value, 2)))
 
 p1
@@ -430,6 +439,7 @@ for(i in 1:30){
 That probably went too fast, but it printed the values 1:30 in your console. You can loop over any vector:
 
 ```{r w1d1_for_loop_check2, include = TRUE, eval=FALSE, class.source = 'fold-show'}
+#| code-fold: false
 
 for(i in c("N. americanus","E. vermicularis","M. incognita","A. suum",
            "T. semipenetrans","O. volvulvus","D. dipsaci","E. arcuatus")){
@@ -437,11 +447,29 @@ for(i in c("N. americanus","E. vermicularis","M. incognita","A. suum",
 }
 
 ```
+
+A 'cleaner' way to write this (at least in our opinion) is to loop over the index number in the vector with species names `1:8` and then select the species for printing.
+
+```{r w1d1_for_loop_check2, include = TRUE, eval=FALSE, class.source = 'fold-show'}
+#| code-fold: false
+species <- c("N. americanus","E. vermicularis","M. incognita","A. suum",
+           "T. semipenetrans","O. volvulvus","D. dipsaci","E. arcuatus")
+
+for(i in 1:length(species)){
+    print(species[i])
+}
+
+```
+
+Use this to test any *A. thaliana* genotype against Col-0.
+
 :::
 
 #### For-loop over t-tests
+Let's automatize the t-test function! This is a bit simpler than plotting. For this, you need to make a for-loop cycling over the genoypes in `pheno_data`. You can remove Col-0 from the vector using `genotypes <- genotypes[genotypes != "Col-0"]`. 
 
-Now, let's automatize the t-test function. This is a bit simpler than plotting. For this, you need to make a for-loop cycling over the genoypes in `pheno_data`. You can remove Col-0 from the vector using `genotypes <- genotypes[genotypes != "Col-0"]`. Now, with what you read above, write a for-loop doing the t-test of each genotype versus Col-0 and make sure to pint the values in the console (either use `cat()` or `print()`).
+::: {#exr-forttest}
+Now, with what you read above, write a for-loop doing the t-test of each genotype versus Col-0 and make sure to pint the values in the console (either use `cat()` or `print()`).
 
 ```{r w1d1_for_loop_t-test_ASSIGNMENT, include = TRUE,eval=FALSE}
 #| code-fold: false
@@ -455,16 +483,23 @@ Now, let's automatize the t-test function. This is a bit simpler than plotting. 
     for(i in 1:length(genotypes)){
       
         ### We select the data from one batch
+        ### You need to replace AAA (2 times) with a selection of a genotype
         data.test <- dplyr::group_by(pheno_data,screening) %>%
-                     dplyr::filter(("Col-0" %in% Line & genotypes[i] %in% Line)) %>%
+                     dplyr::filter(("Col-0" %in% Line & AAA %in% Line)) %>%  
                      dplyr::ungroup() %>%
-                     dplyr::filter(Line %in% c("Col-0",genotypes[i]))
+                     dplyr::filter(Line %in% c("Col-0",AAA))
         
         ### conduct test and print the p-value
-        cat("",t.test(eggmass~Line,data=data.test)$p.value)
+        ### you can select the p-value in the t-test output with $p.value
+        t.test(eggmass~Line,data=data.test)
+        
+        ### print the p-value
+        
     }
 
 ```
+:::
+
 
 #### For loop for plotting
 
@@ -508,8 +543,24 @@ As we saw before, you can also access specific locations within these items, sim
     output[[1]][8]
     
 ```
+
+We can also write data into a list as output of a for-loop.
+
+```{r w1d1_access_a_list, include = TRUE,eval=FALSE, class.source = 'fold-show'}
+#| code-fold: false
+    ###this makes an empty list
+    output <- as.list(NULL)
+
+    ###run a for-loop and save within ouput
+    for(i in 1:30){
+        output[[i]] <- i^2
+    }
+
+```
 :::
 
+
+::: {#exr-forplot}
 Now take the plotting function we wrote before and use it to save plots into an object. Note that this takes a while to run (\~2 minutes).
 
 ```{r w1d1_for-loop_Warmerdam, include = TRUE,eval=FALSE}
@@ -524,6 +575,7 @@ Now take the plotting function we wrote before and use it to save plots into an 
     for(i in 1:length(genotypes)){
     
         ### We select the data from one batch
+        ### The mutate on the final line of this chunk make sure that Col-0 is always on the left.
         data.test <- dplyr::group_by(pheno_data,screening) %>%
                      dplyr::filter(("Col-0" %in% Line & genotypes[i] %in% Line)) %>%
                      dplyr::ungroup() %>%
@@ -534,14 +586,12 @@ Now take the plotting function we wrote before and use it to save plots into an 
         statplot <- broom::tidy(t.test(eggmass~Line,data=data.test))
         
         ### Make the plot into the empty list
-        output[[i]] <- ggplot(data.test,aes(x=Line,y=eggmass)) +
-                       geom_boxplot() + geom_jitter(height=0,width=0.25) +
-                       annotate("text",x=1.5,y=max(data.test$eggmass),label=paste("p =",signif(statplot$p.value,2))) +
-                       theme_bw() + 
-                       labs(x=expression(bolditalic("A. thaliana")~bold("genotype")),y=expression(bolditalic("M. incognita")~bold("eggmasses (n)")))
+        
+        ### here add the fancy plotting script we made before, and save its graphs into output
         }
 
 ```
+:::
 
 #### Save the plots
 
@@ -567,11 +617,11 @@ Complete the code below, so you can make a .png of each plot individually.
 ```{r w1d1_png_of_warmerdam_plot_all_vs_Col-0, include = TRUE, eval=FALSE, class.source = 'fold-show'}
 #| code-fold: false
 
-### Here include the for-loop 
-    png(file=paste("Figure_Col0-",genotypes[i],".png",sep=""),width=3,height=4,units="in",res=300)
-        print(output[[i]])
-    dev.off()
-### Here, close the for-loop
+    ### Here include the for-loop 
+        png(file=paste("Figure_Col0-",genotypes[i],".png",sep=""),width=3,height=4,units="in",res=300)
+            print(output[[i]])
+        dev.off()
+    ### Here, close the for-loop
         
 ```
 :::
