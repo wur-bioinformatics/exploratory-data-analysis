@@ -6,19 +6,19 @@ title: "QMD notebook cheatsheet"
 
 | Feature           | Syntax                        | Explanation                               |
 |------------------|--------------------------|----------------------------|
-| Bold              | **text**                      | Makes text bold                           |
-| Italic            | *text*                        | Makes text italic                         |
-| Bold + Italic     | ***text***                    | Bold and italic                           |
-| Inline code       | `code`                        | Formats inline code                       |
-| Strikethrough     | ~~text~~                      | Strikes through text                      |
-| Headings          | #, ##, ###, \####             | Creates headings (H1--H4)                 |
+| Bold              | \*\*text\*\*                  | Makes text bold                           |
+| Italic            | \*text\*                      | Makes text italic                         |
+| Bold + Italic     | \*\*\*text\*\*\*              | Bold and italic                           |
+| Inline code       | \`code\`                      | Formats inline code                       |
+| Strikethrough     | \~\~text\~\~                  | Strikes through text                      |
+| Headings          | \#, \#\#, \#\#\#, \#\#\#\#    | Creates headings (H1--H4)                 |
 | Bullet list       | \- item                       | Creates unordered lists                   |
 | Numbered list     | 1\. item                      | Creates ordered lists                     |
 | Task list         | \- \[ \] item                 | Creates checkboxes                        |
 | Link              | https://example.com           | Creates a clickable link                  |
 | Link              | \[text\](https://example.com) | Creates a clickable link with custom text |
 | Image             | image.png                     | Inserts an image                          |
-| Image             | \[text\](image.png)           | Inserts an image with a caption           |
+| Image             | \!\[text\](image.png)           | Inserts an image with a caption           |
 | Blockquote        | \> text                       | Creates an indented quote                 |
 | Horizontal rule   | \-\--                         | Inserts a horizontal line                 |
 | Footnote          | text\[\^1\] / \[\^1\]: note   | Adds a footnote                           |
