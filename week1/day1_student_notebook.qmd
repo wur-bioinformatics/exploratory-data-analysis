@@ -6,6 +6,8 @@ author: ADD
 registration_number: ADD
 format: 
   html
+execute: 
+  eval: false
 ---
 
 # The importance of data analysis

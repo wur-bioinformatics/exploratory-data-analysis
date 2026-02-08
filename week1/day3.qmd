@@ -54,7 +54,7 @@ In RStudio go to File \> New File \> Quarto document...
 
 Based on the documents provided last two days ([Chapter 1](/week1/day1.qmd) and [Chapter 2](/week1/day2.qmd)), make your own markdown file. Include meta information (title, name, registration number) and headings for: setup of the R environment (working directory, packages), and the five steps in the data analysis cycle (see [Chapter 1](/week1/day1.qmd)).
 
-You can choose whether it renders a .html or a .pdf document. For now, settle on .html, this typically renders well and does not require additional programs.
+You can choose whether it renders a .html or a .pdf document. For now, settle on .html, this typically renders well and does not require many additional programs. You probably will need [pandoc](https://pandoc.org/).
 :::
 
 ::: {.callout-tip appearance="simple"}
@@ -68,7 +68,7 @@ Many errors were made by me - and the other teachers - in building the book you 
 Today we want to cover one more aspect of data analysis, namely including the fit of a simple model into a plot. In this case, we will use some plant-growth data. And to be precise, we will use the linear part of the growth curve. It is perfectly possible to fit a growth-model within R, but we want to start a bit simpler with an actual linear curve. you can find the data for this assignment via the fileshare on [Brightspace](https://brightspace.wur.nl/). You need the general file under day 3, not your personal dataset for the code-review assignment.
 
 ::: {#exr-load_robj}
-### Load the data
+### Loading data into R
 
 Load the data using `load()`. We have not used this function before. Use `?load()` to figure out how this function works.
 
@@ -100,7 +100,7 @@ There are some general measures you can take to reduce risks:
 
 ### Inspecting data
 
-#### Inspecting data using functions
+#### Using functions
 
 Inspect the data using the same functions as in [Chapter 2](/week1/day2.qmd).
 
@@ -156,7 +156,7 @@ Same as before, let's figure out whether the data is normally distributed. If yo
 You now conducted two types of analyses that tell you whether the data is normally distributed. What is your assessment, is it normally distributed?
 :::
 
-#### Analysis of correlation
+#### Correlation analysis
 
 Yesterday we conducted an analysis of correlation using the `cor()` function. There is actually another way to conduct this type of analysis, namely using a linear model with `lm()`. The advantage of this method is that we will get a slope and an intercept.
 
@@ -175,8 +175,12 @@ We can use the function `summary()` to get the fit of the model.
 
 ```
 
+The `summary()` function is a very versatile function, that can generate outputs from many objects. In this case, it presents the analysis from the linear model, which in essence fits a correlation line. The `Estimate` for the intercept of that line (-2.97528) and the slope (0.50663) are reported. Also the fit of the model (the Adjusted R-squared: 0.8274) and of the parameters. For instance, there is a significant correlation between day post infection (dpi) and the leaf area (value); p < 2e-16.
+
+
 ### Presenting
 
+#### Scatter plot
 Now, let's make a proper plot of correlation.
 
 ```{r w1d2_wilcoxplot_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
@@ -227,6 +231,8 @@ Also, you should provide a conclusion about the *biological interpretation* of t
 
 ::: {.callout-tip appearance="simple"}
 Do not wait untill you are finished to make the first render. At the very start, when your file is still pristine (e.g after adapting a .qmd file from [Chapter 1](/week1/day1.qmd) or [Chapter 2](/week1/day2.qmd)), do a check on whether it renders correctly. 
+
+Note that in day 1 and day 2 the parameter `eval` is set to `false` in the yaml header (this is the text at the start of the document between the \-\-\- and \-\-\-). This means that in the .html generated, none of the code blocks are executed. This is a good option to prevent R coding errors from rendering the document. However, if you want to include a figure, you need to set this option to true within that code-chunk `#| eval: true`.
 :::
   
   
@@ -261,7 +267,7 @@ We covered the data inspection functions in [Chapter 1](/week1/day1.qmd) and [Ch
 :::
   
 ::: {#exr-Assignment_clean}
-#### Clean (combine)
+#### Clean; combine
 Use a 'bind' function to combine the two objects into one.
 :::
   

@@ -6,6 +6,8 @@ author: ADD
 registration_number: ADD
 format: 
   html
+execute: 
+  eval: false 
 ---
 
 # From messy to clean
@@ -155,20 +157,14 @@ Here you can add notes to help yourself in the future.
 ```{r}
 
 ### Using a plot
-    ggplot(pheno_data,aes(sample=Gpal_vir)) + 
-    stat_qq() + stat_qq_line()
 
-    ggplot(pheno_data,aes(sample=Gpal_avir)) + 
-    stat_qq() + stat_qq_line()
 
 ### Using a statistical test
-    shapiro.test(pheno_data$Gpal_vir)
-    
-    shapiro.test(pheno_data$Gpal_avir)
+
 
 ```
 
-### Does the data follow a normal distribution?
+### Does the data follow a normal distribution? (exercise)
 You now conducted two types of analyses that tell you whether the data is normally distributed. 
 
 (1) what do you see in the qqplots, and what does it mean? 
