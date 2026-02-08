@@ -236,7 +236,7 @@ Confirm that you now have a file on your HDD, within the folder you set as your 
 
 ## A for-loop
 
-### For-loop over t-tests
+### For-loop over t-tests (exercise)
 Here you can add notes to help yourself in the future.
 
 ```{r}
@@ -250,19 +250,24 @@ Here you can add notes to help yourself in the future.
     for(i in 1:length(genotypes)){
       
         ### We select the data from one batch
+        ### You need to replace AAA (2 times) with a selection of a genotype
         data.test <- dplyr::group_by(pheno_data,screening) %>%
-                     dplyr::filter(("Col-0" %in% Line & genotypes[i] %in% Line)) %>%
+                     dplyr::filter(("Col-0" %in% Line & AAA %in% Line)) %>%  
                      dplyr::ungroup() %>%
-                     dplyr::filter(Line %in% c("Col-0",genotypes[i]))
+                     dplyr::filter(Line %in% c("Col-0",AAA))
         
         ### conduct test and print the p-value
-        cat("",t.test(eggmass~Line,data=data.test)$p.value)
+        ### you can select the p-value in the t-test output with $p.value
+        t.test(eggmass~Line,data=data.test)
+        
+        ### print the p-value
+        
     }
 
 ```
 
 
-### For loop for plotting
+### For loop for plotting (exercise)
 Here you can add notes to help yourself in the future.
 
 ```{r}
@@ -276,6 +281,7 @@ Here you can add notes to help yourself in the future.
     for(i in 1:length(genotypes)){
     
         ### We select the data from one batch
+        ### The mutate on the final line of this chunk make sure that Col-0 is always on the left.
         data.test <- dplyr::group_by(pheno_data,screening) %>%
                      dplyr::filter(("Col-0" %in% Line & genotypes[i] %in% Line)) %>%
                      dplyr::ungroup() %>%
@@ -286,11 +292,8 @@ Here you can add notes to help yourself in the future.
         statplot <- broom::tidy(t.test(eggmass~Line,data=data.test))
         
         ### Make the plot into the empty list
-        output[[i]] <- ggplot(data.test,aes(x=Line,y=eggmass)) +
-                       geom_boxplot() + geom_jitter(height=0,width=0.25) +
-                       annotate("text",x=1.5,y=max(data.test$eggmass),label=paste("p =",signif(statplot$p.value,2))) +
-                       theme_bw() + 
-                       labs(x=expression(bolditalic("A. thaliana")~bold("genotype")),y=expression(bolditalic("M. incognita")~bold("eggmasses (n)")))
+        
+        ### here add the fancy plotting script we made before, and save its graphs into output
         }
 
 ```
