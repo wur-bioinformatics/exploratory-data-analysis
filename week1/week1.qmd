@@ -25,10 +25,12 @@ The material you are supposed to work through each day is a chapter in the book.
 There will be three days of working through the chapters (Monday - Wednesday). The exercises in this book require you to use data. In the first week, this data is available via a link on [Brightspace](https://brightspace.wur.nl/). For each day of the course, there is a data set available.
 
 1.  For [Chapter 1]((week1/day1.qmd)) we all work on the same dataset[@Warmerdam2018].
-2.  For [Chapter 2]((week1/day2.qmd)) you have your own, personal dataset based on [@Schaveling2026].
+2.  For [Chapter 2]((week1/day2.qmd)) you have your own, personal dataset based on [@Schaveling2026]. This data set you find in a folder under your own name.
 3.  For [Chapter 3]((week1/day3.qmd)), we start with a shared dataset[@Willig2023]. For the assignment, you will also have your own, personal data set[@Willig2023]. This data set you find in a folder under your own name.
 
 The answers to the assignments will be posted on Brightspace the morning after (so the answers for Chapter 1 will appear on Tuesday).
+
+Next to the chapters, there is some (light) reading to support your view on data analysis. After [Chapter 2]((week1/day2.qmd)) you are expected to read a paper by Itai Yanai and Martin Lercher[@Yanai2020]. After [Chapter 3]((week1/day3.qmd)) you are expected to read a critique on this paper by Teppo Felin *et al.*[@Felin2021]. These two papers should give you a firm grip on hypothesis testing and data analysis.
 
 ### The assignment
 

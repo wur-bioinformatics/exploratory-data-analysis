@@ -134,7 +134,7 @@ This set of instructions follows the data analysis cycle, so it also includes se
 
 ### Setup R
 
-Before we start, make sure you have set the work directory and have the following packages ready: {tidyverse}, {readxl}, and {ggpubr}. Of course you also need to activate them. If you're not sure how, check [Chapter 1](/week1/day1.qmd).
+Before we start, make sure you have set the work directory and have the following packages ready: {tidyverse} and {readxl}. Of course you also need to activate them. If you're not sure how, check [Chapter 1](/week1/day1.qmd).
 
 ```{r w1d2_packages_readxl}
 #| code-fold: false
@@ -363,7 +363,7 @@ Now we can add p-value as well using `annotate()`.
 ::: {#exr-saveplot}
 #### Save plot
 
-Now save the plot, check back at [Chapter 1](/week1/day1.qmd). Use a graphical device to save the plot with dimensions of 7 (width) by 4 (height).
+Now save the plot, check back at [Chapter 1](/week1/day1.qmd). Use a graphical device to save the plot with dimensions of 7 (width) by 4 (height) inch.
 
 ```{r w1d2_pdf_of_pallida_plot, include = TRUE, eval=FALSE}
 #| code-fold: false
@@ -408,7 +408,7 @@ What do you conclude from the correlation analysis, are the two values correlate
 
 #### Clustering analysis
 
-Clustering is another method to explore data. Instead of patterns that move in the same direction, clustering is useful to apply if you expect consistent differences in values.
+Clustering is another method to explore data. Instead of patterns that move in the same direction, clustering is useful to apply if you expect consistent value differences in values.
 
 For clustering we use the functions `dist()` and `hclust()`. The first function calculates the distance matrix, there are multiple methods to calculate the distance-matrix, here we use the standard method ("euclidean"). The second performs the clustering. This process groups the measurements that are most similar.
 
@@ -495,3 +495,7 @@ Correlation can best be visualized with a scatter plot. complete the code below 
 
 ```
 :::
+
+### Some reading
+In part, this assignment was inspired by a paper in the journal Genome Biology, by Itai Yanai and Martin Lercher[@Yanai2020]. Read this paper as food for thought about what we covered today in p-value testing and its role in data analysis. This editorial paper is part of an interesting series of editorials about data science in biology: [Night science](https://link-springer-com.ezproxy.library.wur.nl/collections/cejajaicde)[@Yanai2019].
+

@@ -371,7 +371,8 @@ Check:
 #### The Biological interpretation
 Do you agree with the biological interpretation given? Note that all of you have different days and P~i~'s to compare. Thus, the conclusions will probably differ amongst yourselves!
 
-
+### Some reading
+Yesterday you might have been convinced that a hypothesis is a liability[@Yanai2020], today you may convince yourself otherwise. There is a nice critique written of the provocative paper you read yesterday. The authors in the paper 'The data-hypothesis relationship' will convince you that a hypothesis is not such a bad idea after all[@Felin2021].
 
 
 
