@@ -92,7 +92,7 @@ To gradually build up to a level of independent data analysis, the book is struc
 ## Reading guide
 
 Throughout the book, you will find a mix of examples, stories, theory, and assignments.
-All the study material for the course is available in the book.
-This means that by completing the material of one section of the book, you should be able to successfully perform the graded assignment of the accompanying week.
+All the study material for the course is available in the book, lectures are intended to solidify concepts and provide additional motivation and examples.
+This means that by completing the material of one section of the book and carefully reviewing the lecture slides, you should be able to successfully perform the graded assignment of the accompanying week.
 
 To provide additional structure to the material in the book, you will find various 'boxes': these are intended to either highlight important information, or provide additional background material.g
