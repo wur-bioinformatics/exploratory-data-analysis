@@ -218,7 +218,7 @@ What is the *biological interpretation* of the correlation you calculated and ob
 
 ### The assignment
 
-Via the fileshare on [Brightspace](https://brightspace.wur.nl/), you can find your dataset for the code review. Everyone of you has their own folder, with their own dataset. This means that the conclusions you draw will be based on your individual dataset. We expect that you hand in a .hmtl file generated using a Quarto Markdown (QMD) file you wrote yourself in R. Within the .hmtl file you provide the code to:
+Via the fileshare on [Brightspace](https://brightspace.wur.nl/), you can find your dataset for the code review. Everyone of you has their own folder, with their own dataset. This means that the conclusions you draw will be based on your individual dataset. We expect that you hand in a .html file generated using a Quarto Markdown (QMD) file you wrote yourself in R. Within the .html file you provide the code to:
 
 1.  Setup of the R environment
 2.  Load the data
