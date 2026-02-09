@@ -292,7 +292,7 @@ knitr::kable(data.frame(Question = 1:10,
                                   "outlier_rate_trait2",
                                   "NA_rate_trait1",
                                   "NA_rate_trait2")
-))
+), table.attr = "style='width:30%;'")
 ```
 
 The first of these is simply the four-character (filetag) of the file you analysed. Make sure you type this correctly! Typos here mean your data will be filtered out and not used in the plenary analysis.
