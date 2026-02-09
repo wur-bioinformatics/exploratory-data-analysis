@@ -12,7 +12,7 @@ This chapter is not yet finished, come back later for the final product
 
 The focus of today will be on errors - data points that for one reason or another do not fit in our dataset. We often need to be able to identify errors so that we can remove (or correct) them before running an analysis. This is generally the case for types of analyses or calculations that assume data is error-free (there are more advanced approaches that can explicitly model the possibility of errors in the data e.g. Bayesian methods, but we will not be using them here). Errors could lead to false conclusions being drawn, or a loss of statistical power for testing differences (by inflating the estimates of the variance in the data for example). We will spend some time considering in particular what an "outlier" means, and what to do with them.
 
-We will also be dealing with simulations; initially, using a [simulator]("https://shiny.wur.nl/content/937deca7-466c-4887-987e-1bb952bc8efb") to generate datasets with errors in them. You will have to don your detectives' cap to figure out the error rates in the data.
+We will also be dealing with simulations; initially, using a [simulator](https://shiny.wur.nl/content/937deca7-466c-4887-987e-1bb952bc8efb) to generate datasets with errors in them. You will have to don your detectives' cap to figure out the error rates in the data.
 
 We first start with a warm-up exercise, detecting errors in data from a study on salt stress in tomato (*Solanum lycopersicum*).
 
@@ -30,7 +30,7 @@ The experimenter measured the following traits after 60 days' growth:
 
 The last of these traits was measured on a scale of 0-5, with 0 for healthy leaves and 5 for dead leaves. Per plant, the average necrosis of the top 5 leaves was calculated and recorded.
 
-The dataset that resulted is available to download from [Brightspace]("https://brightspace.wur.nl/d2l/home/336819") under Content -\> Week 4. The filename is "tomato_salinity.csv".
+The dataset that resulted is available to download from [Brightspace](https://brightspace.wur.nl/d2l/home/336819) under Content -\> Week 4. The filename is "tomato_salinity.csv".
 
 Download this file and save it to your working directory. Let's read in the file and check its dimension and structure:
 
@@ -74,7 +74,7 @@ If you are unsure, have a look at the `boxplot()` documentation for the details:
 ?boxplot
 ```
 
-If you need some reminders on what terms like "median" and "quantile" mean, you can also check back to the [notes from week 2]("https://wur-bioinformatics.github.io/exploratory-data-analysis/week2/summary_statistics_and_functions.html").
+If you need some reminders on what terms like "median" and "quantile" mean, you can also check back to the [notes from week 2](https://wur-bioinformatics.github.io/exploratory-data-analysis/week2/summary_statistics_and_functions.html).
 
 We also mentioned the "$3\sigma$ rule", do any of the values fall outside this range? How could you check this? Try this yourself before looking at the **\> Code**!
 
@@ -242,9 +242,9 @@ plot(lm1, which = c(1,2))
 
 We are now going to move on to a "fun activity", namely generating a simulated dataset with errors in it for somebody else to puzzle over.
 
-The simulator is hosted on the [shiny.wur.nl server]("https://shiny.wur.nl/content/937deca7-466c-4887-987e-1bb952bc8efb").
+The simulator is hosted on the [shiny.wur.nl server](https://shiny.wur.nl/content/937deca7-466c-4887-987e-1bb952bc8efb).
 
-The simulator uses [Shiny]("https://shiny.posit.co/"), an R package for developing web applications with R (or Python) running under the hood. The simulation tool itself is quite basic: it allows the user to generate a dataset with user-defined numbers of genotypes & experimental blocks, various genetic, environmental and residual variances, for two measured traits (with the exciting names of 'trait1' and 'trait2'). Finally, you can introduce outliers (generated according to the $3\sigma$ rule) and missing values.
+The simulator uses [Shiny](https://shiny.posit.co/), an R package for developing web applications with R (or Python) running under the hood. The simulation tool itself is quite basic: it allows the user to generate a dataset with user-defined numbers of genotypes & experimental blocks, various genetic, environmental and residual variances, for two measured traits (with the exciting names of 'trait1' and 'trait2'). Finally, you can introduce outliers (generated according to the $3\sigma$ rule) and missing values.
 
 ### Running the simulation
 
