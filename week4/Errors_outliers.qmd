@@ -1,7 +1,6 @@
 ---
 title: "Errors, outliers and simulations"
 author: "Peter Bourke"
-eval: FALSE
 ---
 
 ## Introduction
@@ -28,9 +27,10 @@ The last of these traits was measured on a scale of 0-5, with 0 for healthy leav
 
 The dataset that resulted is available to download from [Brightspace](%22https://brightspace.wur.nl/d2l/home/336819%22) under Content -\> Week 4. The filename is "tomato_salinity.csv".
 
-Downloaded this file and save it to your working directory. Let's read in the file and check its dimension and structure:
+Download this file and save it to your working directory. Let's read in the file and check its dimension and structure:
 
 ```{r}
+#| eval: false
 data <- read.csv("tomato_salinity.csv")
 
 dim(data)
@@ -346,8 +346,6 @@ estimate_rho <- function(data){
 
 The last four items needed are also relatively straightforward - for example you can identify `NA` values with the `is.na()` function. But you may want to give some thought to how to identify outliers. Should you use a boxplot, the $3\sigma$ rule, or via the residuals? Maybe try all these approaches!
 
-Finally, it may dawn on you that you estimated trait means and genetic correlations *before* identifying potential outliers. This is OK, but perhaps the outliers introduced some bias, in which case simply taking the mean of the data might not be very accurate. 
-
-I leave this up to you to think about.
+We have put the focus here on identifying the errors in the dataset. As an additional exercise, see whether any of your data parameter estimates change if you "clean up" the dataset before estimating them.
 
 
