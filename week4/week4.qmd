@@ -29,7 +29,7 @@ The content of the first three days is as follows:
 
 -   **Tuesday**: Exploring genetic and phenotypic diversity in *Arabidopsis thaliana*
 
--   **Wednesday**: (if needed) Completion of the data analysis from Tuesday / String operations and data parsing
+-   **Wednesday**: (if needed) Completion of the data analysis from Tuesday / String operations
 
 
 
