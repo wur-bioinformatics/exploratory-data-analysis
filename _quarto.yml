@@ -38,8 +38,8 @@ book:
         - week3/day1.qmd
     - part: week4/week4.qmd
       chapters: 
-        - week4/arabidopsis_gwas.qmd
         - week4/errors_outliers.qmd
+        - week4/arabidopsis_gwas.qmd
     - part: appendices/appendices.qmd
       chapters:
         - appendices/base-r-cheatsheet.qmd
