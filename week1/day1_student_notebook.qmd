@@ -16,6 +16,9 @@ execute:
 
 ```{r setup}
     options(repos = c(CRAN = "https://cloud.r-project.org"))
+    ### Some of you will have problems with setting the workdirectory (setwd())
+    ### Here you need to set your work directory as well
+    #knitr::opts_knit$set(root.dir = "D:/") 
 ```
 
 ### Getting to grips with R (exercise)
