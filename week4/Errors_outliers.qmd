@@ -1,6 +1,7 @@
 ---
 title: "Errors, outliers and simulations"
 author: "Peter Bourke"
+eval: FALSE
 ---
 
 ## Introduction
