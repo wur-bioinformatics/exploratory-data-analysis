@@ -14,7 +14,7 @@ This chapter is not yet finished, come back later for the final product
 Although `R` is primarily a tool for dealing with numeric data, it is also possible to perform string operations. In this final chapter, we will be practicing string manipulation as a final part of the course.
 
 ::: callout-tip
-A **string** is a separate data type in `R`, which you have probably already come across in earlier chapter. Strings are often used for descriptive variables (e.g. the name of a tomato variety like 'Moneymaker'), but can also more generally be any group of alphanumeric characters, e.g. "abc123_z". To denote a string we use either `''` or `""`, which are interchangeable, although [double quotation marks are preferred](https://stat.ethz.ch/R-manual/R-patched/library/base/html/Quotes.html).
+A **string** is a separate data type in `R`, which you have probably already come across in earlier chapters. Strings are often used for descriptive variables (e.g. the name of a tomato variety like 'Moneymaker'), but can also more generally be any group of alphanumeric characters, e.g. "abc123_z". To denote a string we use either `''` or `""`, which are interchangeable, although [double quotation marks are preferred](https://stat.ethz.ch/R-manual/R-patched/library/base/html/Quotes.html).
 
 ```{r}
 #| eval: false
@@ -161,6 +161,8 @@ The functions `apply()`, `sapply()`, `lapply()` and `tapply()` are the most comm
 Check out the documentation for `sapply()`, which is arguably the most-used function in the family:
 
 ```{r}
+#| eval: false
+
 ?sapply
 ```
 
