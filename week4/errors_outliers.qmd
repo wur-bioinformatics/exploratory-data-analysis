@@ -12,9 +12,9 @@ This chapter is not yet finished, come back later for the final product
 
 The focus of today will be on errors - data points that for one reason or another do not fit in our dataset. We often need to be able to identify errors so that we can remove (or correct) them before running an analysis. This is generally the case for types of analyses or calculations that assume data is error-free (there are more advanced approaches that can explicitly model the possibility of errors in the data e.g. Bayesian methods, but we will not be using them here). Errors could lead to false conclusions being drawn, or a loss of statistical power for testing differences (by inflating the estimates of the variance in the data for example). We will spend some time considering in particular what an "outlier" means, and what to do with them.
 
-We will also be dealing with simulations; initially, using a [simulator](https://shiny.wur.nl/EDA_R_sim/) to generate datasets with errors in them. You will have to don your detectives' cap to figure out the error rates in the data.
+We will also be dealing with simulations, using a [simulator](https://shiny.wur.nl/EDA_R_sim/){target="_blank"} to generate datasets with errors in them. You will have to don your detectives' cap to figure out the error rates in the data.
 
-We first start with a warm-up exercise, detecting errors in data from a study on salt stress in tomato (*Solanum lycopersicum*).
+We will start with a warm-up exercise, detecting errors in data from a study on salt stress in tomato (*Solanum lycopersicum*).
 
 ### Tomato salinity experiment
 
@@ -30,9 +30,9 @@ The experimenter measured the following traits after 60 days' growth:
 
 The last of these traits was measured on a scale of 0-5, with 0 for healthy leaves and 5 for dead leaves. Per plant, the average necrosis of the top 5 leaves was calculated and recorded.
 
-The dataset that resulted is available to download from [Brightspace](https://brightspace.wur.nl/d2l/home/336819) under Content -\> Week 4. The filename is "tomato_salinity.csv".
+The dataset that resulted is available to download from [Brightspace](https://brightspace.wur.nl/d2l/home/336819){target="_blank"} under Content -\> Week 4. The filename is "tomato_salinity.csv".
 
-Download this file and save it to your working directory. Let's read in the file and check its dimension and structure:
+Download this file and save it to your working directory. Let's read in the file and check its dimension and structure using `dim()` and `str`.
 
 ```{r}
 #| eval: false
@@ -47,6 +47,7 @@ str(data)
 ### Detecting tomato outliers
 
 -   There are four obvious (typing) errors in the dataset. Can you identify them? Can you think of what the values (probably) *should* be?
+
 :::
 
 ## Outliers
@@ -144,8 +145,8 @@ setNames(bp$out,bp$names[bp$group]) #read the boxplot documentation!
 `setNames()` is a useful little function to know, it sets the names of a vector:
 
 ```{r}
-d <- setNames(1:5,letters[1:5]) 
-d
+vect <- setNames(1:5,letters[1:5]) 
+vect
 ```
 :::
 
@@ -156,9 +157,9 @@ As a last topic in this section, we will briefly consider how residuals can also
 
 ![](images/residuals_plotted.png){fig-align="center" width="600"}
 
-In this figure, leaf biomass is plotted against yield, and a fitted trendline (fitted using linear regression) has been added in green. The *predicted* yield given a leaf biomass value is the value the line takes at this point. So we can see the residual as the difference between the observed yield values, and those predicted by the model (in this case, a single line). These quantities are represented above as dashed red lines. Large deviations from the line (= larger residuals) suggest that the particular observation in question is not in line with the trend from the rest of the data. This could be by chance, or due to a problematic data-point.
+In this figure, leaf biomass is plotted against yield, and a fitted trendline (fitted using linear regression) has been added in green. The *predicted* yield given a leaf biomass value is the value the line takes at this point. So we can see the residual as the difference between the observed yield values, and those predicted by the model (in this case, a single line). These quantities are represented above as dashed red lines. Large deviations from the green line (= larger residuals) suggest that the particular observation in question is not in line (literally) with the trend from the rest of the data. This could be by chance, or due to a problematic data-point.
 
-When fitting an ordinary linear model, one assumes certain things about the residuals (often shortened as i.i.d.) - that they are independent of each other and identically distributed, namely that they are drawn from a $N(0,\sigma_e^2)$ distribution (normal distribution with mean 0 and a shared variance). It is good practice to check the residuals (we often do this using residual plots) after running a regression or ANOVA model, to make sure the residuals are distributed as expected. These checks can also highlight potentially problematic data-points (with high residuals, or perhaps with high leverage i.e. having an unduly large influence on the model fit).
+When fitting an ordinary linear model, one assumes certain things about the residuals (often shortened as i.i.d. - that they are independent of each other and identically distributed, namely that they are drawn from a $N(0,\sigma_e^2)$ distribution - a Normal distribution with mean 0 and a shared variance). It is good practice to check the residuals (we often do this using residual plots) after running a regression or ANOVA model, to make sure the residuals are distributed as expected. These checks can also highlight potentially problematic data-points (with high residuals, or perhaps with high leverage i.e. having an unduly large influence on the model fit).
 
 We will use a dataset of leaf biomass and yield collected from a field trial in potato (*Solanum tuberosum*) to demonstrate the point.
 
@@ -169,7 +170,7 @@ We will use a dataset of leaf biomass and yield collected from a field trial in 
 
 -   Check the **str**ucture of the dataset using `str()`. If there is an experimental factor that is coded as a character string, convert it to a factor (e.g. using `factor()` or `as.factor()`).
 
--   Generate 2 boxplots, showing yield and leaf biomass split by potato variety. Is there any evidence of outliers?
+-   Generate 2 boxplots, showing yield and leaf biomass, split across potato variety. Is there any evidence of outliers?
 
 -   Create a scatter plot of the leaf biomass (x axis) versus yield (y axis) using `plot()`. Can you spot any strange data points / potential outliers?
 
@@ -254,7 +255,7 @@ The interface is in standard shiny layout, with a side panel for input and a mai
 
 -   **Step 1**: Select your student ID in the drop-down menu
 
--   **Step 2**: Choose some interesting settings using the input sliders.
+-   **Step 2**: Choose some interesting parameter settings using the input sliders.
 
 -   **Step 3**: Click on the "Run Simulation" button.
 
@@ -268,7 +269,7 @@ These need to be uploaded on MS Teams to the appropriate folder (one for the CSV
 
 ![](images/Upload_ED.png)
 
-As you may have noticed, the CSV filename has your student ID embedded - this is to help the detective find the correct file (a dataset is assigned based on student ID - this will be done in class). Student ID is then followed by a four-character code (a "filetag"), for example 'AG27'. Note that the accompanying parameter file has a different filename, which is an encrypted version of the same four-character code. This is to avoid possible cheating (otherwise it would be very simple and perhaps tempting to look up the 'true' simulation parameters and correct your asnwers before submitting).
+As you may have noticed, the CSV filename has your student ID embedded - this is to help the detective find the correct file (a dataset is assigned based on student ID - this will be done in class). Student ID is then followed by a four-character code (a "filetag"), for example 'AG27'. Note that the accompanying parameter file has a different filename, which is an encrypted version of the same four-character code. This is to avoid possible cheating (otherwise it would be very simple and perhaps tempting to look up the 'true' simulation parameters and correct your answers before submitting).
 
 ### Analysing the data (Error Detective)
 
@@ -300,17 +301,17 @@ knitr::kable(data.frame(Question = 1:10,
 ), table.attr = "style='width:30%;'")
 ```
 
-The first of these is simply the four-character (filetag) of the file you analysed. Make sure you type this correctly! Typos here mean your data will be filtered out and not used in the plenary analysis.
+The first of these is simply the four-character (filetag) of the file you analysed. Make sure you type this correctly! Typos here wil mean your data will most likely be filtered out and not used in the plenary analysis.
 
-The number of genotypes and blocks should be fairly straigtforward to work out (do you know the function `unique()`? If not, check it out!), as well as the mean trait values for trait1 and trait2 (the function `mean()` might help!).
+The number of genotypes and blocks should be fairly straigtforward to work out (have you already used the function `unique()`? If not, check it out!), as well as the mean trait values for trait1 and trait2 (the function `mean()` might help!).
 
 ### Genetic correlation, $\rho$
 
-The next item is more tricky - the (Pearson) correlation co-efficient between the traits. Whoever generated the data you are now analysing selected a value for $\rho$ between -1 and 1, but in the simulation app, this was actually the *genetic* correlation between traits, not the correlation between the phenotypes directly.
+The next item is more tricky - "rho", the (Pearson) correlation co-efficient between the traits. Whoever generated the data you are now analysing selected a value for $\rho$ between -1 and 1, but in the simulation app, this was actually the *genetic* correlation between traits, not the correlation between the phenotypes directly.
 
-In many instances we are more interested in this correlation rather than in the phenotypic correlation, as the phenotypes are often affected by other effect, e.g. block effects, other environmental effects, experimental treatments etc. The usual way to estimate the genetic correlation is to fit a multivariate model with an explicit variance-covariance structure that models this. If genome-wide marker information is available, this can also be used to get a better estimation of the genetic correlation, taking into account different levels of genetic correlation between individuals.
+In many instances we are more interested in the genetic rather than the phenotypic correlation, as phenotypes are often affected by other effects, e.g. block effects, other environmental effects, experimental treatments etc. The usual way to estimate the genetic correlation is to fit a multivariate model with an explicit variance-covariance structure. If genome-wide marker information is available, this can also be used to get a better estimation of the genetic correlation, taking into account different levels of genetic relatedness between individuals.
 
-Here we will keep it relatively simple - we will estimate $\rho$ by taking the correlation between the estimated genetic effects (the "predicted values" from the fitted model of the genotypes). Check for yourself how $\rho$ compares to the correlation between the raw phenotypes. It should be broadly similar but not identical (unless the block variance was 0 and there was no noise in the data).
+Here we will keep it very simple - we will estimate $\rho$ by calculating the correlation between the estimated genetic effects themselves (the "predicted values" from the fitted model of the genotypes). Once you have done that, check for yourself how $\rho$ compares to the correlation between the raw phenotypes (i.e. `cor(data$trait1,data$trait2)`). The correlation should be broadly similar but probably not identical (unless the block variance was 0 and there was no noise in the data!).
 
 You are not expected to be able to write a function to do this yourself - you may use the `estimate_rho()` function given here:
 
@@ -349,8 +350,13 @@ estimate_rho <- function(data){
 
 ```
 
-The last four items needed are also relatively straightforward - for example you can identify `NA` values with the `is.na()` function. But you may want to give some thought to how to identify outliers. Should you use a boxplot, the $3\sigma$ rule, or via the residuals? Maybe try all these approaches!
+Note that in the exam you **will** be expected to be able to write a simple function, including the corrct use of input arguments in round brackets, function body in curly brackets, `return` at the end etc.
 
-We have put the focus here on identifying the errors in the dataset. As an additional exercise, see whether any of your data parameter estimates change if you "clean up" the dataset before estimating them.
+The last four items for the Error Detective are also relatively straightforward - for example you can identify `NA` values with the `is.na()` function. But you may want to give some thought to how to identify outliers. Should you use a boxplot, the $3\sigma$ rule, or via the residuals? Maybe try all these approaches and make an informed decision before submitting the form. When all students have submitted their Detective forms, we will collectively analyse the results, to see how well (or poorly) you were able to describe the attributes of the datasets.
 
+::: {#exr-finalED}
+### Final exercise
 
+We have put the focus here on identifying errors in the dataset. As an additional exercise, see whether any of your data parameter estimates change if you "clean up" the dataset before estimating them.
+
+:::
