@@ -8,7 +8,7 @@ format:
     toc-depth: 3
     code-fold: true
     code-tools: true
-editor: visual
+editor: source
 execute:
   eval: false
   warning: false
@@ -194,13 +194,13 @@ Inspect the four files you have using `dim()`, `nrow()`, and `ncol()`. Which pie
 
 ![The puzzle pieces and the functions you will need to combine them further on in the excercise.](Week1_day2_Puzzle.png)
 
-Answer the following questions (note this is *random* for each personal dataset!). You can deduce which piece is which via their dimensions. 
+Answer the following questions (note this is *random* for each personal dataset!). You can deduce which piece is which via their dimensions.
 
-1. Which 2 files are piece 1 and 2? 
+1.  Which 2 files are piece 1 and 2?
 
-2. which file is piece 3? 
+2.  which file is piece 3?
 
-3. Which file is piece 4?
+3.  Which file is piece 4?
 :::
 
 ### Cleaning and preparing the data
@@ -497,5 +497,5 @@ Correlation can best be visualized with a scatter plot. complete the code below 
 :::
 
 ### Some reading
-In part, this assignment was inspired by a paper in the journal Genome Biology, by Itai Yanai and Martin Lercher[@Yanai2020]. Read this paper as food for thought about what we covered today in p-value testing and its role in data analysis. This editorial paper is part of an interesting series of editorials about data science in biology: [Night science](https://link-springer-com.ezproxy.library.wur.nl/collections/cejajaicde)[@Yanai2019].
 
+In part, this assignment was inspired by a paper in the journal Genome Biology, by Itai Yanai and Martin Lercher[@Yanai2020]. Read this paper as food for thought about what we covered today in p-value testing and its role in data analysis. This editorial paper is part of an interesting series of editorials about data science in biology: [Night science](https://link-springer-com.ezproxy.library.wur.nl/collections/cejajaicde)[@Yanai2019].
