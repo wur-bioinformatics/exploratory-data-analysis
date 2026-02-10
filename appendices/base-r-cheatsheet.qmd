@@ -1,3 +1,20 @@
+---
+title: "base-r-cheatsheet"
+author: "Rens Holmer & Mark Sterken"
+date: "2026-02-10"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    code-tools: true
+editor: source
+execute:
+  eval: false
+  warning: false
+  message: false
+---
+
 # Base R Cheatsheet {.unnumbered}
 
 ## Atomic Data Types
@@ -58,7 +75,7 @@ c(1, "a")
 
 ```
 
-## Functions
+## Writing functions
 
 __(Named) function definition__
 ```{r}
@@ -251,3 +268,58 @@ result <- tryCatch(
 |  | `@` | S4 slot access | Formal classes |
 |  | `?` | Help | Documentation |
 |  | `??` | Search help | Full-text |
+
+## Basic functions covered in the course
+
+## R Functions by Category
+
+### File system
+| Function / Syntax | Description |
+|-------------------|-------------|
+| setwd() | Set the working directory. |
+
+### Package management
+| Function / Syntax | Description |
+|-------------------|-------------|
+| install.packages() | Install R packages from CRAN. |
+| library() | Load an installed package. |
+
+### Data import
+| Function / Syntax | Description |
+|-------------------|-------------|
+| read.delim() | Read tab‑delimited text files. |
+| read.csv() | Read comma‑separated CSV files. |
+| read.csv2() | Read semicolon‑separated CSV files. |
+| readxl::read_xlsx() | Read Excel .xlsx files. |
+
+### Data exploration
+| Function / Syntax | Description |
+|-------------------|-------------|
+| head() | Show the first 6 rows of data. |
+| tail() | Show the last 6 rows of data. |
+| summary() | Show descriptive statistics. |
+| table() | Create frequency tables. |
+
+
+### Dimensions
+| Function / Syntax | Description |
+|-------------------|-------------|
+| ncol() | Number of columns. |
+| nrow() | Number of rows. |
+| dim() | Dimensions (rows × columns). |
+
+### Statistics
+| Function / Syntax | Description |
+|-------------------|-------------|
+| shapiro.test() | Shapiro–Wilk normality test. |
+| t.test() | Student’s t‑test. |
+| wilcox.test() | Wilcoxon non‑parametric test. |
+| cor() | calculates the correlation coefficient |
+| cor.test() | calculates the significance of correlation |
+| lm() | runs a linear model |
+
+### Visualization
+| Function / Syntax | Description |
+|-------------------|-------------|
+| heatmap() | Generate heatmap from a numeric matrix. |
+| plot() | Base R generic plotting function. |

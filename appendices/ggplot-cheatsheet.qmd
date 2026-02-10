@@ -1,1 +1,187 @@
+---
+title: "GGplot Cheatsheet"
+author: "Mark Sterken"
+date: "2026-02-10"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    code-tools: true
+editor: source
+execute:
+  eval: false
+  warning: false
+  message: false
+---
+
 # GGplot Cheatsheet {.unnumbered}
+
+# ggplot2 Beginner Cheat Sheet (R)
+
+This quick reference focuses on the essentials you listed and a few logical additions for beginners. All examples use built‑in datasets so you can copy–paste and run immediately.
+
+```r
+install.packages("ggplot2")   # once
+library(ggplot2)
+```
+
+---
+
+## 1) Building a plot
+
+### `ggplot()`
+Creates a plotting object. Combine with `+` to add layers.
+
+```r
+ggplot(data = mtcars)  # creates an empty canvas using mtcars
+```
+
+### `aes()` (aesthetics)
+Maps variables to visual properties such as `x`, `y`, `color`, `fill`, `size`, `shape`.
+
+```r
+ggplot(mtcars, aes(x = wt, y = mpg, color = factor(cyl)))
+```
+
+**Tip:** Put mappings that apply to many layers in the top-level `aes()`. Put layer-specific mappings inside that layer.
+
+---
+
+## 2) Geoms (layers that draw things)
+
+### `geom_point()` – scatterplot
+```r
+ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+  geom_point(size = 2)
+```
+
+### `geom_smooth()` – trend/fit lines
+Adds model-based smooths (default: LOESS for n < 1000, otherwise GAM). Use `se = FALSE` to hide the ribbon.
+```r
+ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+  geom_point() +
+  geom_smooth(se = TRUE, method = "loess")
+```
+Common options: `method = "lm"` for a straight regression line, `formula = y ~ x` for custom formulas.
+
+### `geom_histogram()` – distributions of a numeric variable
+```r
+ggplot(mtcars, aes(x = mpg)) +
+  geom_histogram(binwidth = 2, color = "white", fill = "steelblue")
+```
+**Tip:** Control binning with `binwidth` or `bins`.
+
+### `geom_jitter()` – jittered points to reduce overplotting
+```r
+ggplot(iris, aes(Species, Sepal.Length, color = Species)) +
+  geom_jitter(width = 0.15 ,height = 0)
+```
+Often used instead of (or alongside) `geom_point()` when x is categorical.
+Note that you have to 0, otherwise it also jitters in height!
+
+---
+
+## 3) Faceting (small multiples)
+
+### `facet_wrap()` – wrap a single faceting variable into multiple rows/cols
+```r
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point() +
+  facet_wrap(~ cyl)
+```
+
+### `facet_grid()` – 2D grid by rows and columns
+```r
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point() +
+  facet_grid(gear ~ cyl)
+```
+**Tip:** Use `scales = "free"` to allow axes to vary per panel when ranges differ.
+
+---
+
+## 4) Labels, themes, and polishing
+
+### `labs()` – titles and axis labels
+```r
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point() +
+  labs(
+    title = "Fuel efficiency vs. weight",
+    subtitle = "mtcars dataset",
+    x = "Weight (1000 lbs)", y = "Miles per gallon",
+    color = "Cylinders"
+  )
+```
+
+### `theme_bw()` – black-and-white theme
+```r
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point() +
+  theme_bw()
+```
+Other useful themes: `theme_minimal()`, `theme_classic()`. Modify elements with `theme()`.
+
+---
+
+## 5) Some basic additions to plots
+
+### Scales (`scale_*`) – control colors, fills, axes, legends
+```r
+ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+  geom_point() +
+  scale_color_brewer(palette = "Dark2", name = "Cyl") +
+  scale_x_continuous(breaks = seq(1.5, 5.5, 0.5))
+```
+Why: Scales are how you fine-tune appearance and legends.
+
+### Position adjustments – dodge/stack/jitter
+```r
+ggplot(iris, aes(Species, Sepal.Length, color = Species)) +
+  geom_point(position = position_jitter(width = 0.15), alpha = 0.7)
+```
+Why: Helps manage overlapping points and grouped geoms (e.g., bars with `position = "dodge"`).
+
+### Coordinate systems (`coord_*`)
+```r
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point() +
+  coord_cartesian(xlim = c(2, 5), ylim = c(10, 35))
+```
+Why: Zoom without dropping data (contrast with `xlim`/`ylim`).
+
+### A minimal template to reuse
+```r
+library(ggplot2)
+p <- ggplot(mtcars, aes(wt, mpg, color = factor(cyl))) +
+  geom_point(size = 2, alpha = 0.8) +
+  geom_smooth(se = FALSE, method = "lm") +
+  facet_wrap(~ gear) +
+  labs(title = "MPG vs Weight by Gears", x = "Weight (1000 lbs)", y = "MPG", color = "Cyl") +
+  theme_bw()
+print(p)
+```
+
+---
+
+## 6) Cheat table (quick reference)
+
+| Function | Purpose |
+|---|---|
+| ggplot() | Create a plot object and define data. |
+| aes() | Map variables to aesthetics (x, y, color, fill, size, shape). |
+| geom_point() | Scatterplot points. |
+| geom_smooth() | Trend lines (LOESS/LM) with optional SE ribbon. |
+| geom_histogram() | Histogram for numeric variables. |
+| geom_jitter() | Jittered points for categorical x. |
+| facet_wrap() | Facet by one variable (wrapped layout). |
+| facet_grid() | Facet by row and column variables. |
+| labs() | Titles, subtitles, captions, axis labels, legend titles. |
+| theme_bw() | Black-and-white theme. |
+| scale_*() | Control color/fill palettes, axes, legends. |
+| coord_*() | Coordinate systems and zooming. |
+| ggsave() | Save plots to files. |
+
+
+
