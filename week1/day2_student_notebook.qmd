@@ -27,6 +27,7 @@ Here you can add notes to help yourself in the future.
 ```{r}
 
 ### Hint: you can copy/paste from previous scripts
+###Note that you need to set it as well in the {r setup} chunk at the start of this document.
 
 ```
 
@@ -295,7 +296,7 @@ Here you can add notes to help yourself in the future.
     ###check the shape of the data before gather
     head(data.test)
     
-    data.test <- tidyr::gather(key=population,value=reproduction,-Experiment) 
+    data.test <- tidyr::gather(data.test,key=population,value=reproduction,-Experiment) 
 
     ###and after gather
     head(data.test)
