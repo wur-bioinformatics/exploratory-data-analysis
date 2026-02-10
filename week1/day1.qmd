@@ -364,21 +364,27 @@ Use `geom_boxplot()` to visualize the distribution and `geom_jitter()` to show t
     geom_boxplot() + geom_jitter(height=0,width=0.25)
 ```
 
-We can make it a bit fancier by plotting the p-value as well. Try to include it into the plot by using the function `annotate()`.
+We can make it a bit fancier by plotting the p-value as well. Try to include it into the plot by using the function `annotate()`. We use `broom::tidy()` for convenience, {broom} is also included in the {tidyverse}.
+
+To make the fancy plot, we add statistics with `ggplot2::annotate()`. Also, we've added a layout with `theme_bw()` and axis labels with `ggplot2::labs()`. The function `expression()` allows printing of cursive text and ^super^ and ~sub~ script within {ggplot2} axis labels.
 
 ```{r w1d1_ttestplot_pval_Warmerdam_ASSIGNMENT, include = TRUE,eval=FALSE}
 #| code-fold: false
 
-###I'm getting the statistics here
-statplot <- broom::tidy(t.test(eggmass~Line,data=data.test))
-
-p1 <- ggplot(data.test,aes(x=Line, y=eggmass)) +
-      geom_boxplot() + 
-      geom_jitter(height=0, width=0.25) +
-      theme_bw() +
-      annotate("text", x=1.5, y=max(data.test$eggmass), label=paste("p =", signif(statplot$p.value, 2)))
-
-p1
+    ### Fancier boxplot
+        ###I'm getting the statistics here
+        statplot <- broom::tidy(t.test(eggmass~Line,data=data.test))
+        
+        p1 <- ggplot(data.test,aes(x=Line, y=eggmass)) +
+              geom_boxplot() + 
+              geom_jitter(height=0, width=0.25) +
+              theme_bw() +
+              annotate("text", x=1.5, y=max(data.test$eggmass), 
+                       label=paste("p =", signif(statplot$p.value, 2))) + 
+              labs(x=expression(bolditalic("A. thaliana")~bold("genotype")),
+                   y=expression(bolditalic("M. incognita")~bold("eggmasses (n)")))
+        
+        p1
 
 ```
 
@@ -471,6 +477,8 @@ Let's automatize the t-test function! This is a bit simpler than plotting. For t
 ::: {#exr-forttest}
 Now, with what you read above, write a for-loop doing the t-test of each genotype versus Col-0 and make sure to pint the values in the console (either use `cat()` or `print()`).
 
+For that you need to: (1) replace AAA with the genotype you want to test. Hint: use [i] to access the current genotype. (2) save the p-value in the list. (3) print the p-val (see the `print()` or `cat()` functions above).
+
 ```{r w1d1_for_loop_t-test_ASSIGNMENT, include = TRUE,eval=FALSE}
 #| code-fold: false
 
@@ -478,8 +486,6 @@ Now, with what you read above, write a for-loop doing the t-test of each genotyp
     genotypes <- unique(pheno_data$Line)
     genotypes <- genotypes[genotypes != "Col-0"]
     
-    ###this makes an empty list
-    output <- as.list(NULL)
     for(i in 1:length(genotypes)){
       
         ### We select the data from one batch
@@ -490,8 +496,8 @@ Now, with what you read above, write a for-loop doing the t-test of each genotyp
                      dplyr::filter(Line %in% c("Col-0",AAA))
         
         ### conduct test and print the p-value
-        ### you can select the p-value in the t-test output with $p.value
-        t.test(eggmass~Line,data=data.test)
+        ### you can select the p-value in the t-test output with $
+        pval <- t.test(eggmass~Line,data=data.test)$p.value ### save it into an object
         
         ### print the p-value
         
@@ -561,7 +567,7 @@ We can also write data into a list as output of a for-loop.
 
 
 ::: {#exr-forplot}
-Now take the plotting function we wrote before and use it to save plots into an object. Note that this takes a while to run (\~2 minutes).
+Now take the plotting function we wrote before and use it to save plots into an object. Note that this takes a while to run (\~2 minutes). For this you need to save the plots into the list. See above for how to use a list.
 
 ```{r w1d1_for-loop_Warmerdam, include = TRUE,eval=FALSE}
 #| code-fold: false
@@ -585,9 +591,17 @@ Now take the plotting function we wrote before and use it to save plots into an 
         ### conduct test and clean the result with broom::tidy
         statplot <- broom::tidy(t.test(eggmass~Line,data=data.test))
         
-        ### Make the plot into the empty list
+        ### Make the plot into the list ('output')
+        ###note that the object you need to write into is missing.
+         <- ggplot(data.test,aes(x=Line, y=eggmass)) +
+              geom_boxplot() + 
+              geom_jitter(height=0, width=0.25) +
+              theme_bw() +
+              annotate("text", x=1.5, y=max(data.test$eggmass), 
+                       label=paste("p =", signif(statplot$p.value, 2))) + 
+              labs(x=expression(bolditalic("A. thaliana")~bold("genotype")),
+                   y=expression(bolditalic("M. incognita")~bold("eggmasses (n)")))
         
-        ### here add the fancy plotting script we made before, and save its graphs into output
         }
 
 ```

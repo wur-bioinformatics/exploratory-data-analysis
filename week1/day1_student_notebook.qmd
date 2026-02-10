@@ -46,6 +46,8 @@ Here you can add notes to help yourself in the future.
 ###this function you can use to automatically set a location; you might not have a D-drive.
 #setwd("D:/")
 
+###Note that you need to set it as well in the {r setup} chunk at the start of this document.
+
 ```
 
 
@@ -330,6 +332,10 @@ Complete the code, so you can make a .png of each plot individually.
 ```{r}
 
 
+
 ```
+
+
+
 
 
