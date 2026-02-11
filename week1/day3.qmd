@@ -232,9 +232,11 @@ Via the fileshare on [Brightspace](https://brightspace.wur.nl/), you can find yo
 Also, you should provide a conclusion about the *biological interpretation* of the data. The exercises below take you through the assignment step-by step. Make sure that for the R steps you include code chunks. If you print figures or execute functions within these blocks, the output will be included in the .html.
 
 ::: {.callout-tip appearance="simple"}
-Do not wait untill you are finished to make the first render. At the very start, when your file is still pristine (e.g after adapting a .qmd file from [Chapter 1](/week1/day1.qmd) or [Chapter 2](/week1/day2.qmd)), do a check on whether it renders correctly. 
+Do not wait untill you are finished to make the first render. At the very start, when your file is still pristine (e.g without code chunks but after adapting a .qmd file from [Chapter 1](/week1/day1.qmd) or [Chapter 2](/week1/day2.qmd)), do a check on whether it renders correctly. You render the document by hitting the 'Render' button on top of the top-left pane in RStudio.
 
 Note that in day 1 and day 2 the parameter `eval` is set to `false` in the yaml header (this is the text at the start of the document between the \-\-\- and \-\-\-). This means that in the .html generated, none of the code blocks are executed. This is a good option to prevent R coding errors from rendering the document. However, if you want to include a figure, you need to set this option to true within that code-chunk `#| eval: true`.
+
+If you need more tips in general on QMD, check [Appendix QMD notebook cheatsheet](/appendices/qmd-notebooks-cheatsheet.qmd).
 :::
   
   

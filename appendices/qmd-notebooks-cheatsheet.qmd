@@ -21,6 +21,7 @@ execute:
 You start a QMD with a yaml header, this is information in-between three dashes (\-\-\-). The first three dashes indicate the start of the header, the last three the end. There are some guidelines to writing yaml. But for this course it suffices to copy the header from the first two days
 
 ```{r}
+#| code-fold: false
 
 ---
 title: "BIF20806_week1day1_notebook"
@@ -45,6 +46,8 @@ Code is written in QMD between three back ticks \`\`\`. After these backticks yo
 The first code chunk in the document should be \{r setup\}, this chunk specifies some general conditions. In particular, on some systems it is required to set the root directory (your workdirectory) here as well (in addition to `setwd()`).
 
 ```{r setup}
+#| code-fold: false
+
     options(repos = c(CRAN = "https://cloud.r-project.org"))
     ### Some of you will have problems with setting the workdirectory (setwd())
     ### Here you need to set your work directory as well
