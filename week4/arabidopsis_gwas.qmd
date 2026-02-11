@@ -10,11 +10,11 @@ execute:
 This chapter is not yet finished, come back later for the final product
 :::
 
-## Introduction
+## Introduction {#sec-wk4d2_intro}
 
 This chapter follows a data-driven approach: we will be working with a large genotypic dataset (SNP markers) with accompanying meta-data, and a linked phenotypic dataset of flowering time in *A. thaliana*. You will gain some experience with data subsetting, data curation and visualisation, with some focus on the choice of colour schemes. Familiar techniques like PCA will be used (already covered in week 3), followed by some possibly less familiar techniques (genome-wide association study). As we will be using data from a previously-published study, part of today's exercises will try to replicate some of the figures from the publication itself.
 
-## Install R packages (dependencies)
+## Install R packages (dependencies) {#sec-wk4d2_installdep}
 
 We will be using a number of packages that should ideally be installed at this stage so that any installation issues can be handled together. 
 
@@ -38,17 +38,17 @@ if(!requireNamespace("ggplot2", quietly = TRUE)) install.packages("ggplot2")
 if(!requireNamespace("statgenGWAS", quietly = TRUE)) install.packages("statgenGWAS")
 ```
 
-## Downloading Data
+## Downloading Data {#sec-wk4d2_download_data}
 
 All the data that we will be using today is publicly available and free to download, and is connected to the 2016 Cell paper "1,135 genomes reveal the global pattern of polymorphism in *Arabidopsis thaliana*" [@alonso2016]. The genotype data in particular is quite large (\> 900 Mb), most of which we won't use. If storage space is an issue for you, you can also work with the subset(s) of the genotype files that we will be generating.
 
-### Genotypes
+### Genotypes {#sec-wk4d2_geno}
 
 You can download the SNP genotype data from the 1001genomes.org website via the following link: <https://1001genomes.org/data/GMI-MPI/releases/v3.1/SNP_matrix_imputed_hdf5/>
 
 The large tarball (1001_SNP_MATRIX.tar.gz) is the relevant directory to download. You will need to extract this compressed folder to access the 'imputed_snps_binary.hdf5' file that we will be using. These will be made available via Brightspace in the coming hour.
 
-### Accessions list
+### Accessions list {#sec-wk4d2_acclist}
 
 The list of accessions associated with the SNP data is on the same website:
 
@@ -56,7 +56,7 @@ The list of accessions associated with the SNP data is on the same website:
 
 Scroll down to the bottom of the '1135 Accessions Final Set' tab and click on "Download complete list (CSV)"
 
-### Phenotypes
+### Phenotypes {#sec-wk4d2_pheno}
 
 The flowering time phenotypes for this *Arabidopsis* panel that we will be working with are available here:
 
@@ -66,7 +66,7 @@ Download both the FT10 and FT16 datasets; this can be done in one step using the
 
 ![](images/download_FT.png){fig-align="center" width="600"}
 
-## Data overview
+## Data overview {#sec-wk4d2_data_overview}
 
 As usual, it's convenient to make a new folder where all datasets has been saved, and set your working directory to that folder using `setwd()`.
 
@@ -82,8 +82,8 @@ So there are 10,709,949 SNPs scored per accession, which is more than we can eas
 accessions <- rhdf5::h5read("imputed_snps_binary.hdf5","accessions")
 positions <- rhdf5::h5read("imputed_snps_binary.hdf5","positions")
 ```
-
-## Big data in R
+ 
+## Big data in R {#sec-wk4d2_bigdata}
 
 R is not famed for its capacities to deal with big data. In R, "big" usually means taking up lots of working memory. For example, if we try to allocate a very large vector within R, at some point we will get an error message (on my computer this occurs for i = 10 in the following call):
 
@@ -99,7 +99,7 @@ for(i in 1:10){
 
 In today's example, we will be looking at the effect of different subsetting / data simplification strategies on the results we obtain (mainly in terms of population genetics).
 
-## Subsetting the SNP data
+## Subsetting the SNP data {#sec-wk4d2_subsetting_data}
 
 To handle this "big-dataset" and generate results quickly, we are going to use a subset of the SNP data today, sampling 10k SNPs from the total set to work with.
 
@@ -149,7 +149,7 @@ We are going to repeat this procedure, but instead of randomly taking 10k separa
 
 If you are unable to complete these steps yourself (after a reasonable attempt), you can check Brightspace for code to complete exercise 1. If it is not yet visible, please raise your hand.
 
-## Accession data
+## Accession data {#sec-wk4d2_accession_data}
 
 We have also downloaded information on the accessions in comma-separated format. Supposing you have saved them in a file called "metadata.txt", we can read in this data as follows:
 
@@ -201,7 +201,7 @@ table(meta$collector)
 -   Which accession carries the reference allele at all sites?
 :::
 
-## PCA
+## PCA {#sec-wk4d2_pca}
 
 A Principal Component Analysis is a useful way to visualise variation in a dataset. When applied to genomic data like the SNP genotype matrix, it can give insights into the genetic similarity between individuals in the population, i.e. the structure of the population being studied.
 
@@ -323,11 +323,11 @@ One final note of interest - in `pca_plot()`, we have already specified some arg
 
 These steps may take a little while to complete. A small R script to do this will be made visible on Brightspace (*after* you have tried to do this yourself first). If it is not yet visible, please raise your hand.
 
-## Choosing colour palettes
+## Choosing colour palettes {#sec-wk4d2_colpal}
 
 One important topic when working with data is how best to visualise the results of some analysis (or the raw data itself), particularly if this is to be shared with a broader audience. Colour is one way to denote differences in such visualisations (alternatives are symbol shapes, symbol sizes, line types, line weights etc.). There are many resources available to choose appropriate colour sets or palettes, and we will be using a few of them today.
 
-### Data types
+### Data types {#sec-wk4d2_data_types}
 
 If you start searching for information on colour palettes and data visualisation, you will probably see that three basic types of data are generally recognised:
 
@@ -354,7 +354,7 @@ par(mar = c(1,4,1,1)) #decrease the whitespace padding / margins
 RColorBrewer::display.brewer.all()
 ```
 
-### Admixture results
+### Admixture results {#sec-wk4d2_admixture}
 
 Now that you have some experience with running a PCA, let's investigate how well the PCA results align with the admixture assignments from the original 2016 Cell analysis. We will be using `Set1` from the `RColorBrewer` package, which corresponds closely to the colour palette used in the 2016 Cell paper for the admixure groups.
 
@@ -398,7 +398,7 @@ admix_pca <- function(pcafit,
 
 **Are the PCA results consistent among themselves, i.e. across the four datasets? If not, why?**
 
-## Visualising geo-reference data
+## Visualising geo-reference data {#sec-wk4d2_mapview}
 
 One of the nice extra features of this dataset is the inclusion of latitute and longitude information for each of the accessions. We will be using the R package `mapview` to visualise the data, to see where the accessions were originally collected, and colour these by e.g. the admixture group or (out of interest) the sequence provided (who did the sequencing or genotyping work).
 
@@ -465,13 +465,13 @@ Your plot should look as follows:
 
 ![](images/sample_mapView_sequencer.png){fig-align="center" width="800"}
 
-## Reproducibility of results
+## Reproducibility of results {#sec-wk4d2_repres}
 
 It is often important to be able to reproduce results from previous research. The usual meaning here is that a new / independent experiment or study is performed, confirming (or not) the previous findings. However, at its very least reproducibility should hold true within a dataset, ie. another researcher that tries to re-run your analysis with your data should be able to generate the same outcomes. In many cases a workflow or script is provided as part of a publication so that the results can be easily generated.
 
 In the following two exercises you are asked to reproduce two of the figures from the 2016 Cell paper.
 
-### Graphical Abstract
+### Graphical Abstract {#sec-wk4d2_graphical_abs}
 
 The first figure we will try to re-create is relatively straightforward, relying on the `mapview::mapView()` function as before but this time only distinguishing relicts from non-relicts:
 
@@ -493,7 +493,7 @@ The resulting plot should look something like this:
 
 ![](images/reproducing_graphical_abstract.png){fig-align="center" width="800"}
 
-### Supplementary Figure S5
+### Supplementary Figure S5 {#sec-wk4d2_figS5}
 
 As a follow-up exercise, you are now asked to reproduce (part of) a supplementary figure of the 2016 Cell paper (Figure S5), showing the distribution of Variants by Type and Group:
 
@@ -525,7 +525,7 @@ If you were able to perform all these steps, you should have produced a plot loo
 
 Although not exactly reproducing Figure S5, the trend shown is broadly similar (this was using data from 10K rather than 10M SNPs).
 
-## Phenotypic diversity
+## Phenotypic diversity {#sec-wk4d2_pheno_div}
 
 We leave the SNP data for now to have a look at the phenotype dataset we downloaded earlier (on my computer this is a CSV file called 'values.csv'):
 
@@ -569,7 +569,7 @@ In order to combine the phenotypic data with the geographic co-ordinates, we nee
 
 **As an additional exercise, fit a model that tries to predict FT16 from geographic location. Is this a good model? Why / why not? Could you suggest any improvements?**
 
-## Genome-wide Association Study (GWAS)
+## Genome-wide Association Study (GWAS) {#sec-wk4d2_gwas}
 
 A GWAS is a well-established method to uncover genetic variation that underlies phenotypic variation. Although originally applied to human genetics studies, it has also had a big impact on the identification of important genetic variants in both plant and animal populations.
 
@@ -585,7 +585,7 @@ One of the most common GWAS models applied to plant and animal populations is th
 
 Although the genetics underlying flowering time are of course of interest, we are also interested here in arranging the data we have been working with to be able to run the GWAS. In many cases with more advanced analytical methods that have been implemented into software packages, half the work can be in organising and transforming your input files to the expected format that the package requires. Hence, the emphasis here is on practicing the manipulation of a dataset into a suitable format.
 
-### Package manual / vignette
+### Package manual / vignette {#sec-wk4d2_vignette}
 
 There are a number of manuals available for the `statgenGWAS` package, either the very concise [package overview](https://biometris.github.io/statgenGWAS/) which gives a short overview of what is possible, or the more complete [package vignette](https://cran.r-project.org/web/packages/statgenGWAS/vignettes/GWAS.html) which explains more of the theory as well as more extensive worked examples. If you read the documentation, you will see that the central object used in the package is an object of class `gData`. There is a function `statgenGWAS::createGData()` to create a `gData` object, with a number of arguments. In our case, we will be supplying SNP data via the argument `geno`, marker positions via `map` and the phenotypes via the argument `pheno`.
 
