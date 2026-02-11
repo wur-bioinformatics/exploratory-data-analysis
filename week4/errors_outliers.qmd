@@ -8,7 +8,7 @@ author: "Peter Bourke"
 This chapter is not yet finished, come back later for the final product
 :::
 
-## Introduction
+## Introduction {#sec-w4d1_intro}
 
 The focus of today will be on errors - data points that for one reason or another do not fit in our dataset. We often need to be able to identify errors so that we can remove (or correct) them before running an analysis. This is generally the case for types of analyses or calculations that assume data is error-free (there are more advanced approaches that can explicitly model the possibility of errors in the data e.g. Bayesian methods, but we will not be using them here). Errors could lead to false conclusions being drawn, or a loss of statistical power for testing differences (by inflating the estimates of the variance in the data for example). We will spend some time considering in particular what an "outlier" means, and what to do with them.
 
@@ -16,7 +16,7 @@ We will also be dealing with simulations, using a [simulator](https://shiny.wur.
 
 We will start with a warm-up exercise, detecting errors in data from a study on salt stress in tomato (*Solanum lycopersicum*).
 
-### Tomato salinity experiment
+### Tomato salinity experiment {#sec-w4d1_tomato}
 
 An experimenter investigated the response of three varieties of tomato (Moneymaker, Recordsmen, Rio Grande) to salt stress. Tomato plants were grown in pots with four different salinity levels (0, 50, 100, 150 mM NaCl), with three replicates per treatment.
 
@@ -50,13 +50,13 @@ str(data)
 
 :::
 
-## Outliers
+## Outliers {#sec-w4d1_outliers}
 
 There is no strict definition of an outlier, although there are some rules of thumb that are commonly used. For example, Tukey proposed that an outlier is a value that falls beyond 1.5 times the inter-quartile range. If the data is normally-distributed, then values that are more than 3 standard deviations from the mean are very unlikely to occur by chance and are often considered as outliers (the "$3\sigma$ rule").
 
 -   **Question: With *scaled* data, what would the** $3\sigma$ rule imply?
 
-### Boxplots
+### Boxplots {#sec-w4d1_boxplot}
 
 You have already encountered boxplots earlier in the course, here we return to them in the context of identifying outliers. A typical boxplot looks something like the following:
 
@@ -151,7 +151,7 @@ vect
 :::
 
 
-### Residuals
+### Residuals {#sec-w4d1_residuals}
 
 As a last topic in this section, we will briefly consider how residuals can also tell us something about data quality and the potential presence of outliers. As you may recall, a residual is what is left over after fitting a model, which is often visualised for the case of a simple linear regression as follows:
 
@@ -239,7 +239,7 @@ plot(lm1, which = c(1,2))
 -   Apply the rule of thumb on the Studentised residuals (*Hint*: use the `rstudent()` function). Are any of the data points potential outliers using this criterion? Which one(s)?
 :::
 
-## Detecting errors in a simulated dataset
+## Detecting errors in a simulated dataset {#sec-w4d1_introED}
 
 We are now going to move on to a "fun activity", namely generating a simulated dataset with errors in it for somebody else to puzzle over.
 
@@ -247,7 +247,7 @@ The simulator is hosted on the [shiny.wur.nl server](https://shiny.wur.nl/EDA_R_
 
 The simulator uses [Shiny](https://shiny.posit.co/), an R package for developing web applications with R (or Python) running under the hood. The simulation tool itself is quite basic: it allows the user to generate a dataset with user-defined numbers of genotypes & experimental blocks, various genetic, environmental and residual variances, for two measured traits (with the exciting names of 'trait1' and 'trait2'). Finally, you can introduce outliers (generated according to the $3\sigma$ rule) and missing values.
 
-### Running the simulation
+### Running the simulation {#sec-w4d1_simulation}
 
 The interface is in standard shiny layout, with a side panel for input and a main panel for output.
 
@@ -271,7 +271,7 @@ These need to be uploaded on MS Teams to the appropriate folder (one for the CSV
 
 As you may have noticed, the CSV filename has your student ID embedded - this is to help the detective find the correct file (a dataset is assigned based on student ID - this will be done in class). Student ID is then followed by a four-character code (a "filetag"), for example 'AG27'. Note that the accompanying parameter file has a different filename, which is an encrypted version of the same four-character code. This is to avoid possible cheating (otherwise it would be very simple and perhaps tempting to look up the 'true' simulation parameters and correct your answers before submitting).
 
-### Analysing the data (Error Detective)
+### Analysing the data (Error Detective) {#sec-w4d1_ED}
 
 In class you will be randomly assigned another student's simulated dataset to work with.
 
@@ -279,7 +279,7 @@ It is now time to become an Error Detective!
 
 Download the CSV file assigned to you (you will need to look for this file via the studentID - make sure you analyse the correct file, and **not your own one**!).
 
-On MS Teams there is a form that needs to be filled in:
+On MS Teams there is a [form](https://teams.microsoft.com/l/entity/81fef3a6-72aa-4648-a763-de824aeafb7d/_djb2_msteams_prefix_2296628998?context=%7B%22channelId%22%3A%2219%3Ac8zuRtNFsb76lU5GBmTNrT3u_mkqy0e1yeaqcTD0bDs1%40thread.tacv2%22%7D&tenantId=27d137e5-761f-4dc1-af88-d26430abb18f) that needs to be filled in (only visible during week 4 of the course):
 
 ![](images/ED_MSTeams_form.png)
 
@@ -301,11 +301,11 @@ knitr::kable(data.frame(Question = 1:10,
 ), table.attr = "style='width:30%;'")
 ```
 
-The first of these is simply the four-character (filetag) of the file you analysed. Make sure you type this correctly! Typos here wil mean your data will most likely be filtered out and not used in the plenary analysis.
+The first of these is simply the four-character (filetag) of the file you analysed. Make sure you type this correctly! Typos here will mean your data will most likely be filtered out and not used in the plenary analysis.
 
-The number of genotypes and blocks should be fairly straigtforward to work out (have you already used the function `unique()`? If not, check it out!), as well as the mean trait values for trait1 and trait2 (the function `mean()` might help!).
+The number of genotypes and blocks should be fairly straightforward to work out (have you already used the function `unique()`? If not, check it out!), as well as the mean trait values for trait1 and trait2 (the function `mean()` might help!).
 
-### Genetic correlation, $\rho$
+### Genetic correlation, $\rho$ {#sec-w4d1_gencor}
 
 The next item is more tricky - "rho", the (Pearson) correlation co-efficient between the traits. Whoever generated the data you are now analysing selected a value for $\rho$ between -1 and 1, but in the simulation app, this was actually the *genetic* correlation between traits, not the correlation between the phenotypes directly.
 
@@ -350,7 +350,7 @@ estimate_rho <- function(data){
 
 ```
 
-Note that in the exam you **will** be expected to be able to write a simple function, including the corrct use of input arguments in round brackets, function body in curly brackets, `return` at the end etc.
+Note that in the exam you will be expected to be able to write a simple function, including the correct use of input arguments in round brackets, function body in curly brackets, `return` at the end etc.
 
 The last four items for the Error Detective are also relatively straightforward - for example you can identify `NA` values with the `is.na()` function. But you may want to give some thought to how to identify outliers. Should you use a boxplot, the $3\sigma$ rule, or via the residuals? Maybe try all these approaches and make an informed decision before submitting the form. When all students have submitted their Detective forms, we will collectively analyse the results, to see how well (or poorly) you were able to describe the attributes of the datasets.
 
@@ -360,3 +360,5 @@ The last four items for the Error Detective are also relatively straightforward 
 We have put the focus here on identifying errors in the dataset. As an additional exercise, see whether any of your data parameter estimates change if you "clean up" the dataset before estimating them.
 
 :::
+
+
