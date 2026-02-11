@@ -35,13 +35,15 @@ data(corre_continuous, package = "planteda")
 
 ## Functions {#sec-functions}
 
-In the previous chapters we have encountered _functions_. So far, we have used these functions to our advantage, but we have mostly glossed over what a function is, and when it is most appropriate to use functions. In this section we go into a bit more depth to highlight the most important practical aspects of functions in R, whilst avoiding unnecessary theoretical detail as much as possible. We'll discuss a few other relevant programming concepts as well, again mostly limiting ourselves to practical aspects.
+In the previous chapters we have encountered _functions_. So far, we have used these functions to our advantage, but we have mostly glossed over what a function is, and when it is most appropriate to use functions. In this section we go into a bit more depth to highlight the most important practical aspects of functions in R, whilst avoiding unnecessary theoretical detail as much as possible. 
 
 ### What is a function?
-A function can be concisely described as a __reusable piece of code__. Some clear examples of this are the functions you have used from some of the packages you used (e.g. the `read.csv()` or `ggplot()` functions). 
+A function can be concisely described as a __reusable piece of code__ that takes input values (arguments), performs an operation, and returns a result. Some clear examples of this are the functions you have used from some of the packages you used (e.g. the `read.csv()` or `ggplot()` functions). It is important to make the distinction between the _function definition_, which is the piece of code that describes what the function does, and _calling a function_, which is where the code is used (See @nte-function-syntax).
 
-:::{.callout-note}
+
+:::{#nte-function-syntax .callout-note appearance='simple'}
 ### R function syntax
+#### Function definition
 __Named functions__ in R are all functions that are assigned a variable name (see example below).
 ```{r}
 #| eval: FALSE
@@ -80,11 +82,61 @@ For short, easy to understand operations, the __one-line function syntax__ is so
 function_name <- function(arg1, arg2) arg1 + arg2 # <1>
 ```
 1. A one-line function definition can omit the curly braces (`{ }`).
+
+#### Using (executing/invoking/calling) a function
+A function is executed by using the parenthesis (`( )`) syntax.
+```{r}
+#| eval: FALSE
+# Executing a previously defined function
+function_name(arg1, arg2)
+```
+
+#### Getting help for existing functions
+Base R functions and functions that are imported from packages come with documentation on what the function does, and how to use them. This documentation typically includes a description of all the possible arguments for a function, and a few examples. The documentation for a function can be invoked by prefixing the function name with a question mark (`?`) in the R console.
+
+```{r}
+#| eval: FALSE
+# Typing this in the console will open the documentation for the function (if it exists)
+?function_name
+```
+
+In addition, executing the _function name_ in the R console (without parentheses!) prints the function definition. 
+```{r}
+#| eval: FALSE
+# Typing this in the R console will print the function definition
+function_name
+```
+
+:::
+
+:::{#exr-inspecting-functions}
+### Inspect some function definitions and documentation
+To get familiar with inspecting function documentation and definition, execute the following commands and note down what you find:
+
+- `?read.csv` and `read.csv`
+- `?mean` and `mean`
+- `?filter` and `filter`
 :::
 
 ### Why (and when) use a function?
 
-TODO
+As you become more experienced and proficient in performing data analysis in R, you'll find that the amount of code you write to do these analyses expands. The basic steps of a data analysis pipeline (loading, inspecting, cleaning, analyzing, presenting, see @tip-data-science-cycle) will often be repeated multiple times. These are very good cases of where defining a function makes sense! By bundling a sequence of operations into a function, your code improves in three key ways:
+
+1. __Clarity__: instead of a long list of R commands, readers can read more 'high-level' code and more easily understand the main steps being performed
+2. __Re-usability__: write the analysis logic once, and reuse it across different datasets without copying and pasting. (Packages are the ultimate example here).
+3. __Maintainability__: If something changes in your workflow, updating the logic in one place (i.e. at the function) makes sure all places where the logic is applied are also updated.
+
+A few typical situations where it thus makes sense to implement a function: you're copying and pasting the same code over and over again; a sequence of steps represent a logical subtask; applying the same steps to different variables or datasets. In addition, functions make your code easier to document and test (more details on testing will be discussed in @sec-debugging-and-testing).
+
+:::{.callout-tip appearance='simple'}
+### Naming functions (is hard)
+_Should my code be a function?_ A straightforward way to determine whether a piece of code can be extracted into a function, is how easy it is to give a name to the collection of steps being performed. You'll be surprised how hard it can be to give intuitive names to functions! In fact, there are [entire books](https://www.namingthings.co/) written about just this.
+
+Base R has some good examples (both good and bad):
+
+  - `read.csv()` does what it says: it reads a csv file. The name matches perfectly with what the function does.
+  - `apply()` is much less straightforward: the name does not tell you what is being applied, or what it is being applied to. You need to read the documentation carefully to figure out these things, and how to actually use this function. 
+:::
 
 :::{#exr-revisit-plotting-code}
 ### Revisite some code from last week
@@ -95,6 +147,10 @@ Let's take a look at some code from last week:
 :::
 
 ## Summary statistics {#sec-summary-statistics}
+
+To explore new and previously unseen datasets, we tend to follow the data science cycle (@tip-data-science-cycle). Summary statistics play a key role in both the __inspect__ and __analyse__ parts of this cycle. A summary statistic is something that is easy to calculate, and gives you some insights into what the data in your dataset looks like. By calculating a few different summary statistics, you can get a quick overview of a dataset, and potentially diagnose some easy to spot issues.
+
+In this section, we present the main summary statistics that you will use for summarizing a new dataset. For most summary statistics, we perform some arithmetic and computation. This gives us an excellent opportunity to implement what was covered in the previous section on functions!
 
 ### Mean
 
@@ -179,7 +235,7 @@ median(corre_continuous$LDMC)
 
 ::: {#exr-mean-vs-median}
 ### Interpret the mean and median
-When computing the mean and median of the leaf dry matter content, we observe a (small) difference. How do you interpret this difference?
+When computing the mean and median of the leaf dry matter content, we observe a (small) difference. How do you interpret this difference? (You can use @fig-summary-stats for visual intuition).
 :::
 
 :::{#exr-mean-vs-median-all-traits}
@@ -330,9 +386,72 @@ Throughout this chapter, we introduced summary statistics by first focusing on t
 Use the `summary()` function on both the `corre_categorical` and `corre_continuous` datasets. Describe your findings, making note of the following things: (1) what are the data types of the different variables? (2) How many NAs are there in the dataset? (3) Are there any variables with extreme values?
 :::
 
-
 ## Other programming techniques {#sec-other-programming-concepts}
 
+In @sec-functions we have discussed the basics of functions in R. In your data analysis practice, this will be the most useful tool that you use to make your code readable, reusable, and maintainable. However, when working with R a bit more (and perhaps also using other programming languages), you likely encounter some other programming techniques as well. In this section we briefly highlight a few common programming techniques to raise awareness, but we do not go into full detail on how these techniques work.
 
+:::{.callout-tip}
+### Advanced R
+The book [Advanced R](https://adv-r.hadley.nz) [@Wickham2019] provides a good and detailed overview of some of the topics in this chapter. It's not very beginner friendly though!
+:::
 
-TODO: discuss - functions - scope - OOP (classes, methods, etc.)
+### Object Oriented Programming (OOP)
+
+In addition to functions, R also supports object-oriented programming (OOP). In OOP, data _and the operations that act on that data_ are conceptually bundled together into objects.
+
+In practice, you have already been using OOP in R, even if you were not aware of it. For example, when you call `summary()` on different types of objects, R automatically chooses an appropriate method depending on the object:
+
+```{r}
+#| eval: FALSE
+# These all provide useful summaries, but are implemented completely differently under the hood
+summary(my_numeric_vector)
+summary(my_data_frame)
+summary(my_statistical_model)
+
+```
+
+Although the function name is the same, the behavior differs. This is an example of _method dispatch_, where R selects the correct method based on the class of the object.
+
+For most data analysis workflows, it is not necessary to write your own object-oriented code. However, understanding that many R functions behave differently depending on object class helps explain why the same function call can produce different results in different contexts.
+
+### Scoping rules
+The _scope_ of your code determines where R looks for objects such as variables and functions.
+
+When a function is executed, R first looks for variables inside the function itself. If a variable is not found there, R then searches in the surrounding environments. This behavior is known as _lexical scoping_.
+
+```{r}
+# Scoping example: var1 is defined in the outside scope
+var1 <- 10
+
+# This example function takes no arguments
+f <- function() {
+  # var2 is defined in the function scope
+  var2 <- 5
+  # We still have access to the outside scope
+  return(var1 + var2)
+}
+
+# Executing the function performs the calculation. Note there are no arguments provided!
+f()
+```
+
+:::{#exr-scope}
+### Thinking about scope
+In the example above `var1` and `var2` are available in the function scope (Verify how you know this is true!). Is `var2` available outside of the scope of the function (e.g. what happens if you try to print `var2` outside of the function?) 
+:::
+
+### Vectorization
+Many quantitative operations and functions in R are _vectorized_. This means that the semantics of the operation are applied to a collection of elements individually, without having to write additional loops or other code 
+
+```{r}
+# Vectorization example, the square root is calculated for each number individually
+numbers <- c(25, 9, 5)
+sqrt(numbers)
+```
+
+There is no single diagnostic for determining whether a function is vectorized or not. Often the semantics of the function will give a hint: if the operation should work on multiple elements, and the number of return values is the same as the number of inputs, a function is a good candidate for being vectorized. Some examples: most arithmetic is vectorized, `read.csv()` is typically not expected to work on a collection of filenames (so not vectorized), and `mean()` summarizes multiple numbers into a single statistic (also not vectorized).
+
+:::{#exr-vectorization}
+### Vectorization alternatives
+What other language constructs have you already encountered that perform the same function as vectorization? (Hint: look back at @exr-forttest)
+:::
