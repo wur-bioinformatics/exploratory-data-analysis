@@ -80,7 +80,7 @@ We could force the ordering of the genotypes by converting it to a factor with d
 genos <- factor(paste0("genotype", 1:20), levels = paste0("genotype", 1:20))
 ```
 
-This can be a useful approach if you want a specific order - we already encountered this when trying to visualise the geographic distribution of admixture groups in the same order as the publication (@wk4d2_mapview).
+This can be a useful approach if you want a specific order - we already encountered this when trying to visualise the geographic distribution of admixture groups in the same order as the publication (@sec-wk4d2_mapview).
 
 Here, we'll mention a different approach - using **leading zeros**. There are a number of ways to pad a number with zeros, but here we will only consider one, using the function `sprintf()`. Have a look at the documentation and see whether you can work out how to add a leading zero so that the genotype names order as we would like. Try this before looking at the **Code** below.
 
@@ -89,7 +89,9 @@ Here, we'll mention a different approach - using **leading zeros**. There are a 
 
 genos <- paste0("genotype", sprintf("%02d",1:20))
 
-## The argument starts with % and ends with d (for integers). In between we tell the function to pad with zeros up to 2 digits. If we exceeded 100 genotypes we would have needed "%03d" etc. 
+## The first argument starts with % and ends with d (for integers). In between we tell the function to pad with zeros up to 2 digits. If we exceeded 100 genotypes we would have needed "%03d" etc. 
+
+genos
 
 ```
 
@@ -203,7 +205,7 @@ sapply(strsplit(sampledata$Height,split = "cm"),"[[",1)
 This approach picks out the *first* element of each list item (the 1 after "\[\[" specifies this). In another data-set you might want to pick out the *second* result (for example the number after the `_`), in which case you would replace the 1 with a 2. Alternatively, you could specify the column name instead of the column number.
 
 ::: callout-note
-You have already encountered the `apply` family of functions in earlier weeks, for example in week 2 when you learned about @functions.
+You have already encountered the `apply` family of functions in earlier weeks, for example in week 2 when you learned about @sec-functions.
 
 The functions `apply()`, `sapply()`, `lapply()` and `tapply()` are the most commonly-used (`mapply()` is also available, but I have never used it).
 
@@ -394,5 +396,28 @@ dim(attempt1)
 attempt1[1:10]
 ```
 
-`attempt1` is a character vector, not something that you usually have to work with as genetic marker data, but here it is the first step at getting the data into `R`. A number of string operations will be necessary to extract the genotypic data and convert it into a numeric matrix.
+`attempt1` is a character vector, not something that you usually have to work with as genetic marker data, but here it is the first step at getting the data into `R`. A number of string operations will be necessary to extract the genotypic data and convert it into a numeric matrix. This is left as a final exercise to practice on (this is at a slightly advanced level, and goes beyond the expected skill level for the exam, so don't worry if you cannot complete it).
+
+
+::: {#exr-readLines}
+
+## Converting output of readLines
+
+The steps described below provide a suggested approach to solve this problem. You may think of another way, which is also fine.
+  
+-   Use the `readLines()` function to read in the .loc file. Check how many lines have been read in.
+  
+-   Use `grep()` with a suitable "pattern" to find the lines with the marker names. 
+
+-   Apply a suitable string splitting approach to extract the marker name without the extra information or comment (e.g. `PVV4 (a,b) ; 1` should be simply be `PVV4` etc.) 
+  
+-   Use the marker name information to also work out the line numbers of where the genotypic data starts. *Hint* After each markername there is always 4 lines of marker information. 
+  
+-   Convert the dataset to numeric format in a matrix, with 0 in place of 'a' and 1 in place of 'b'. 
+  
+-   Use the marker names as the rownames of the matrix.
+  
+-   Double-check the data for characters other than 'a' or 'b', and make sure these have been correctly handled in the conversion step.
+
+:::
 
