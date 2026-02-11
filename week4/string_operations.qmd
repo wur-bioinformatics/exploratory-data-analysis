@@ -205,7 +205,7 @@ sapply(strsplit(sampledata$Height,split = "cm"),"[[",1)
 This approach picks out the *first* element of each list item (the 1 after "\[\[" specifies this). In another data-set you might want to pick out the *second* result (for example the number after the `_`), in which case you would replace the 1 with a 2. Alternatively, you could specify the column name instead of the column number.
 
 ::: callout-note
-You have already encountered the `apply` family of functions in earlier weeks, for example in week 2 when you learned about @sec-functions.
+You have already encountered the `apply` family of functions in earlier weeks, for example in week 2 (@sec-functions) when you learned about functions.
 
 The functions `apply()`, `sapply()`, `lapply()` and `tapply()` are the most commonly-used (`mapply()` is also available, but I have never used it).
 
