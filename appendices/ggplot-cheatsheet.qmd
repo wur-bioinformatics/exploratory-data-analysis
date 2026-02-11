@@ -175,6 +175,7 @@ print(p)
 | geom_smooth() | Trend lines (LOESS/LM) with optional SE ribbon. |
 | geom_histogram() | Histogram for numeric variables. |
 | geom_jitter() | Jittered points for categorical x. |
+| geom_boxplot() | boxplot for numeric variables.|
 | facet_wrap() | Facet by one variable (wrapped layout). |
 | facet_grid() | Facet by row and column variables. |
 | labs() | Titles, subtitles, captions, axis labels, legend titles. |
