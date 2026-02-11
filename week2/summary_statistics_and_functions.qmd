@@ -120,7 +120,23 @@ To get familiar with inspecting function documentation and definition, execute t
 
 ### Why (and when) use a function?
 
-TODO
+As you become more experienced and proficient in performing data analysis in R, you'll find that the amount of code you write to do these analyses expands. The basic steps of a data analysis pipeline (loading, inspecting, cleaning, analyzing, presenting, see @tip-data-science-cycle) will often be repeated multiple times. These are very good cases of where defining a function makes sense! By bundling a sequence of operations into a function, your code improves in three key ways:
+
+1. __Clarity__: instead of a long list of R commands, readers can read more 'high-level' code and more easily understand the main steps being performed
+2. __Re-usability__: write the analysis logic once, and reuse it across different datasets without copying and pasting. (Packages are the ultimate example here).
+3. __Maintainability__: If something changes in your workflow, updating the logic in one place (i.e. at the function) makes sure all places where the logic is applied are also updated.
+
+A few typical situations where it thus makes sense to implement a function: you're copying and pasting the same code over and over again; a sequence of steps represent a logical subtask; applying the same steps to different variables or datasets. In addition, functions make your code easier to document and test (more details on testing will be discussed in @sec-debugging-and-testing).
+
+:::{.callout-tip appearance='simple'}
+### Naming functions (is hard)
+_Should my code be a function?_ A straightforward way to determine whether a piece of code can be extracted into a function, is how easy it is to give a name to the collection of steps being performed. You'll be surprised how hard it can be to give intuitive names to functions! In fact, there are [entire books](https://www.namingthings.co/) written about just this.
+
+Base R has some good examples (both good and bad):
+
+  - `read.csv()` does what it says: it reads a csv file. The name matches perfectly with what the function does.
+  - `apply()` is much less straightforward: the name does not tell you what is being applied, or what it is being applied to. You need to read the documentation carefully to figure out these things, and how to actually use this function. 
+:::
 
 :::{#exr-revisit-plotting-code}
 ### Revisite some code from last week

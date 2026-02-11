@@ -1,6 +1,4 @@
----
-title: "Debugging and testing"
----
+# Debugging and testing {#sec-debugging-and-testing}
 
 :::{.callout-caution}
 ### WORK IN PROGRESS

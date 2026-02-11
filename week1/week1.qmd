@@ -12,7 +12,7 @@ In the first week, the goals are:
 4.  Document your code in a clear & concise way.
 5.  Apply the data-science cycle (load, inspect, clean, analyse, present)
 
-::: {.callout-tip appearance="simple"}
+::: {#tip-data-science-cycle .callout-tip appearance="simple"}
 ### What is the 'data-science cycle'?
 
 You are familiar with collecting data, even with some analysis and interpretation. For instance, in [Plant Science in Practice](https://studyhandbook.wur.nl/modules/NEM11305?type=Cursory) you gathered a dataset on wild plants via fieldwork and in [Reproduction of Plants](https://studyhandbook.wur.nl/modules/CLB10803?type=Cursory) you carried out a small experiment in a laboratory setting. During lab work you follow a particular protocol, and it is no different for data-analysis. We use an iterative cycle of loading, inspecting, cleaning, analyzing, and presenting data. It is normal to go back and forth in the cycle. The main assumption is that any data set is imperfect and has issues. In the first week, we will not bother with imperfection in what you use, but we will discuss it.
