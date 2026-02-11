@@ -148,6 +148,10 @@ Let's take a look at some code from last week:
 
 ## Summary statistics {#sec-summary-statistics}
 
+To explore new and previously unseen datasets, we tend to follow the data science cycle (@tip-data-science-cycle). Summary statistics play a key role in both the __inspect__ and __analyse__ parts of this cycle. A summary statistic is something that is easy to calculate, and gives you some insights into what the data in your dataset looks like. By calculating a few different summary statistics, you can get a quick overview of a dataset, and potentially diagnose some easy to spot issues.
+
+In this section, we present the main summary statistics that you will use for summarizing a new dataset. For most summary statistics, we perform some arithmetic and computation. This gives us an excellent opportunity to implement what was covered in the previous section on functions!
+
 ### Mean
 
 Perhaps one of the simplest and most intuitive summary statistics is the mean (typically indicated with the greek letter $\mu$). The mean can be calculated as the sum of all values in a variable divided by the number of values in that variable (@eq-mean).
@@ -231,7 +235,7 @@ median(corre_continuous$LDMC)
 
 ::: {#exr-mean-vs-median}
 ### Interpret the mean and median
-When computing the mean and median of the leaf dry matter content, we observe a (small) difference. How do you interpret this difference?
+When computing the mean and median of the leaf dry matter content, we observe a (small) difference. How do you interpret this difference? (You can use @fig-summary-stats for visual intuition).
 :::
 
 :::{#exr-mean-vs-median-all-traits}
