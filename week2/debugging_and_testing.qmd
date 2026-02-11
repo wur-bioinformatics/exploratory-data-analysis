@@ -1,4 +1,13 @@
-# Debugging and testing {#sec-debugging-and-testing}
+# Debugging, testing, and correlation {#sec-debugging-and-testing}
+
+```{r}
+#| echo: FALSE
+# We want errors to show up in this notebook
+options(error = recover)
+# this code is only for getting the data into the notebook during publishing
+data(corre_categorical, package = "planteda")
+data(corre_continuous, package = "planteda")
+```
 
 :::{.callout-caution}
 ### WORK IN PROGRESS
@@ -31,16 +40,13 @@ We will work on two complementary skill sets:
 - Debugging and error handling:
 - Testing and validating: 
 
-```{r}
-#| echo: FALSE
-options(error = recover)
-```
-
 ## Debugging and error handling
 
+[Bugs](https://en.wikipedia.org/wiki/Software_bug) and errors go hand in hand: 
+
 ### Syntax errors
-These class often pop up when you are in the process of writing some new code. 
-Simply put, a syntax error is any form of mistake where your code does not follow the syntax definitions of the R language.
+These errors often pop up when you are in the process of writing some new code. 
+Simply put, a syntax error is any form of mistake where your code does not follow the [syntax](https://en.wikipedia.org/wiki/Syntax) definitions of the R language.
 As a consequence, the code cannot be parsed and executed by the interpreter. 
 These error are caught relatively easy, because any syntax error will break the execution of your code.
 In addition, when viewing the full error message (see note [...]), a syntax error always starts with `Error in parse(text = input): [...]` indicating that _parsing_ of the code failed.
@@ -72,6 +78,7 @@ my_function <- function(arg){
 ]
 
 ```
+
 ```{r}
 #| error: TRUE
 # Syntax error example 4, a syntax error in a loop
@@ -115,6 +122,72 @@ my_function(4)
 
 ### Logical errors
 
+These errors are potentially the most dangerous, because they do not cause your R session to crash. Any behavior of your code that does not result in the desired/expected result can be seen as a logical error. This can range from explicit mistakes in an implementation (e.g. messing up a mathematical calculation), to not realizing some hidden behavior of a certain function. 
+
 ### Warnings
+In some cases, functions that you use might warn you when you are asking for unexpected behavior. One example we previously encountered are the warning messages of functions being overwritten when loading the `tidyverse` package. Warnings do not terminate your code, so just like logical errors you still get results. Unlike logical errors, you get some indication that there might be something not going as intended. Sometimes warnings can be safely ignored, sometimes they mean something is critically wrong.
+
+```{r}
+# Warning example 1: converting strings to number raises a warning, but you still get a result
+as.numeric(corre_continuous$species[1:5])
+```
+
+:::{#exr-warning}
+In the example above (when attempting to convert a character to a number), do you think it is appropriate to raise a warning, or would an error be a better choice? 
+:::
+
+Implementing warnings in your own functions can be a very powerful tool to keep track of what is happening in your analysis (see example below).
+```{r}
+# Warning example 2: raising a warning in a function
+
+f <- function(arg){
+  if (arg < 3) warning('arg must be >= 3, got ', arg)
+  arg ** 2
+}
+
+f(2)
+```
+
+:::{#exr-errors}
+### Identify the error
+For each of the following 10 excercises, identify the type of error, and fix the code so that it works as expected.
+
+```{r}
+#| eval: FALSE
+# Excercise 1: Calculating average leaf Nitrogen content
+mean(corre_continuous$leaf_N
+     
+# Excercise 2: Finding the most common growth form
+mean(corre_categorical$growth_form)
+
+# Excercise 3: Is there a relationship between plant family and leaf N content?
+cor.test(corre_continuous$family, corre_continuous$leaf_N)
+
+# Excercise 4: What is the average leaf dry mass?
+mean(corre_continuous$leaf_dry_mass, na.rm = TRUE)
+
+# Excercise 5: Select all the entries for the grass family
+subset(corre_continuous, family = 'Poaceae')
+
+# Excercise 6: Calculate mean leaf are
+mean(corre_continuous$SLA)
+
+# Excercise 7: Select the leaf area for the 1,000th plant
+corre_continuous$leaf_area[10000]
+
+# Excercise 8: Compute the average seed dry mass for grasses
+subset(corre_continuous, family == 'Poaceae')$seed_dry_mass |> mean(na.rm = TRUE)
+
+# Excercise 9: Compute the mean SLA for a specific family
+mean_trait_by_family <- function(dataset, trait){
+  mean(dataset[[trait]], na.rm = TRUE)
+}
+mean_trait_by_family(corre_continuous, 'SLA')
+
+# Excercise 10: log-transform seed dry mass
+log(corre_continuous$seed_dry_mass)
+```
+
+:::
 
 ## Testing and validating {#sec-testing-and-validating}

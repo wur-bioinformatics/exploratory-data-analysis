@@ -15,7 +15,7 @@ book:
   downloads: [pdf]
   repo-actions: [edit, issue]
   reader-mode: true
-  license: CC-BY-NC 4.0
+  license: CC BY-NC
   sidebar:
     style: docked
     tools:
@@ -62,6 +62,9 @@ format:
     font:
       google: "Noto Sans"
     repo: "https://github.com/wur-bioinformatics/exploratory-data-analysis"
+    link-external-icon: true
+    link-external-newwindow: true
+    license: CC BY-NC
   pdf:
     documentclass: scrreprt
     papersize: letter

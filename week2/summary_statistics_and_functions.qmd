@@ -1,5 +1,5 @@
 ---
-title: "Summary statistics and functions"
+title: "Functions and summary statistics"
 ---
 
 ::: callout-caution
@@ -390,9 +390,9 @@ Use the `summary()` function on both the `corre_categorical` and `corre_continuo
 
 In @sec-functions we have discussed the basics of functions in R. In your data analysis practice, this will be the most useful tool that you use to make your code readable, reusable, and maintainable. However, when working with R a bit more (and perhaps also using other programming languages), you likely encounter some other programming techniques as well. In this section we briefly highlight a few common programming techniques to raise awareness, but we do not go into full detail on how these techniques work.
 
-:::{.callout-tip}
+:::{.callout-tip appearance='simple'}
 ### Advanced R
-The book [Advanced R](https://adv-r.hadley.nz) [@Wickham2019] provides a good and detailed overview of some of the topics in this chapter. It's not very beginner friendly though!
+The book [Advanced R](https://adv-r.hadley.nz) [@Wickham2019] provides a good and detailed overview of some of the topics in this section. It's not very beginner friendly though!
 :::
 
 ### Object Oriented Programming (OOP)

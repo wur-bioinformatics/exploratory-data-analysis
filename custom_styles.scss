@@ -20,5 +20,12 @@ $yellow: #EFD34B;
   border-left-color: $red;
   border-left-width: 0.25rem;
   border-left-style: solid;
-  // border: 0.075rem solid #d9d9d9;
+}
+
+.cell-output-warning {
+  border-radius: 0.25rem;
+  border: 0.075rem solid $yellow;
+  border-left-color: $yellow;
+  border-left-width: 0.25rem;
+  border-left-style: solid;
 }
