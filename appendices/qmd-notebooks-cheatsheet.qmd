@@ -1,6 +1,56 @@
 ---
 title: "QMD notebook cheatsheet"
+author: "Mark Sterken"
+date: "2026-02-11"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    code-tools: true
+editor: source
+execute:
+  eval: false
+  warning: false
+  message: false
 ---
+
+# QMD notebook cheatsheet {.unnumbered}
+
+## Setting up QMD
+You start a QMD with a yaml header, this is information in-between three dashes (\-\-\-). The first three dashes indicate the start of the header, the last three the end. There are some guidelines to writing yaml. But for this course it suffices to copy the header from the first two days
+
+```{r}
+
+---
+title: "BIF20806_week1day1_notebook"
+editor: source
+date: ADD
+author: ADD
+registration_number: ADD
+format: 
+  html
+execute: 
+  eval: false
+---
+  
+
+```
+
+## Making a code chunk in QMD
+Code is written in QMD between three back ticks \`\`\`. After these backticks you should state \{r\}, which indicates that the code chunk is in the r-language. The yaml header you use states that this code is not evaluated (eval: false). You can force evaluation by either setting this to true (eval: true) or setting it to true in a specific code block using "\#\| eval: true".
+
+
+## R setup in QMD
+The first code chunk in the document should be \{r setup\}, this chunk specifies some general conditions. In particular, on some systems it is required to set the root directory (your workdirectory) here as well (in addition to `setwd()`).
+
+```{r setup}
+    options(repos = c(CRAN = "https://cloud.r-project.org"))
+    ### Some of you will have problems with setting the workdirectory (setwd())
+    ### Here you need to set your work directory as well
+    knitr::opts_knit$set(root.dir = "YOUR_WD") 
+```
+
 
 ## Writing text in QMD
 
@@ -24,3 +74,7 @@ title: "QMD notebook cheatsheet"
 | Footnote          | text\[\^1\] / \[\^1\]: note   | Adds a footnote                           |
 | Line break        | text (two spaces)             | Forces a new line                         |
 | Escape characters | \*, #, \_                     | Shows literal symbols                     |
+
+
+
+

@@ -15,7 +15,7 @@ execute:
   message: false
 ---
 
-# Base R Cheatsheet {.unnumbered}
+# Base R cheatsheet {.unnumbered}
 
 ## Atomic Data Types
 

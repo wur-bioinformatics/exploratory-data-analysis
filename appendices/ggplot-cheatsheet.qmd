@@ -15,7 +15,7 @@ execute:
   message: false
 ---
 
-# GGplot Cheatsheet {.unnumbered}
+# GGplot cheatsheet {.unnumbered}
 
 # ggplot2 Beginner Cheat Sheet (R)
 
@@ -28,7 +28,7 @@ library(ggplot2)
 
 ---
 
-## 1) Building a plot
+## Building a plot
 
 ### `ggplot()`
 Creates a plotting object. Combine with `+` to add layers.
@@ -48,7 +48,7 @@ ggplot(mtcars, aes(x = wt, y = mpg, color = factor(cyl)))
 
 ---
 
-## 2) Geoms (layers that draw things)
+## Geoms (layers that draw things)
 
 ### `geom_point()` – scatterplot
 ```r
@@ -82,7 +82,7 @@ Note that you have to 0, otherwise it also jitters in height!
 
 ---
 
-## 3) Faceting (small multiples)
+## Faceting (separating plots over a variable)
 
 ### `facet_wrap()` – wrap a single faceting variable into multiple rows/cols
 ```r
@@ -101,7 +101,7 @@ ggplot(mtcars, aes(wt, mpg)) +
 
 ---
 
-## 4) Labels, themes, and polishing
+## Labels, themes, and polishing
 
 ### `labs()` – titles and axis labels
 ```r
@@ -125,7 +125,7 @@ Other useful themes: `theme_minimal()`, `theme_classic()`. Modify elements with 
 
 ---
 
-## 5) Some basic additions to plots
+## Some basic additions to plots
 
 ### Scales (`scale_*`) – control colors, fills, axes, legends
 ```r
@@ -165,7 +165,7 @@ print(p)
 
 ---
 
-## 6) Cheat table (quick reference)
+## Quick summary
 
 | Function | Purpose |
 |---|---|

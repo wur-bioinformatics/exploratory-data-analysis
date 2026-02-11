@@ -45,7 +45,7 @@ For the basics of setting up your environment, you can check [Chapter 1](/week1/
 
 The last two days you have been working with .qmd files ([Quarto markdown](https://quarto.org/docs/guide/)). This is a flavor of markdown, which is a markup language that relies on simple text to produce a layout of a document. As you have a lab-journal for experimental work in the field, greenhouse, or laboratory, a markdown notebook is useful to have when writing code.
 
-The Quarto markdown file you make today, should be handed in on [Brightspace](https://brightspace.wur.nl/) today, before the deadline. You hand in the .qmd file. Your reviewer will go through the file and check if it renders and whether your conclusions are correct.
+The Quarto markdown file you make today for the assignment, should be handed in on [Brightspace](https://brightspace.wur.nl/) today, before the deadline. You hand in the .qmd file. Your reviewer will go through the file and check if it renders and whether your conclusions are correct.
 
 ::: {#exr-MakeQmd}
 #### Make your own markdown file
@@ -55,6 +55,8 @@ In RStudio go to File \> New File \> Quarto document...
 Based on the documents provided last two days ([Chapter 1](/week1/day1.qmd) and [Chapter 2](/week1/day2.qmd)), make your own markdown file. Include meta information (title, name, registration number) and headings for: setup of the R environment (working directory, packages), and the five steps in the data analysis cycle (see [Chapter 1](/week1/day1.qmd)).
 
 You can choose whether it renders a .html or a .pdf document. For now, settle on .html, this typically renders well and does not require many additional programs. You probably will need [pandoc](https://pandoc.org/).
+
+You can find general tips on how to write in markdown in [Appendix QMD notebook cheatsheet](/appendices/qmd-notebooks-cheatsheet.qmd).
 :::
 
 ::: {.callout-tip appearance="simple"}
@@ -102,7 +104,7 @@ There are some general measures you can take to reduce risks:
 
 #### Using functions
 
-Inspect the data using the same functions as in [Chapter 2](/week1/day2.qmd).
+Inspect the data using the same functions as in [Chapter 2](/week1/day2.qmd). Also, these functions you can find in [Appdix Base R cheatsheet](/appendices/base-r-cheatsheet.qmd).
 
 ```{r w1d2_check_the_data, include = TRUE,eval=FALSE}
 
@@ -181,7 +183,7 @@ The `summary()` function is a very versatile function, that can generate outputs
 ### Presenting
 
 #### Scatter plot
-Now, let's make a proper plot of correlation.
+Now, let's make a proper plot of correlation. Of course, you can find instructions in both [Chapter 1](/week1/day1.qmd) and [Chapter 2](/week1/day2.qmd). Also, check [Appendix GGplot cheatsheet](/appendices/ggplot-cheatsheet.qmd).
 
 ```{r w1d2_wilcoxplot_pallida_ASSIGNMENT, include = TRUE,eval=FALSE}
 #| code-fold: false
@@ -295,7 +297,7 @@ Make a `ggplot2::` boxplot showing the two nematode species on the x-axis and th
 :::
 
 ::: {.callout-note appearance="simple"}
-We covered the boxplot function in [Chapter 1](/week1/day1.qmd)) in the presentation section.
+We covered the boxplot function in [Chapter 1](/week1/day1.qmd)) in the presentation section. Also, you can find how to in [Appendix GGplot cheatsheet](/appendices/ggplot-cheatsheet.qmd).
 :::
 
 Now you have analysed the difference in growth rates between the two species at a particular density at a particular day of the experiment. Now it is time to draw conclusions.
