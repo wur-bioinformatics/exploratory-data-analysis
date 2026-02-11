@@ -386,9 +386,72 @@ Throughout this chapter, we introduced summary statistics by first focusing on t
 Use the `summary()` function on both the `corre_categorical` and `corre_continuous` datasets. Describe your findings, making note of the following things: (1) what are the data types of the different variables? (2) How many NAs are there in the dataset? (3) Are there any variables with extreme values?
 :::
 
-
 ## Other programming techniques {#sec-other-programming-concepts}
 
+In @sec-functions we have discussed the basics of functions in R. In your data analysis practice, this will be the most useful tool that you use to make your code readable, reusable, and maintainable. However, when working with R a bit more (and perhaps also using other programming languages), you likely encounter some other programming techniques as well. In this section we briefly highlight a few common programming techniques to raise awareness, but we do not go into full detail on how these techniques work.
 
+:::{.callout-tip}
+### Advanced R
+The book [Advanced R](https://adv-r.hadley.nz) [@Wickham2019] provides a good and detailed overview of some of the topics in this chapter. It's not very beginner friendly though!
+:::
 
-TODO: discuss - functions - scope - OOP (classes, methods, etc.)
+### Object Oriented Programming (OOP)
+
+In addition to functions, R also supports object-oriented programming (OOP). In OOP, data _and the operations that act on that data_ are conceptually bundled together into objects.
+
+In practice, you have already been using OOP in R, even if you were not aware of it. For example, when you call `summary()` on different types of objects, R automatically chooses an appropriate method depending on the object:
+
+```{r}
+#| eval: FALSE
+# These all provide useful summaries, but are implemented completely differently under the hood
+summary(my_numeric_vector)
+summary(my_data_frame)
+summary(my_statistical_model)
+
+```
+
+Although the function name is the same, the behavior differs. This is an example of _method dispatch_, where R selects the correct method based on the class of the object.
+
+For most data analysis workflows, it is not necessary to write your own object-oriented code. However, understanding that many R functions behave differently depending on object class helps explain why the same function call can produce different results in different contexts.
+
+### Scoping rules
+The _scope_ of your code determines where R looks for objects such as variables and functions.
+
+When a function is executed, R first looks for variables inside the function itself. If a variable is not found there, R then searches in the surrounding environments. This behavior is known as _lexical scoping_.
+
+```{r}
+# Scoping example: var1 is defined in the outside scope
+var1 <- 10
+
+# This example function takes no arguments
+f <- function() {
+  # var2 is defined in the function scope
+  var2 <- 5
+  # We still have access to the outside scope
+  return(var1 + var2)
+}
+
+# Executing the function performs the calculation. Note there are no arguments provided!
+f()
+```
+
+:::{#exr-scope}
+### Thinking about scope
+In the example above `var1` and `var2` are available in the function scope (Verify how you know this is true!). Is `var2` available outside of the scope of the function (e.g. what happens if you try to print `var2` outside of the function?) 
+:::
+
+### Vectorization
+Many quantitative operations and functions in R are _vectorized_. This means that the semantics of the operation are applied to a collection of elements individually, without having to write additional loops or other code 
+
+```{r}
+# Vectorization example, the square root is calculated for each number individually
+numbers <- c(25, 9, 5)
+sqrt(numbers)
+```
+
+There is no single diagnostic for determining whether a function is vectorized or not. Often the semantics of the function will give a hint: if the operation should work on multiple elements, and the number of return values is the same as the number of inputs, a function is a good candidate for being vectorized. Some examples: most arithmetic is vectorized, `read.csv()` is typically not expected to work on a collection of filenames (so not vectorized), and `mean()` summarizes multiple numbers into a single statistic (also not vectorized).
+
+:::{#exr-vectorization}
+### Vectorization alternatives
+What other language constructs have you already encountered that perform the same function as vectorization? (Hint: look back at @exr-forttest)
+:::
