@@ -1,3 +1,22 @@
+---
+title: "I: A first look at R"
+author: "Rens Holmer & Mark Sterken"
+date: "2026-02-11"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    code-tools: true
+    link-external-newwindow: true
+    link-external-icon: true
+editor: source
+execute:
+  eval: false
+  warning: false
+  message: false
+---
+
 # I: A first look at R
 
 ## The goals for week 1

@@ -8,6 +8,8 @@ format:
     toc-depth: 3
     code-fold: true
     code-tools: true
+    link-external-newwindow: true
+    link-external-icon: true    
 editor: source
 execute:
   eval: false

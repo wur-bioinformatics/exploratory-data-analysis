@@ -8,6 +8,8 @@ format:
     toc-depth: 3
     code-fold: true
     code-tools: true
+    link-external-newwindow: true
+    link-external-icon: true    
 editor: source
 execute:
   eval: false
@@ -251,7 +253,7 @@ While going through the exercises, you might encounter steps requiring you to in
 ::: {#exr-Assignment_load}
 #### Load the data
 
-Load the two data files into the R environment using the appropriate read function. Make sure that your name is included here, so the reviewers can check if your code works.
+Load the two data files into the R environment using the appropriate read function. Make sure that your name is included here, so the reviewers can check if your code works. That way your reviewer can find your datafiles.
 :::
   
   
@@ -307,7 +309,7 @@ Now you have analysed the difference in growth rates between the two species at 
 ::: {#exr-Assignment_interpret}
 #### Interpret
 
-What is the *biological interpretation* of the boxplot and the t-test p-value?
+What is the *biological interpretation* of the boxplot and the wilcoxon-test p-value?
 :::
 
 Once you have worked through all these excercises related to the assignment, you can render the .html file. Check the file (is everything included?). If you run into errors, the 'Background Jobs' window will indicate where the rendering has halted.
