@@ -10,7 +10,8 @@ This chapter is not yet finished, come back later for the final product
 
 ## Introduction
 
-A simple but effective way to start exploring a dataset is to compute a few summary statistics. In the previous week we already encountered a few summary statistics: we looked at e.g. the numbers of rows and columns of a table. In @sec-summary-statistics we will explore a few numerical summary techniques, such as computing the mean and standard deviation of a numeric variable, or counts/frequencies of a categorical variable. While doing so, we will encounter one of the more powerful features of using a programming language: the possibility to create functions. In section @sec-functions we explore this concept a bit further, we highlight a few other commonly occurring programming patterns, and we discuss the relevance of these concepts in the context of reproducible research.
+In this chapter we expand on two concepts that we encountered in the previous week: functions, and summarizing a dataset with numbers. We start with a few concepts on what functions are and when to use them in @sec-functions, and we apply these concepts in @sec-summary-statistics to implement the calculation of some useful dataset summaries. We will explore several numerical summary techniques, such as computing the mean and standard deviation of a numeric variable, or counts/frequencies of a categorical variable. We finish the chapter with a brief section on various other programming concepts that you typically encounter when doing exploratory data analysis (@sec-other-programming-concepts).
+
 
 ::: {#exr-install-dependencies}
 ### Installing the dependencies for this chapter
@@ -31,6 +32,67 @@ data('corre_categorical')
 data(corre_categorical, package = "planteda")
 data(corre_continuous, package = "planteda")
 ```
+
+## Functions {#sec-functions}
+
+In the previous chapters we have encountered _functions_. So far, we have used these functions to our advantage, but we have mostly glossed over what a function is, and when it is most appropriate to use functions. In this section we go into a bit more depth to highlight the most important practical aspects of functions in R, whilst avoiding unnecessary theoretical detail as much as possible. We'll discuss a few other relevant programming concepts as well, again mostly limiting ourselves to practical aspects.
+
+### What is a function?
+A function can be concisely described as a __reusable piece of code__. Some clear examples of this are the functions you have used from some of the packages you used (e.g. the `read.csv()` or `ggplot()` functions). 
+
+:::{.callout-note}
+### R function syntax
+__Named functions__ in R are all functions that are assigned a variable name (see example below).
+```{r}
+#| eval: FALSE
+# Named function example  
+function_name <- function(argument){ # <1>
+  # function body                    # <2>
+  return(...)                        # <3>
+}                                    # <4>
+```
+1. First line of a function definition, in this case the function is assigned to a variable named `function_name`. `{` indicates the opening of the function body.
+2. The function 'body' contains all the logic that will be executed upon function execution
+3. The return statement provides the result of the computation performed inside the function
+4. The function body is closed with `}`
+
+Not all functions have to be assigned to variables: __anonymous functions__ are inline function definitions that are not assigned to a variable. As such, they can not be executed anywhere else. A clear use case of anonymous functions is in e.g. the apply approaches where a simple operation is applied to multiple elements of a collection (see example below).
+
+```{r}
+#| eval: FALSE
+# Anonymous function example
+sapply(                                                                      # <1>
+  1:3,                                                                       # <2>
+  function(element){                                                         # <3>
+    # apply operation on element (in this case a number in the range 1 to 3) # <3>
+    return(result)                                                           # <3>
+  }                                                                          # <3>
+)
+```
+1. `sapply` applies a function to a collection. The first argument to `sapply` is the collection, the second argument is the function that will be applied.
+2. In this example we apply our function to the range `1:3`
+3. Anonymous function: in this `sapply` example, it will be applied to the range 1:3. The function will receive as argument one element from the collection, so in this case a single number.
+
+For short, easy to understand operations, the __one-line function syntax__ is sometimes used.
+```{r}
+#| eval: FALSE
+# one-line named function
+function_name <- function(arg1, arg2) arg1 + arg2 # <1>
+```
+1. A one-line function definition can omit the curly braces (`{ }`).
+:::
+
+### Why (and when) use a function?
+
+TODO
+
+:::{#exr-revisit-plotting-code}
+### Revisite some code from last week
+Let's take a look at some code from last week:
+
+1. Compare the code for @exr-forttest and @exr-forplot. Which parts are shared? What would the function for doing the shared parts be called?
+2. Revisit the code for @exr-forplot. There are a few steps in the for loop that perform (more or less) isolated tasks. Could you come up with logical names for these steps? Do you think it makes sense to extract these steps into individual functions? 
+:::
 
 ## Summary statistics {#sec-summary-statistics}
 
@@ -268,50 +330,8 @@ Throughout this chapter, we introduced summary statistics by first focusing on t
 Use the `summary()` function on both the `corre_categorical` and `corre_continuous` datasets. Describe your findings, making note of the following things: (1) what are the data types of the different variables? (2) How many NAs are there in the dataset? (3) Are there any variables with extreme values?
 :::
 
-## Functions and other programming concepts {#sec-functions}
 
-In the previous chapters, and in @nte-mean-implementation-example, @exr-variance, and @exr-quantiles in particular, we have encountered _functions_. So far, we have used these functions to our advantage, but we have glossed over what a function is exactly, and when it is most appropriate to use functions. In this section we go into a bit more depth to highlight the most important practical aspects of functions in R, whilst avoiding unnecessary theoretical detail as much as possible. We'll discuss a few other relevant programming concepts as well, again mostly limiting ourselves to practical aspects.
-
-### What is a function?
-A function can be concisely described as a reusable piece of code. Some clear examples of this are @exr-variance and @exr-quantiles: you implemented some logic to perform a calculation, and then later executed that logic in one line of code when you executed the function.
-
-:::{.callout-note}
-### R function syntax
-__Named functions__ in R are all functions that are assigned a variable name (see example below).
-```{r}
-#| eval: FALSE
-# Named function example  
-function_name <- function(argument){ # <1>
-  # function body                    # <2>
-  return(...)                        # <3>
-}                                    # <4>
-```
-
-1. First line of a function definition, in this case the function is assigned to a variable named `function_name`. `{` indicates the opening of the function body.
-2. The function 'body' contains all the logic that will be executed upon function execution
-3. The return statement provides the result of the computation performed inside the function
-4. The function body is closed with `}`
-
-Not all functions have to be assigned to variables: __anonymous functions__ are inline function definitions that are not assigned to a variable. As such, they can not be executed anywhere else. A clear use case of anonymous functions is in e.g. the apply approaches where a simple operation is applied to multiple elements of a collection (see example below).
-
-```{r}
-#| eval: FALSE
-# Anonymous function example
-sapply(                                                                      # <1>
-  1:3,                                                                       # <2>
-  function(element){                                                         # <3>
-    # apply operation on element (in this case a number in the range 1 to 3) # <3>
-    return(result)                                                           # <3>
-  }                                                                          # <3>
-)
-```
-1. `sapply` applies a function to a collection. The first argument to `sapply` is the collection, the second argument is the function that will be applied.
-2. In this example we apply our function to the range `1:3`
-3. Anonymous function: in this `sapply` example, it will be applied to the range 1:3. The function will receive as argument one element from the collection, so in this case a single number.
-:::
-
-### Why (and when) use a function?
-
+## Other programming techniques {#sec-other-programming-concepts}
 
 
 
