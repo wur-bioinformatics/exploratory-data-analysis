@@ -47,6 +47,55 @@ You have probably already seen this function, or its cousin `paste0()`. Like man
 -   Repeat the first exercise, but this time pasting the first 10 positive integers together with the next 10 numbers (i.e. paste 1 - 10 together with 11 - 20). What is the data type of the output? *Hint*: use `class()` to check.
 :::
 
+::: callout-note
+## Leading zeros
+
+If you are assigning names to things like experimental treatments, you sometimes combine character strings with numbers quite naturally, for example "genotype1", "genotype2", "genotype3". 
+
+We have already seen how to do this using `paste0()`:
+
+```{r}
+paste0("genotype", 1:3)
+```
+
+Suppose we had 20 genotypes in an experiment, we might reasonably call them genotype1 - genotype20:
+
+```{r}
+genos <- paste0("genotype", 1:20)
+```
+
+But if we are doing an analysis or plotting the data afterwards, you will notice that the order of the genotypes is not g1:g20, instead they are ordered as follows:
+
+```{r}
+levels(as.factor(genos))
+```
+
+Why do we go from genotype1 to genotype10? Doesn't `R` know how to count?
+
+The problem of course is that "genotype1" is now a string, and strings are ordered alphanumerically, meaning that genotype10 comes before genotype2.
+
+We could force the ordering of the genotypes by converting it to a factor with defined levels:
+
+```{r}
+genos <- factor(paste0("genotype", 1:20), levels = paste0("genotype", 1:20))
+```
+
+This can be a useful approach if you want a specific order - we already encountered this when trying to visualise the geographic distribution of admixture groups in the same order as the publication (@wk4d2_mapview).
+
+Here, we'll mention a different approach - using **leading zeros**. There are a number of ways to pad a number with zeros, but here we will only consider one, using the function `sprintf()`. Have a look at the documentation and see whether you can work out how to add a leading zero so that the genotype names order as we would like. Try this before looking at the **Code** below.
+
+```{r}
+#| code-fold: true
+
+genos <- paste0("genotype", sprintf("%02d",1:20))
+
+## The argument starts with % and ends with d (for integers). In between we tell the function to pad with zeros up to 2 digits. If we exceeded 100 genotypes we would have needed "%03d" etc. 
+
+```
+
+:::
+
+
 ### Manipulating strings {#sec-wk4d3_manip_string}
 
 Suppose we have received a dataset from another researcher where plant heights were measured in centimeters. Unfortunately, the researcher recorded everything in Excel with the letters "cm" following the numbers. We would like to extract the actual heights as a **numeric** data type so that we can produce a plot.
