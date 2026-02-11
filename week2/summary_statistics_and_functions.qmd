@@ -35,13 +35,15 @@ data(corre_continuous, package = "planteda")
 
 ## Functions {#sec-functions}
 
-In the previous chapters we have encountered _functions_. So far, we have used these functions to our advantage, but we have mostly glossed over what a function is, and when it is most appropriate to use functions. In this section we go into a bit more depth to highlight the most important practical aspects of functions in R, whilst avoiding unnecessary theoretical detail as much as possible. We'll discuss a few other relevant programming concepts as well, again mostly limiting ourselves to practical aspects.
+In the previous chapters we have encountered _functions_. So far, we have used these functions to our advantage, but we have mostly glossed over what a function is, and when it is most appropriate to use functions. In this section we go into a bit more depth to highlight the most important practical aspects of functions in R, whilst avoiding unnecessary theoretical detail as much as possible. 
 
 ### What is a function?
-A function can be concisely described as a __reusable piece of code__. Some clear examples of this are the functions you have used from some of the packages you used (e.g. the `read.csv()` or `ggplot()` functions). 
+A function can be concisely described as a __reusable piece of code__ that takes input values (arguments), performs an operation, and returns a result. Some clear examples of this are the functions you have used from some of the packages you used (e.g. the `read.csv()` or `ggplot()` functions). It is important to make the distinction between the _function definition_, which is the piece of code that describes what the function does, and _calling a function_, which is where the code is used (See @nte-function-syntax).
 
-:::{.callout-note}
+
+:::{#nte-function-syntax .callout-note appearance='simple'}
 ### R function syntax
+#### Function definition
 __Named functions__ in R are all functions that are assigned a variable name (see example below).
 ```{r}
 #| eval: FALSE
@@ -80,6 +82,40 @@ For short, easy to understand operations, the __one-line function syntax__ is so
 function_name <- function(arg1, arg2) arg1 + arg2 # <1>
 ```
 1. A one-line function definition can omit the curly braces (`{ }`).
+
+#### Using (executing/invoking/calling) a function
+A function is executed by using the parenthesis (`( )`) syntax.
+```{r}
+#| eval: FALSE
+# Executing a previously defined function
+function_name(arg1, arg2)
+```
+
+#### Getting help for existing functions
+Base R functions and functions that are imported from packages come with documentation on what the function does, and how to use them. This documentation typically includes a description of all the possible arguments for a function, and a few examples. The documentation for a function can be invoked by prefixing the function name with a question mark (`?`) in the R console.
+
+```{r}
+#| eval: FALSE
+# Typing this in the console will open the documentation for the function (if it exists)
+?function_name
+```
+
+In addition, executing the _function name_ in the R console (without parentheses!) prints the function definition. 
+```{r}
+#| eval: FALSE
+# Typing this in the R console will print the function definition
+function_name
+```
+
+:::
+
+:::{#exr-inspecting-functions}
+### Inspect some function definitions and documentation
+To get familiar with inspecting function documentation and definition, execute the following commands and note down what you find:
+
+- `?read.csv` and `read.csv`
+- `?mean` and `mean`
+- `?filter` and `filter`
 :::
 
 ### Why (and when) use a function?
