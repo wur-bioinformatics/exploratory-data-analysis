@@ -222,7 +222,7 @@ The **Usage** section mentions that this function has 3 main arguments, namely `
 In the code above, `[[` is actually a function we are applying to the output of `strsplit()`, and `1` is the extra argument we are supplying to `[[`[^1].
 :::
 
-[^1]: Note that I have deliberately written `[[` and not `[[()` when referring to the function `[[` here. This goes a bit against convention: elsewhere in these notes functions arw written like `plot()` to explicitly refer to the function `plot`.
+[^1]: Note that I have deliberately written `[[` and not `[[()` when referring to the function `[[` here. This goes a bit against convention: elsewhere in these notes functions are written like `plot()` to explicitly refer to the function `plot`.
 
 ## Regular expressions {#sec-wk4d3_regex}
 
@@ -236,7 +236,7 @@ A good description of Regular Expression usage in R can be found by looking at t
 
 Associated R functions are `grep()`,`gsub()` etc - these are functions that accept regular expressions as matching arguments (usually called the "pattern", but check function documentation to be sure). 
 
-Here we present an example to give you an idea of how regular expressions can be used in R. For the assignment later today, regular expressions may be needed to break into a dataset saved in a difficult-to-read format.
+Here we present an example to give you an idea of how regular expressions can be used in R.
 
 We first generate a vector of character strings that mix letters, numbers and an underscore:
 
