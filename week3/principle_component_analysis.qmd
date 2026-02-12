@@ -1,0 +1,293 @@
+---
+title: "Principle Component Analysis"
+author: "Harm Nijveen"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+editor: visual
+execute:
+  eval: false
+  warning: false
+  message: false
+---
+
+# Dimensionality reduction
+
+We looked at clustering the samples based on the expression of 2 genes, which worked pretty good when this was based on the two most variable genes. With two genes, we could also plot the samples in a 2 dimensional figure and 'see' the clusters. However, if we take all genes into account, this will not work anymore: with three genes we reach the limit of the number of dimensions we can plot and already that third dimension does not work as well as the first two. Still, as always in exploratory analysis, being able to 'look' at your data can be very informative.
+
+A common way to address this is to perform [dimensionality reduction](https://en.wikipedia.org/wiki/Dimensionality_reduction), where the data are transformed into a lower dimensional space, while trying to preserve the main characteristics of the original data. Plotting the samples using the two most variable genes could be considered dimensionality reduction. Dimensionality reduction methods can be separated into linear and nonlinear approaches. In this session we will look at a specific method for linear dimensionality reduction called **principle component analysis** or PCA, which works quite well for bulk RNA-seq data. If the structure in de data becomes more complex, for instance in single-cell RNA-seq data which can consist of dozens of different cell types that each has its own unique expression profile, nonlinear methods like t-SNE and UMAP are popular alternatives. It is good to realize that flattening the data points to only two dimensions will unavoidably lead to a simplification of the overall structure, which may lead to wrong conclusions.
+
+## Principle Component Analysis
+
+To understand the algorithm for doing PCA involves leaning about matrix calculations like eigenvectors, which is beyond the scope of this course, but fortunately the underlying principle of PCA is less complicated.
+
+In this session we continue with the gene expression dataset from <https://www.ebi.ac.uk/gxa/experiments/E-GEOD-72806/>
+
+First load the proper libraries and filter/transform the data like before
+
+```{r}
+
+library(HDF5Array)
+library(edgeR)
+library(SummarizedExperiment)
+se = loadHDF5SummarizedExperiment(dir="E-GEOD-72806")
+
+counts <- assay(se) 
+coldata <- as.data.frame(colData(se))
+keep <- rowSums(counts >= 10) >= 3
+counts_filt <- counts[keep, ]
+dge <- DGEList(counts = counts_filt)
+dge <- calcNormFactors(dge)
+
+logcounts <- cpm(dge, log = TRUE, prior.count = 1) #adds 1 to avoid taking the log of zero
+```
+
+We can project the samples in two dimensions like we did before using these two genes: AT4G27670 and AT1G56600.
+
+```{r}
+library(ggplot2)
+
+genes = c("AT4G27670","AT1G56600") 
+expr_df <- as.data.frame(t(logcounts[genes, , drop = FALSE]))
+expr_df$sample <- rownames(expr_df)
+
+
+coldata_2genes <- coldata
+coldata_2genes$sample <- rownames(coldata_2genes)
+
+df <- merge(
+  expr_df,
+  coldata_2genes,
+  by = "sample",
+  all.x = TRUE
+)
+
+p2 <- ggplot(
+  df,
+  aes(
+    x = .data[[genes[1]]],
+    y = .data[[genes[2]]],
+    color = environmental_stress
+  )) +
+  geom_point(size = 4) +
+
+  labs(
+    title = "Samples in gene-expression space",
+    x = genes[1],
+    y = genes[2]
+  ) +
+  coord_equal() +
+  theme_bw()
+
+p2
+
+```
+
+The idea of PCA is that you rotate the gene-expression space to find an that contains the most variance. We can rotate the plot
+
+```{r}
+library(grid)
+rotation <- -17
+grid.newpage()
+print(
+  p2,
+  vp = viewport(
+    x = 0.5, y = 0.5, just = c("center", "center"),
+    width  = unit(0.9, "npc"),
+    height = unit(0.9, "npc"),
+    angle = rotation,
+    clip = "off"   # key
+  )
+)
+```
+
+We can try the same with three genes in three dimensions
+
+```{r}
+# install.packages("plotly")
+library(plotly,,quietly = TRUE)
+
+genes3 <- c("AT4G27670", "AT1G56600", "AT4G09020")
+expr3 <- t(logcounts[genes3, , drop = FALSE])
+expr3 <- as.data.frame(expr3)
+
+df_gene_space <- as.data.frame(expr3)
+df_gene_space$environmental_stress <- coldata[rownames(expr3), "environmental_stress"]
+
+
+p3 <- plot_ly(
+  df_gene_space,
+  x = ~ .data[[genes3[1]]],
+  y = ~ .data[[genes3[2]]],
+  z = ~ .data[[genes3[3]]],
+  color = ~ environmental_stress,
+  colors = "Set2",
+  type = "scatter3d",
+  mode = "markers",
+  marker = list(size = 6)
+) |>
+  layout(
+    title = "Samples in 3-gene expression space",
+    scene = list(
+      xaxis = list(title = genes3[1]),
+      yaxis = list(title = genes3[2]),
+      zaxis = list(title = genes3[3])
+    )
+  )
+
+p3
+```
+
+```{r}
+pca2 <- prcomp(expr2, scale. = FALSE)
+
+loadings <- pca2$rotation
+
+# choose how long the lines should be
+line_scale <- max(apply(expr2, 2, sd))
+center <- colMeans(expr2)
+
+pc_lines <- data.frame(
+  x    = center[1],
+  y    = center[2],
+  xend = center[1] + loadings[1, ] * line_scale,
+  yend = center[2] + loadings[2, ] * line_scale,
+  pc   = c("PC1", "PC2")
+)
+
+df_gene_space <- as.data.frame(expr2)
+df_gene_space$environmental_stress <- coldata[rownames(expr2), "environmental_stress"]
+
+ggplot(
+  df_gene_space,
+  aes(
+    x = .data[[genes2[1]]],
+    y = .data[[genes2[2]]],
+    color = environmental_stress
+  )
+) +
+  geom_point(size = 4) +
+
+  # PC axes
+  geom_segment(
+    data = pc_lines,
+    aes(x = x, y = y, xend = xend, yend = yend, linetype = pc),
+    inherit.aes = FALSE,
+    linewidth = 1,
+    color = "black"
+  ) +
+
+  labs(
+    title = "Samples in gene-expression space with PCA axes",
+    subtitle = "Solid line = PC1, dashed line = PC2",
+    x = genes2[1],
+    y = genes2[2]
+  ) +
+  coord_equal() +
+  theme_bw()
+
+```
+
+We can do this using all genes.
+
+```{r}
+
+# PCA (samples = rows → transpose)
+
+pca <- prcomp(t(logcounts), scale. = TRUE)
+
+library(dplyr, quietly = TRUE)
+
+summary(pca)
+pca_df <- as.data.frame(pca$x) %>%
+  mutate(sample = rownames(pca$x)) %>% bind_cols(coldata)
+
+```
+
+And now we can plot the samples using the first two principle componenents, already covering most of the variance in the dataset
+
+```{r}
+ggplot(pca_df, aes(PC1, PC2, color = environmental_stress)) + geom_point(size = 4) + labs(title = "PCA of Arabidopsis heat/salt stress RNA-seq", x = paste0("PC1 (", round(100 * summary(pca)$importance[2,1], 1), "%)"),
+       y = paste0("PC2 (", round(100 * summary(pca)$importance[2,2], 1), "%)")) + theme_bw()
+```
+
+By far the most variance is already explained by the first principle component, caused by which stress?
+
+The second principle component is a bit ambiguous, at least it does not separate the samples according to the other stress. For that we should look at the third principle component:
+
+```{r}
+ggplot(pca_df, aes(PC1, PC3, color = environmental_stress)) + geom_point(size = 4) + labs(title = "PCA of Arabidopsis heat/salt stress RNA-seq", x = paste0("PC1 (", round(100 * summary(pca)$importance[2,1], 1), "%)"),
+       y = paste0("PC3 (", round(100 * summary(pca)$importance[2,3], 1), "%)")) + theme_bw()
+
+```
+
+```{r}
+# PC1 loadings (genes)
+
+loadings <- pca$rotation[, "PC1"]
+top50 <- names(sort(abs(loadings), decreasing = TRUE))[1:50]
+mat_heat <- logcounts[top50,]
+
+# Scale by gene
+mat_heat_scaled <- t(scale(t(mat_heat)))
+
+annotation_col <- coldata %>% select(environmental_stress)
+
+library(pheatmap, quietly = TRUE)
+
+pheatmap( mat_heat_scaled, annotation_col = annotation_col, show_rownames = TRUE, show_colnames = FALSE, main = "Top 50 genes by absolute PC1 loading" )
+```
+
+We can do the same for PC3
+
+```{r}
+library(clusterProfiler, quietly = TRUE)
+library(org.At.tair.db, quietly = TRUE)
+
+# PC3 loadings
+
+pc3_loadings <- pca$rotation[, "PC3"]
+
+# Top 50 genes by absolute loading
+
+top50_pc3 <- names(sort(pc3_loadings, decreasing = FALSE))[1:500]
+
+gene_universe <- rownames(logcounts)
+
+ego_pc3 <- enrichGO( gene = top50_pc3, universe = gene_universe, OrgDb = org.At.tair.db, keyType = "TAIR", ont = "BP", pAdjustMethod = "BH", pvalueCutoff = 0.05, qvalueCutoff = 0.05, readable = TRUE)
+
+ego_df <- as.data.frame(ego_pc3)
+
+head(ego_df[, c("ID", "Description", "GeneRatio", "p.adjust")])
+
+
+```
+
+```{r}
+# Hierarchical
+pca_scores <- pca$x[, -c(2)]
+hc_pca <- hclust(dist(pca_scores), method = "ward.D2")
+plot(hc_pca, main = "Hierarchical clustering on PCA scores")
+
+# k-means on PCA
+
+set.seed(42)
+km_pca <- kmeans(pca_scores, centers = 4)
+
+pca_df$cluster <- factor(km_pca$cluster[match(pca_df$sample, rownames(pca_scores))])
+
+ggplot(pca_df, aes(PC1, PC2, color = environmental_stress, shape = cluster)) +
+  geom_point(size = 4) +
+  labs(
+    title = "PCA of Arabidopsis heat/salt stress RNA-seq",
+    x = paste0("PC1 (", round(100 * summary(pca)$importance[2,1], 1), "%)"),
+    y = paste0("PC2 (", round(100 * summary(pca)$importance[2,2], 1), "%)"),
+    shape = "k-means cluster",
+    color = "Stress"
+  ) +
+  theme_bw()
+
+```

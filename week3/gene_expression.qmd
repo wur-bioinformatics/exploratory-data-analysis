@@ -1,0 +1,323 @@
+---
+title: "Gene expression analysis: salt and heat stress in Arabidopsis"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+editor: visual
+execute:
+  eval: false
+  warning: false
+  message: false
+---
+
+## Introduction
+
+Gene expression analyses can shed light on all kinds of biological processes and environmental responses, through identifying genes that are activated or silenced. In this session we will analyze RNA-seq gene expression data from *Arabidopsis thaliana* plants exposed to salt and heat stress and a combination of salt and heat stress.
+
+The data originate from the study:\
+**ABA Is Required for Plant Acclimation to a Combination of Salt and Heat Stress**\
+<https://doi.org/10.1371/journal.pone.0147625>
+
+We could start with the raw sequencing data, but that is beyond the scope of this course. Fortunately, the gene-level counts are already available through the **EMBL-EBI Expression Atlas** at <https://www.ebi.ac.uk/gxa/experiments/E-GEOD-72806/>
+
+We will use this dataset for: -exploratory RNA-seq analysis -clustering and principle component analysis -differential gene expression (DGE)
+
+------------------------------------------------------------------------
+
+## Installing and loading required packages
+
+First we need to install and load some packages:
+
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE)) 
+  install.packages("BiocManager")
+
+BiocManager::install(c(
+  "ExpressionAtlas",
+  "SummarizedExperiment",
+  "edgeR",
+  "pheatmap",
+  "tidyverse",
+  "clusterProfiler",
+  "org.At.tair.db"
+))
+
+install.packages("HDF5Array")
+
+suppressMessages(library(ExpressionAtlas))
+suppressMessages(library(SummarizedExperiment))
+suppressMessages(library(tidyverse))
+suppressMessages(library(pheatmap))
+```
+
+we can download the data directly from the EMBL-EBI Expression Atlas using the getAltasExperiment method in the ExpressionAtlas library method:
+
+```{r}
+exp <- getAtlasExperiment("E-GEOD-72806")
+```
+
+This returns a list (SimpleList) of data structures, in this case only one, let's extract that:
+
+```{r}
+  se <- exp[[1]]
+```
+
+To further explore the resulting data structure, use the str() and show() methods to get more information about the content.
+
+To learn more about the data structure use the class() method to see what kind of data we are dealing with.
+
+```{r}
+class(se)
+```
+
+It is a a RangedSummarizedExperiment, which is a subclass of SummarizedExperiment. Try this to get more information about these classes:
+
+```{r}
+?RangedSummarizedExperiment
+?SummarizedExperiment
+```
+
+The Expression Atlas site can be unresponsive at times, so best to store the data structure locally. Because it is a complex data set, we cannot simply save it as a csv file. Instead, we can use the [Hierarchical Data Format (HDF)](https://en.wikipedia.org/wiki/Hierarchical_Data_Format). In the HDF5Array library there are specific methods to store and load SummarizedExperiment files:
+
+```{r}
+library(HDF5Array)
+saveHDF5SummarizedExperiment(se,dir="E-GEOD-72806")
+```
+
+Using the dir() command you can check that a directory was created called **E-GEOD-72806**.
+
+Now we can load the data as:
+
+```{r}
+se = loadHDF5SummarizedExperiment(dir="E-GEOD-72806")
+```
+
+The data in **se** are stored in different slots. To see which these are, you can use the **slotNames()** method on the **se** object. You can access these slots use the @***\*** **character. For instance, to see how the raw sequencing data were filtered you can look in the** metadata\*\* slot, which is a list, and then the **filtering** element.
+
+```{r}
+se@metadata$filtering 
+# or 
+se@metadata[["filtering"]]
+```
+
+Notice that for accessing an element of a list you do not use an \*\*@*\* character, but instead a dollar sign or double square brackets.
+
+However, accessing slots directly like this is not advisable, especially for making changes to the object. The recommended way to access data in a complex data structure like this is via accessor functions:
+
+```{r}
+metadata(se)$filtering 
+```
+
+To find the proper accessor function, the help text for the class is usually the best place to look.
+
+To get the actual expression data in the RangedSummarizedExperiment, we can use the assay() method:
+
+```{r}
+counts <- assay(se) # genes x samples
+```
+
+This returns a matrix with rows representing genes and columns representing samples. Let's look at the dimensions:
+
+```{r}
+dim(counts)
+```
+
+There are 12 samples with various treatments. The columns are the samples, so to get information for the samples we can use the colData method:
+
+```{r}
+coldata <- colData(se) # sample level information
+coldata
+```
+
+Now to get some idea of the expression values, we can can plot their distribution. First flatten the counts into one vector:
+
+```{r}
+expr <- as.vector(counts)
+```
+
+And plot this as a histogram with 100 bins:
+
+```{r}
+df_expr <- data.frame(expr = expr)
+
+library(ggplot2)
+
+ggplot(df_expr, aes(x = expr)) +
+  geom_histogram(bins = 100) +
+  labs(title = "Distribution of raw gene counts",
+  x = "Counts", y = "Frequency")
+```
+
+This is not very informative, is it? To bring the values in the same range, we can plot the log10 transformed counts:
+
+```{r}
+ggplot(df_expr, aes(x = expr)) +
+  geom_histogram(bins = 100) +
+  scale_x_log10() +
+  labs(title = "Distribution of raw gene counts (log10 x-axis)",
+    x = "Counts", y = "Frequency")
+```
+
+::: {#exr-log_warnings}
+You may see a warning that the scale_x_log10() introduced infinite values, can you explain why and for which expression values this happened?
+:::
+
+We can avoid the "infinite values" warning by using the the log1p method:
+
+```{r}
+ggplot(df_expr, aes(x = log1p(expr))) +
+  geom_histogram(bins = 100) +
+  labs(title = "Distribution of log1p-transformed gene counts",
+    x = "log1p(count)", y = "Frequency")
+```
+
+::: {#exr-log1p}
+What is the difference with the previous plot? In which two ways does log1p() differ from log10()?
+:::
+
+For further analyses, we are not interested in genes that have little to no expression, so let's filter these out:
+
+```{r}
+keep <- rowSums(counts >= 10) >= 3
+counts_filt <- as.matrix(counts[keep, ])
+```
+
+Let's unpack what happens here: the *counts \>= 10* results in a matrix with boolean or logical (TRUE or FALSE) values. *rowSums()* counts a TRUE as 1 and a FALSE as 0. The resulting keep is a vector of logical values, which is used to select specific rows in counts.
+
+::: {#exr-filter}
+How many genes are left? Describe which criteria genes have to meet to be kept
+:::
+
+If we look at the mean expression per gene, we can see that a small proportion of genes is very highly expressed.
+
+```{r}
+counts_filt
+
+gene_means <- rowMeans(counts_filt)
+gene_means_sorted <- sort(gene_means)
+
+plot(
+  gene_means_sorted,
+  type = "l",
+  xlab = "Genes (sorted by mean expression)",
+  ylab = "Mean expression",
+  main = "Sorted gene mean expression"
+)
+
+```
+
+I guess by now it is clear that for plotting gene expression values a log transformation is advised to not let the highly expressed genes dominate the analyses
+
+```{r}
+logcounts = log10(counts_filt + 1)
+
+```
+
+Now let's look at the top 10 most highly expressed genes, which are actually the bottom 10 of the sorted list that we made before.
+
+```{r}
+top_n <- 10
+top_genes <- names(tail(gene_means_sorted,top_n))
+
+mat_top <- logcounts[top_genes,]
+
+```
+
+To plot the expression of these genes in all samples we can use a fancy heatmap that also allows us to add annotation from the metadata of the samples.
+
+```{r}
+library(pheatmap)
+
+anno_col <- as.data.frame(colData(se))  # sample annotations
+
+pheatmap(
+  mat_top,
+  cluster_rows = FALSE,
+  cluster_cols = FALSE,
+  annotation_col = anno_col,
+  show_colnames = FALSE,
+  fontsize_row = 7,
+  scale = "row",
+  main = paste("Top", top_n, "most highly expressed genes")
+)
+```
+
+::: {#exr-}
+In this plot you can already discern a pattern, at least for the 2 or 3 most highly expressed genes. Still the plot can be improved in a number of ways: -most of the sample annotation are not very useful, change the anno_col data frame to only keep the most informative annotation. -the most highly expressed genes still take most of the attention, the *scale* argument can improve that by converting the values to z-scores per row or column. Set the scale argument to the appropriate direction to see the relative expression over the different sample for the less highly expressed genes. -with clustering you can group samples and/or genes based on how similar their expression values are, more about that later in the clustering session. Try out what happens if you cluster genes and samples in this plot.
+
+```{r}
+anno_col <- as.data.frame(colData(se))
+
+pheatmap(
+  mat_top,
+  cluster_rows = FALSE,
+  cluster_cols = FALSE,
+  annotation_col = anno_col,
+  show_colnames = FALSE,
+  fontsize_row = 7,
+  scale = "none",
+  main = paste("Top", top_n, "most highly expressed genes")
+)
+```
+:::
+
+So we have looked at the expression at the gene level, what about the sample level: do all samples have roughly the same number of counts? The total number of counts per sample is also called *library size*.
+
+```{r}
+
+libsize <- colSums(counts_filt)
+
+barplot(
+  libsize,
+  las = 2,
+  ylab = "Total counts",
+  main = "Library size per sample"
+)
+
+```
+
+Hmm, pretty similar but not identical. The total number of counts per sample is more a technical than a biological aspect of the data, it does not say anything about the total number of transcripts that were sequenced. If we compare the sample with the most counts and the sample with the least counts, there is a 20% difference:
+
+```{r}
+min(libsize)/max(libsize)
+```
+
+And if we look at the correlation between the counts for the top 10 most highly expressed genes with the library size, some are very highly correlated.
+
+```{r}
+apply(mat_top, 1, cor, y = libsize, method = "pearson")
+
+```
+
+We just discovered something uncomfortable: different samples have very different total numbers of reads. That means our analyses so far were biased. So how do we address this? A simple and reasonably effective method is to just correct the counts for the total number of reads per sample. Just dividing each count by the total counts per sample would create very small numbers, so it is commonly multiplied by a million to generate so called Counts Per Million
+
+$$
+CPM_{i} = \frac {counts_{i}}{\sum_{n=1}^{n}counts_n}\times10^6
+$$
+
+Summing all CPM normalized counts in a sample would then give a uniform total of $10^6$
+
+In practice, this is too simple, so more sophisticated normalization methods are commonly used in RNA-seq analysis. To understand what the problem is with the simple method, think of the following scenario: a treatment causes a very strong increase in expression of all top 10 most highly expressed genes, but does not affect all other genes. The top 10 genes now take an even larger proportion of the total counts, which effectively lowers the counts for all the other genes making it seem like their expression decreased due to the treatment. The problem is that the simple scaling based normalization is sensitive to a change in composition.
+
+A normalization method that addresses this is called TMM, or "Trimmed Mean of M-values". This specifically ignores genes that change a lot between different samples in calculating a scaling factor. It is good to realize that TMM only works well if the majority of genes do not change much in expression.
+
+We can perform TMM normalization step by step, but we can also use a library that was designed for RNA-seq analyses called **edgeR**.
+
+```{r}
+library(edgeR)
+
+dge <- DGEList(counts = counts_filt)
+dge <- calcNormFactors(dge)
+
+cpm <- cpm(dge, log = FALSE)
+
+barplot(
+  colSums(cpm),
+  las = 2,
+  main = "Effective library sizes after TMM",
+  ylab = "Normalized library size"
+)
+```
