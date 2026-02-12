@@ -128,7 +128,7 @@ As you become more experienced and proficient in performing data analysis in R, 
 
 A few typical situations where it thus makes sense to implement a function: you're copying and pasting the same code over and over again; a sequence of steps represent a logical subtask; applying the same steps to different variables or datasets. In addition, functions make your code easier to document and test (more details on testing will be discussed in @sec-debugging-and-testing).
 
-:::{.callout-tip appearance='simple'}
+:::{#tip-function .callout-tip appearance='simple'}
 ### Naming functions (is hard)
 _Should my code be a function?_ A straightforward way to determine whether a piece of code can be extracted into a function, is how easy it is to give a name to the collection of steps being performed. You'll be surprised how hard it can be to give intuitive names to functions! In fact, there are [entire books](https://www.namingthings.co/) written about just this.
 

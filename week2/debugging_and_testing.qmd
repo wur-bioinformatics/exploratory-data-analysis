@@ -7,6 +7,7 @@ options(error = recover)
 # this code is only for getting the data into the notebook during publishing
 data(corre_categorical, package = "planteda")
 data(corre_continuous, package = "planteda")
+data(grassland_traits_environment, package = "planteda")
 ```
 
 :::{.callout-caution}
@@ -19,6 +20,8 @@ It is perhaps even more important to write code that produces correct and interp
 
 Errors in code can become especially dangerous when they silently produce wrong results without throwing errors.
 In this chapter we will go over different types of errors and warnings and how you can solve and prevent them.
+
+We also cover a fundamental approach for comparing two variables: correlation. Calculating correlation is often an important part in the data analysis pipeline (@tip-data-science-cycle). Just like summary statistics, correlation can be relevant in both the inspecting and analyzing parts of the pipeline. Since correlation is about _comparing_ things, it is critical for the interpretation of a correlation analysis that it is clear what is being compared. We'll use some of the debugging and testing approaches from this chapter to make sure we calculate meaningful correlations and draw valid conclusions.
 
 :::{#wrn-analysis-gone-wrong .callout-warning appearance='simple'}
 ## Data analysis code gone wrong, famous examples
@@ -225,3 +228,19 @@ In @exr-variance you implemented the calculation of the variance. Here, you will
 :::
 
 ## Testing and validating {#sec-testing-and-validating}
+In @sec-functions we discussed how and when to use functions. It turns out that by following our rule of thumb for when to create a function^[Is there a logical name for a sequence of steps? Then it should be a function. See @tip-function] we create functions that are often straightforward to test. 
+
+As an example, we revisit @exr-mean-vs-median-all-traits: we want to compute the difference between the mean and the median many times, so it makes sense to implement this in a function.
+
+```{r}
+# Example function that we are going to test
+mean_median_difference <- function(input){
+  # We compute the absolute difference so it doesn't matter which number is bigger
+  abs(mean(input, na.rm = TRUE) - median(input, na.rm = TRUE))
+}
+
+mean_median_difference(grassland_traits_environment$ld)
+```
+
+
+
