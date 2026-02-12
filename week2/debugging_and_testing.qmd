@@ -42,7 +42,30 @@ We will work on two complementary skill sets:
 
 ## Debugging and error handling
 
-[Bugs](https://en.wikipedia.org/wiki/Software_bug) and errors go hand in hand: 
+[Bugs](https://en.wikipedia.org/wiki/Software_bug) and errors go hand in hand: a __bug__ is an error or flaw in a program that causes it to behave differently from what the programmer intended. Bugs can cause code to crash with an error, produce warnings, or even run without complaint while giving incorrect results.
+
+Bugs arise for many reasons: misunderstandings about how a function works, incorrect assumptions about the data, edge cases that were not considered, or simple typing mistakes. Importantly, a program can be syntactically correct (it runs) and still contain bugs if the logic is wrong.
+
+__Debugging__ is the process of identifying, understanding, and fixing these bugs. Rather than trial-and-error, effective debugging relies on systematically inspecting code, checking assumptions, and narrowing down where the program’s behavior diverges from expectations.
+
+:::{.callout-note appearance='simple'}
+### About the term "bug"
+The word "bug" to describe a programming error is often linked to [Grace Hopper](https://en.wikipedia.org/wiki/Grace_Hopper). In 1947, while working on the Harvard Mark II computer, her team found that a malfunction was caused by a real moth trapped in a relay (back then computers where large devices that filled entire rooms). The insect was taped into the logbook with the note "First actual case of bug being found".
+
+Although the term bug was already used informally in engineering, this incident popularized it in computing. It nicely illustrates an important idea: bugs can arise from unexpected causes, and finding them requires careful investigation rather than guesswork.
+:::
+
+:::{.callout-tip appearance='simple'}
+### How to debug
+The main approach to debugging (potentially complex) code is to be systematic. The following steps help in identifying the underlying problem:
+
+1. __Reproduce the issue__: make sure you consistently see the bug. Does it only occur on a specific dataset? Or under other specific conditions? These can provide hints.
+2. __Isolate the problem__: (especially when working with larger functions or big datasets) Narrow down where the error _actually_ comes from. Adding print statements or commenting out specific sections can help. Switching to a small test dataset can be useful too.
+3. __Understand/hypothesize__: once you figured out where the error occurs, check what you expected to happen and verify this is (or is not) happening.
+4. __Fix and verify__: Implement the fix, then _test_ the code by reproducing the original conditions under which the error occurred.
+:::
+
+To better understand what can cause your code to misbehave, it is useful to understand a little bit about different types of errors in R. The following section covers syntax errors, runtime errors, warnings, and logical errors.
 
 ### Syntax errors
 These errors often pop up when you are in the process of writing some new code. 
@@ -147,10 +170,10 @@ It is important to realize that warnings, just like runtime errors (@sec-runtime
 
 ### Logical errors
 
-In sections @seq-runtime-errors and @sec-warnings we have covered what happens when e.g. a package maintainer implements a check in their code. But what about errors in your code that do not cause an error or raise a warning?
+In sections @sec-runtime-errors and @sec-warnings we have covered what happens when e.g. a package maintainer implements a check in their code. But what about errors in your code that do not cause an error or raise a warning?
 These errors are potentially the most dangerous, because they do not show any direct visual clues that something is wrong. Any behavior of your code that does not result in the desired/expected result can be seen as a __logical error__. This can range from explicit mistakes in an implementation (e.g. messing up a mathematical calculation), to not realizing some hidden behavior of a certain function, to simple typo's in variable names. The example at the start of the chapter (@wrn-analysis-gone-wrong) is an example of logical errors: the code ran to completion and produced results, but due to some mistakes in the implementation the results were incorrect.
 
-The crucial problem here is that there is nothing in the code that checks assumptions or e.g. enforces certain properties of datasets/results. In @sec-testing-and-validating we explore in more detail how you can implement some of these checks yourself.
+The crucial problem here is that there is nothing in the code that checks assumptions or e.g. enforces certain properties of datasets/results. In @exr-implement-warnings and @sec-testing-and-validating we explore in more detail how you can implement some of these checks yourself.
 
 :::{#exr-errors}
 ### Identify the error
@@ -191,7 +214,14 @@ mean_trait_by_family(corre_continuous, 'SLA')
 # Exercise 10: log-transform seed dry mass
 log(corre_continuous$seed_dry_mass)
 ```
+:::
 
+:::{#exr-implement-warnings}
+### Upgrading the implementation of the variance calculation
+In @exr-variance you implemented the calculation of the variance. Here, you will make that function a bit safer to use. Add the following checks, decide yourself whether it should be a warning or an error:
+
+- The variance of zero or one numbers is undefined
+- The variance of a collection of all the same numbers (e.g. `c(4,4,4)`) is zero
 :::
 
 ## Testing and validating {#sec-testing-and-validating}

@@ -363,7 +363,7 @@ ggplot(data.frame(specific_leaf_area), aes(x = specific_leaf_area)) +
   theme_bw()
 ```
 
-:::{#exr-variance}
+:::{#exr-boxplot}
 ### Creating and interpreting a boxplot
 Create a boxplot for leaf dry matter content using the `corre_continuous` dataset and compare to @fig-summary-stats. Which summary statistics do you recognize? (You can use either base R `boxplot` or `ggplot` with the `geom_boxplot` geom.)
 :::
