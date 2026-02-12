@@ -396,7 +396,9 @@ dim(attempt1)
 attempt1[1:10]
 ```
 
-`attempt1` is a character vector, not something that you usually have to work with as genetic marker data, but here it is the first step at getting the data into `R`. A number of string operations will be necessary to extract the genotypic data and convert it into a numeric matrix. This is left as a final exercise to practice on (this is at a slightly advanced level, and goes beyond the expected skill level for the exam, so don't worry if you cannot complete it).
+`attempt1` is a character vector, not something that you usually have to work with as genetic marker data, but here it is the first step at getting the data into `R`. A number of string operations will be necessary to extract the genotypic data and convert it into a numeric matrix. 
+
+This is left as a final exercise to practice on (this is at a slightly advanced level, and goes beyond the expected skill level for the exam, so don't worry if you cannot complete it). A sample script to complete this exercise will be made available via Brightspace after a reasonable attempt has been made by most students.
 
 
 ::: {#exr-readLines}
@@ -421,3 +423,41 @@ The steps described below provide a suggested approach to solve this problem. Yo
 
 :::
 
+## Assignment for week 4 code peer-review
+
+Finally, the following exercise needs to be submitted by the end of the day today, in .qmd format. Please check that the file actually Renders correctly before submitting!
+
+Note that you are not provided with a markdown / quarto template for the assignment. This means you will also need to pay attention to the layout and structure of the document yourself.
+
+To get started, create a new .qmd file in `R` for your work. Choose suitable section headings (e.g. using question numbers given below) for each sub-question.
+
+::: {#exr-assignment_wk4}
+## Week 4 (peer-review) assignment
+
+1.  Download the data file ("week4_assignment.dat") available from Brightspace week 4. Read it into `R` using a suitable function.
+
+2.  Describe the dataset along the following lines:
+
+    -   What is the structure of the dataset (data types in each column)
+
+    -   What is the dimension of the dataset
+
+    -   How many genotypes
+
+    -   How many replicates
+
+    -   Presence of missing values in each column.
+
+3.  Use appropriate string operational function(s) to extract numeric values from the height and biomass columns.
+
+4.  Make a scatter plot of the height (x axis) versus biomass (y axis), colouring the points by genotype. If you like, choose a colour-blind friendly colour palette.
+
+5.  Fit an appropriate linear model with biomass as the response variable and height as the explanatory variable, allowing for separate fitted lines per genotype.
+
+6.  Check the residual plots after model fitting. Do you find evidence of outliers in the data? If yes, remove these data points from the dataset and re-run the model. How do the residual plots look now?
+
+7.  Calculate the correlation coefficient between plant height and biomass. Compare this to the $R^2_{adj}$ from the fitted model. Can you account for the discrepancy between these numbers?
+
+:::
+
+You can submit the completed **.qmd** file via Brightspace for feedback on Thursday. Please do so before Wednesday night 23:59.
