@@ -1,13 +1,6 @@
 ---
-title: "GGplot Cheatsheet"
 author: "Mark Sterken"
 date: "2026-02-10"
-format:
-  html:
-    toc: true
-    toc-depth: 3
-    code-fold: true
-    code-tools: true
 editor: source
 execute:
   eval: false
