@@ -345,7 +345,7 @@ book_string <- "Down and out in Paris and London. Ed. Penguin Books Ltd."
 ```
 :::
 
-As usual, please attempt these exercises yourself first!. If you are unable to complete them after a reasonable attempt, a sample script will be made available on Brightspace week 4. If it is not yet visible, please raise your hand.
+As usual, please attempt these exercises yourself first! If you are unable to complete them after a reasonable attempt, a sample script will be made available on Brightspace week 4. If it is not yet visible, please raise your hand.
 
 ## Unexpected data formats and `readLines()` {#sec-wk4d3_readLines}
 

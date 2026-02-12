@@ -30,7 +30,8 @@ The experimenter measured the following traits after 60 days' growth:
 
 The last of these traits was measured on a scale of 0-5, with 0 for healthy leaves and 5 for dead leaves. Per plant, the average necrosis of the top 5 leaves was calculated and recorded.
 
-The dataset that resulted is available to download from [Brightspace](https://brightspace.wur.nl/d2l/home/336819){target="_blank"} under Content -\> Week 4. The filename is "tomato_salinity.csv".
+The dataset that resulted is available to download from [Brightspace](https://brightspace.wur.nl/d2l/home/336819) under 
+Content / Week 4 / Datasets and R scripts for exercises / Errors and outliers / tomato_salinity.csv.
 
 Download this file and save it to your working directory. Let's read in the file and check its dimension and structure using `dim()` and `str`.
 
@@ -54,7 +55,7 @@ str(data)
 
 There is no strict definition of an outlier, although there are some rules of thumb that are commonly used. For example, Tukey proposed that an outlier is a value that falls beyond 1.5 times the inter-quartile range. If the data is normally-distributed, then values that are more than 3 standard deviations from the mean are very unlikely to occur by chance and are often considered as outliers (the "$3\sigma$ rule").
 
--   **Question: With *scaled* data, what would the** $3\sigma$ rule imply?
+-   **Question: With *scaled* data, what would the $3\sigma$ rule imply?**
 
 ### Boxplots {#sec-w4d1_boxplot}
 
@@ -75,7 +76,7 @@ If you are unsure, have a look at the `boxplot()` documentation for the details:
 ?boxplot
 ```
 
-If you need some reminders on what terms like "median" and "quantile" mean, you can also check back to the [notes from week 2](https://wur-bioinformatics.github.io/exploratory-data-analysis/week2/summary_statistics_and_functions.html).
+If you need some reminders on what terms like "median" and "quantile" mean, you can also check back to @sec-summary-statistics.
 
 We also mentioned the "$3\sigma$ rule", do any of the values fall outside this range? How could you check this? Try this yourself before looking at the **\> Code**!
 
@@ -85,15 +86,18 @@ We also mentioned the "$3\sigma$ rule", do any of the values fall outside this r
 range(scale(v))
 ```
 
--   **Q. Which outlier criterion is stricter: Tukey's or the** $3\sigma$ rule?
+-   **Q. Which outlier criterion is stricter: Tukey's or the $3\sigma$ rule?**
 
-We next look at at toy dataset of car fuel consumption, available via Brightspace (filename: "car_mpg.RData"). Load the data using `load()`:
+We next look at at toy dataset of car fuel consumption, available via Brightspace:
+Week 4 / Datasets and R scripts for exercises / Errors and outliers / car_mpg.RData 
+
+Load the data using `load()`:
 
 ```{r}
 print(load("car_mpg.RData")) 
 ```
 
--   **Q. Why wrap the `load()` call with `print()`?**
+-   **Q. Why did I wrap the `load()` call with `print()`?**
 
 Using the `boxplot()` function, produce boxplots of each of the 4 list elements of the `car_mpg` data. If you are unsure, use the code hidden below.
 
@@ -352,7 +356,7 @@ estimate_rho <- function(data){
 
 Note that in the exam you will be expected to be able to write a simple function, including the correct use of input arguments in round brackets, function body in curly brackets, `return` at the end etc.
 
-The last four items for the Error Detective are also relatively straightforward - for example you can identify `NA` values with the `is.na()` function. But you may want to give some thought to how to identify outliers. Should you use a boxplot, the $3\sigma$ rule, or via the residuals? Maybe try all these approaches and make an informed decision before submitting the form. When all students have submitted their Detective forms, we will collectively analyse the results, to see how well (or poorly) you were able to describe the attributes of the datasets.
+The last four items for the Error Detective are also relatively straightforward - for example you can identify `NA` values with the `is.na()` function. But you may want to give some thought to how to identify outliers. Should you use a boxplot, the $3\sigma$ rule, or via the residuals? Maybe try all these approaches and make an informed decision before submitting the form. When all students have submitted their Detective forms, we will collectively analyse the results, to see how well (or poorly) you were able to describe the attributes of the datasets. Afterwards, you can delve more into the group data to see whether you can identify factors that affected prediction accuracy. 
 
 ::: {#exr-finalED}
 ### Final exercise
