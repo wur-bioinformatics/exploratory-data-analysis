@@ -413,8 +413,9 @@ hc_genes <- hclust(d_genes, method = "complete")
 
 Now we could plot the tree, but with 1000 genes this will not be very helpful. We could show the clusters in a heatmap to see the corresponding expression patterns. The pheatmap function that we used before can already do the clustering for you, but now we will provide the clustering results that we obtained above.
 
-\`\`{r} library(pheatmap)
+```{r}
+library(pheatmap)
 
 pheatmap( mat_top, cluster_rows = hc_genes, cluster_cols = FALSE, show_rownames = FALSE, show_colnames = FALSE, annotation_col = coldata, scale = "row", main = paste("Top",n_top,"most variable genes") )
 
-\`\`\` This shows a few clear patterns of genes showing similar expression.
+``` This shows a few clear patterns of genes showing similar expression.
