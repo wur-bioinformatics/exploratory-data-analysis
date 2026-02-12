@@ -35,7 +35,9 @@ book:
         - week2/diving_into_the_tidyverse.qmd
     - part: week3/week3.qmd
       chapters: 
-        - week3/day1.qmd
+        - week3/gene_expression.qmd
+        - week3/clustering.qmd
+        - week3/principle_component_analysis.qmd
     - part: week4/week4.qmd
       chapters: 
         - week4/errors_outliers.qmd
