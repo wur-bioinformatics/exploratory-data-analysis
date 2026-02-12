@@ -413,7 +413,7 @@ The steps described below provide a suggested approach to solve this problem. Yo
   
 -   Use the marker name information to also work out the line numbers of where the genotypic data starts. *Hint* After each markername there is always 4 lines of marker information. 
   
--   Convert the dataset to numeric format in a matrix, with 0 in place of 'a' and 1 in place of 'b'. 
+-   Convert the dataset to numeric format in a matrix, with 0 in place of 'a' and 1 in place of 'b'. Have markers in rows and individuals in columns.
   
 -   Use the marker names as the rownames of the matrix.
   
