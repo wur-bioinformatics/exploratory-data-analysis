@@ -67,7 +67,7 @@ $$
 r_{X,Y} = \frac{Covariance(X,Y)}{\sigma_X \sigma_Y}
 $$ {#eq-pearson-short}
 
-:::{.callout-note appearance='simple'}
+:::{#nte-pearson-properties .callout-note appearance='simple'}
 ### Useful properties of the pearson correlation coefficient
 The pearson correlation coefficient $r$ has a few useful properties that help interpretation.
 
@@ -86,11 +86,13 @@ The pearson correlation coefficient $r$ has a few useful properties that help in
 Since the pearson correlation coefficient describes a linear relationship, it is relatively straightforward to draw this relationship as a straight line in a scatterplot. Using `ggplot`, create a scatterplot of your two variables of interest with `geom_point` and add the correlation line using `geom_smooth`. Make sure to use `method = 'lm'` for `geom_smooth`. What is the relationship between the pearson correlation coefficient and the line you've drawn?
 :::
 
-## Non-linear Spearman correlation
-Not all real data is best described by a straight line! 
+## Non-linear Spearman correlation {#seq-spearman}
+Not all real data is best described by a straight line (@fig-correlation)! We will not go into too much detail on how to express non-linear relationships here (there are many options, most are outside the scope of this course). However, a relatively straightforward modification of the spearman correlation coefficient makes it somewhat suitable to express non-linear relationships. The _spearman correlation coefficient_ is a non-linear correlation approach that simply calculates the pearson correlation coefficient on the _ranks_^[i.e. what is the first biggest number, and the second biggest, etc.] of the variables. In doing so, spearman correlation effectively ignores the magnitude of the differences in a variable: big jumps are just as important as small jumps. Spearman correlation keeps most of the properties of pearson correlation (@nte-pearson-properties ) except one: the relationship is no longer linear, but instead _monotonic_: the variables consistently increase or decrease together, without requiring a straight-line relationship.
 
 ```{r}
 #| echo: FALSE
+#| warning: FALSE
+#| error: FALSE
 #| label: fig-correlation
 #| fig-cap: "The relationship between Specific Leaf Area and Leaf Dry Matter Content in the CoRRE dataset. Green line represents a linear model fit and is directly related to the pearson correlation between these two variables. Blue line represents a non-linear model fit and is probably a better fit for this relationship. Note: the blue line is _not_ spearman correlation, but based on a different non-linear model fit that is outside the scope of this book."
 library(ggplot2)
@@ -100,7 +102,16 @@ ggplot(na.omit(corre_continuous), aes(x=SLA, y=LDMC)) +
   geom_smooth(method='gam', se=FALSE, color = "#0A89FF") + 
   geom_smooth(method='lm', se=FALSE, color = "#07B07B") + 
   guides() +
-  theme_bw()
+  theme_bw() +
+  labs(
+    title = "Relationship between Specific Leaf Area and Leaf Dry Matter Content",
+    x = "Specific Leaf Area [mm2/mg]",
+    y = "Leaf Dry Matter Content [g/g]" 
+  )
 ```
+:::{#exr-spearman}
+### Verifying the spearman correlation coefficient
+@sec-spearman describes how non-linear spearman correlation is a simple modificiation of pearson correlation. Verify this is true: you can get the ranks of a variable by using the `index.return = TRUE` option of the `sort()` function. Pick two variables of your choice, and compare spearman correlation (`cor()` function with `method = spearman`) to pearson correlation on the ranks.
+:::
 
 ## Testing and interpretation (and how to build an argument)
