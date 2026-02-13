@@ -232,7 +232,7 @@ As an example, we revisit @exr-mean-vs-median-all-traits: we want to compute the
 ```{r}
 # Example function that we are going to test
 mean_median_difference <- function(input){
-  # We compute the absolute difference so it doesn't matter which number is bigger
+  # We compute the absolute difference so it doesn\'t matter which number is bigger
   abs(mean(input, na.rm = TRUE) - median(input, na.rm = TRUE))
 }
 
