@@ -1,0 +1,105 @@
+# Correlation
+
+:::{.callout-caution}
+### WORK IN PROGRESS
+This chapter is not yet finished, come back later for the final product
+:::
+
+```{r setup}
+#| echo: FALSE
+# this code is only for getting the data into the notebook during publishing
+data(corre_continuous, package = "planteda")
+```
+
+In this chapter we cover a fundamental approach for comparing two variables: correlation. Calculating correlation is often an important part in the data analysis pipeline (@tip-data-science-cycle). Just like summary statistics, correlation can be relevant in both the inspecting and analyzing parts of the pipeline. Since correlation is about _comparing_ things, it is critical for the interpretation of a correlation analysis that it is clear what is being compared. 
+
+We first introduce the concept of _co_-variance, from that we derive linear and non-linear correlation measures. We then briefly discuss statistical testing of correlation measures, and we finish with testing and interpreting a correlation analysis (and how to use correlation in building an argument).
+
+## Covariance {#sec-covariance}
+In @sec-variance we introduced the concept of _variance_. By calculating the variance you can answer the following question: how much do individual observations differ from the mean? In this chapter we are interested in comparing two variables, and so we generalize the notion of variance to _co_-variance. By calculating the covariance you can answer the following question: if one variable variable varies by some amount, how much does my second variable _co_-vary? In other words: if one variable is high, is my other variable high as well? In a concrete example: do plants that have a large specific leaf area also have a high leaf nitrogen content?
+
+The mathematical derivation for the covariance is relatively straightforward and directly builds on the definition of variance (@eq-variance2). 
+
+$$
+Variance(X) = \frac{1}{N}\sum_{i=1}^{n}{(\mu-x_i)^2}
+$$ {#eq-variance2}
+
+We start by writing the squared difference from the mean as explicit multiplication (@eq-variance-expanded).
+
+$$
+Variance(X) = \frac{1}{N}\sum_{i=1}^{n}{(\mu-x_i)(\mu-x_i)} 
+$$ {#eq-variance-expanded}
+
+Next we swap out one of the difference terms with the difference from the mean of another variable. Note that we use the respective means for the two variables: $\mu_x$ and $\mu_y$ (@eq-covariance)! 
+
+$$
+Covariance(X, Y) = \frac{1}{N}\sum_{i=1}^{n}{(\mu_x-x_i)(\mu_y-y_i)}
+$$ {#eq-covariance}
+
+The R language has a built-in function for computing the covariance:
+```{r}
+# Do plant species with a high specific leaf area have a high leaf nitrogen content?
+cov(corre_continuous$SLA, corre_continuous$leaf_N, use='complete.obs')
+```
+
+:::{#exr-compare-variance-covariance}
+### Comparing variance and covariance
+The formulas in @sec-covariance derive how covariance is a generalization of variance. In this assignment you will verify this empirically using R's built-in `var` and `cov` functions.
+For a variable of your choice, compute the it's variance, and the covariance of that variable _with itself_. Compare the outputs. How do you explain this? Hint: compare @eq-covariance with @eq-variance-expanded.
+:::
+
+:::{#exr-covariance-units}
+### Interpreting the units of covariance
+As discussed in @sec-stddev, the units of variance are the square of the units of measurement. Verify how you can derive this from the mathematical formulation of the variance (@eq-variance2). Next, describe what the units of covariance are. How interpretable do you think the units of covariance are? Hint: identify what the units of the two separate elements of the product term inside the sum are, and compare those to the units of measurement.
+:::
+
+## Linear Pearson correlation
+In @sec-stddev we discussed how the standard deviation solves a problem of the variance: it expresses the units in which we express variation in the same units as the mean and the original observations. _Correlation_ solves a similar problem that occurs with the covariance, but in a slightly different way. In @exr-covariance-units you worked on the units of covariance, and from that is should become obvious that it is not straightforward to transform the units of covariance into the original units of measurement. In addition, the covariance can take on values in the range `-inf` to `+inf`. The __pearson correlation coefficient__ solves some of these issues: it _normalizes_ the covariance to be restricted to the range `-1` to `+1`, and as a side-effect is a _dimensionless_ quantity.
+
+To normalize the covariance, the pearson correlation coefficient divides the covariance by the product of the squared variances (@eq-pearson-full).
+
+$$
+PearsonCorrelationCoefficient(X,Y) = r{X,Y} = \frac{Covariance(X,Y)}{\sqrt{Variance(X)}\sqrt{Variance(Y)}}
+$$ {#eq-pearson-full}
+
+This is also often expressed in terms of standard deviations $\sigma$:
+$$
+r_{X,Y} = \frac{Covariance(X,Y)}{\sigma_X \sigma_Y}
+$$ {#eq-pearson-short}
+
+:::{.callout-note appearance='simple'}
+### Useful properties of the pearson correlation coefficient
+The pearson correlation coefficient $r$ has a few useful properties that help interpretation.
+
+- __Range__ `-1` to `+1`: correlation coefficients of 1 (either positive or negative) indicate a _perfect_ relationship (in other words, all values are exactly equal). A correlation coefficient of 0 indicates _no_ relationship.
+- The __sign__ indicates the direction of the relationship: positive coefficients indicate a high value in one variable corresponds to a high value in the other variable, negative coefficients indicate a high value in one variable corresponds to a low value in the other variable.
+- It measures __linear__ relationships. In other words: it draws a _straight line_ through the datapoints. There is a strong connection with Ordinary Least Squares regression, in this course we do not go into detail about this relationship.
+- It is __dimensionless__: since it has no units, and the range is always the same, the interpretation of the correlation coefficient is always the same. In other words: the interpretation of the correlation coefficient doe s not depend on the units of the measured variable
+:::
+
+:::{#exr-verify-pearson}
+### Verify the calculation of the pearson correlation coefficient.
+@eq-pearson-short describes the pearson correlation coefficient in terms of covariance and standard deviations. Pick two variables of your choice in the `corre_continuous` dataset and verify the output of `cor()` with calculating the coefficient yourself using `cov()` and `sd()`.
+:::
+
+:::{#exr-plotting-pearson}
+Since the pearson correlation coefficient describes a linear relationship, it is relatively straightforward to draw this relationship as a straight line in a scatterplot. Using `ggplot`, create a scatterplot of your two variables of interest with `geom_point` and add the correlation line using `geom_smooth`. Make sure to use `method = 'lm'` for `geom_smooth`. What is the relationship between the pearson correlation coefficient and the line you've drawn?
+:::
+
+## Non-linear Spearman correlation
+Not all real data is best described by a straight line! 
+
+```{r}
+#| echo: FALSE
+
+library(ggplot2)
+
+ggplot(na.omit(corre_continuous), aes(x=SLA, y=LDMC)) + 
+  geom_point(alpha=.5) + 
+  geom_smooth(method='gam', se=FALSE, color = "#0A89FF") + 
+  geom_smooth(method='lm', se=FALSE, color = "#07B07B") + 
+  guides() +
+  theme_bw()
+```
+
+## Testing and interpretation (and how to build an argument)
