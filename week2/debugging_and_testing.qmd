@@ -1,11 +1,10 @@
-# Debugging, testing, and correlation {#sec-debugging-and-testing}
+# Debugging and testing {#sec-debugging-and-testing}
 
-```{r}
+```{r setup}
 #| echo: FALSE
 # We want errors to show up in this notebook
 options(error = recover)
 # this code is only for getting the data into the notebook during publishing
-data(corre_categorical, package = "planteda")
 data(corre_continuous, package = "planteda")
 data(grassland_traits_environment, package = "planteda")
 ```
@@ -20,8 +19,6 @@ It is perhaps even more important to write code that produces correct and interp
 
 Errors in code can become especially dangerous when they silently produce wrong results without throwing errors.
 In this chapter we will go over different types of errors and warnings and how you can solve and prevent them.
-
-We also cover a fundamental approach for comparing two variables: correlation. Calculating correlation is often an important part in the data analysis pipeline (@tip-data-science-cycle). Just like summary statistics, correlation can be relevant in both the inspecting and analyzing parts of the pipeline. Since correlation is about _comparing_ things, it is critical for the interpretation of a correlation analysis that it is clear what is being compared. We'll use some of the debugging and testing approaches from this chapter to make sure we calculate meaningful correlations and draw valid conclusions.
 
 :::{#wrn-analysis-gone-wrong .callout-warning appearance='simple'}
 ## Data analysis code gone wrong, famous examples

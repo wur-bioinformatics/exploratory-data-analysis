@@ -30,8 +30,9 @@ book:
         - week1/day3.qmd
     - part: week2/week2.qmd
       chapters: 
-        - week2/summary_statistics_and_functions.qmd
+        - week2/functions_and_summary_statistics.qmd
         - week2/debugging_and_testing.qmd
+        - week2/correlation.qmd
         - week2/diving_into_the_tidyverse.qmd
     - part: week3/week3.qmd
       chapters: 
