@@ -38,7 +38,11 @@ jobs:
             libudunits2-dev \
             libfreetype6-dev \
             libpng-dev \
-            librsvg2-bin
+            librsvg2-bin \
+            gdal-bin \
+            libcurl4-openssl-dev \
+            libfontconfig1-dev \
+            libx11-dev
           sudo fc-cache -fv
 
       - name: Install R

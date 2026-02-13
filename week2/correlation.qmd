@@ -92,7 +92,7 @@ Not all real data is best described by a straight line!
 ```{r}
 #| echo: FALSE
 #| label: fig-correlation
-#| fig-cap: "The relationship between Specific Leaf Area and Leaf Dry Matter Content in the CoRRE dataset. Green line represents a linear model fit and is directly related to the pearson correlation between these two variables. The blue represents a non-linear model fit and is probably a better fit for this relationship (the fit is based on a G)."
+#| fig-cap: "The relationship between Specific Leaf Area and Leaf Dry Matter Content in the CoRRE dataset. Green line represents a linear model fit and is directly related to the pearson correlation between these two variables. Blue line represents a non-linear model fit and is probably a better fit for this relationship. Note: the blue line is _not_ spearman correlation, but based on a different non-linear model fit that is outside the scope of this book."
 library(ggplot2)
 
 ggplot(na.omit(corre_continuous), aes(x=SLA, y=LDMC)) + 
