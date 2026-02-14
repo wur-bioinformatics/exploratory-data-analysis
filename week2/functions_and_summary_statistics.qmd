@@ -388,6 +388,13 @@ Throughout this chapter, we introduced summary statistics by first focusing on t
 Use the `summary()` function on both the `corre_categorical` and `corre_continuous` datasets. Describe your findings, making note of the following things: (1) what are the data types of the different variables? (2) How many NAs are there in the dataset? (3) Are there any variables with extreme values?
 :::
 
+:::{.callout-note appearance='simple'}
+### A note on hypothesis testing
+In this chapter, we describe summary statistics mostly in the context of the _inspect_ step of the data science cycle (@tip-data-science-cycle). However, some of these summary statistics also appear in the _analyse_ step! In that context, some of these statistics are used in e.g. statistical hypothesis testing. A clear example is the __t-test__ (@eq-t-test), which uses the means and standard deviations to compute a p-value for a observed difference. The exact formulations of the statistical tests belong in a statistics course, and are outside of the scope of this book. However, here we show a formulation of the t-test as an example, and to highlight the appearance of the __mean__ and __standard deviation__. Note: here we use $\bar{x}$ and $s$ for the mean and standard deviation respectively. The symbols $\mu$ and $\sigma$ are typically used in formulas and theory but refer to ideal quantities rather than observations of a dataset (which would be part of a follow-up statistics course!).
+$$
+t = \frac{\bar{x}_1 - \bar{x}_2}{\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}}
+$$ {#eq-t-test}
+:::
 ## Other programming techniques {#sec-other-programming-concepts}
 
 In @sec-functions we have discussed the basics of functions in R. In your data analysis practice, this will be the most useful tool that you use to make your code readable, reusable, and maintainable. However, when working with R a bit more (and perhaps also using other programming languages), you likely encounter some other programming techniques as well. In this section we briefly highlight a few common programming techniques to raise awareness, but we do not go into full detail on how these techniques work.
@@ -442,7 +449,7 @@ f()
 In the example above `var1` and `var2` are available in the function scope (Verify how you know this is true!). Is `var2` available outside of the scope of the function (e.g. what happens if you try to print `var2` outside of the function?) 
 :::
 
-### Vectorization
+### Vectorization {#sec-vectorization}
 Many quantitative operations and functions in R are _vectorized_. This means that the semantics of the operation are applied to a collection of elements individually, without having to write additional loops or other code 
 
 ```{r}

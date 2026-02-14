@@ -9,6 +9,7 @@ This chapter is not yet finished, come back later for the final product
 #| echo: FALSE
 # this code is only for getting the data into the notebook during publishing
 data(corre_continuous, package = "planteda")
+data(grassland_traits_environment, package = "planteda")
 ```
 
 In this chapter we cover a fundamental approach for comparing two variables: correlation. Calculating correlation is often an important part in the data analysis pipeline (@tip-data-science-cycle). Just like summary statistics, correlation can be relevant in both the inspecting and analyzing parts of the pipeline. Since correlation is about _comparing_ things, it is critical for the interpretation of a correlation analysis that it is clear what is being compared. 
@@ -86,7 +87,7 @@ The pearson correlation coefficient $r$ has a few useful properties that help in
 Since the pearson correlation coefficient describes a linear relationship, it is relatively straightforward to draw this relationship as a straight line in a scatterplot. Using `ggplot`, create a scatterplot of your two variables of interest with `geom_point` and add the correlation line using `geom_smooth`. Make sure to use `method = 'lm'` for `geom_smooth`. What is the relationship between the pearson correlation coefficient and the line you've drawn?
 :::
 
-## Non-linear Spearman correlation {#seq-spearman}
+## Non-linear Spearman correlation {#sec-spearman}
 Not all real data is best described by a straight line (@fig-correlation)! We will not go into too much detail on how to express non-linear relationships here (there are many options, most are outside the scope of this course). However, a relatively straightforward modification of the spearman correlation coefficient makes it somewhat suitable to express non-linear relationships. The _spearman correlation coefficient_ is a non-linear correlation approach that simply calculates the pearson correlation coefficient on the _ranks_^[i.e. what is the first biggest number, and the second biggest, etc.] of the variables. In doing so, spearman correlation effectively ignores the magnitude of the differences in a variable: big jumps are just as important as small jumps. Spearman correlation keeps most of the properties of pearson correlation (@nte-pearson-properties ) except one: the relationship is no longer linear, but instead _monotonic_: the variables consistently increase or decrease together, without requiring a straight-line relationship.
 
 ```{r}
@@ -114,4 +115,148 @@ ggplot(na.omit(corre_continuous), aes(x=SLA, y=LDMC)) +
 @sec-spearman describes how non-linear spearman correlation is a simple modificiation of pearson correlation. Verify this is true: you can get the ranks of a variable by using the `index.return = TRUE` option of the `sort()` function. Pick two variables of your choice, and compare spearman correlation (`cor()` function with `method = spearman`) to pearson correlation on the ranks.
 :::
 
+:::{#exr-spearman-vs-pearson}
+### Interpreting the difference between Spearman and Pearson correlation
+For two variables of your choice, compute both the spearman and pearson correlation coefficient. Are they different? How different are they? What do you think this means?
+:::
+
+:::{#exr-multiple-correlations}
+### Computing many correlations on the same dataset
+For datasets with multiple quantitative variables, a straightforward question is to ask 'which variables are correlated with each other?'. The built-in `cor()` function makes use of vectorization (See @sec-vectorization) to make this a straightforward question to ask.
+
+- Select all numeric columns of the `grassland_traits_environment` dataset:
+  ```{r}
+  #| eval: FALSE
+  numeric_columns <- sapply(grassland_traits_environment, is.numeric)
+  grassland_numeric_df <- grassland_traits_environment[numeric_columns]
+  ```
+- Compute pairwise correlations of all variable pairs:
+  ```{r}
+  #| eval: FALSE
+  cor(grassland_numeric_df, use = 'complete.obs')
+  ```
+
+What does the output look like? How do you interpret all these numbers? What does `use = "complete.obs"` do (Hint: check the documentation with `?cor`)?
+:::
+
 ## Testing and interpretation (and how to build an argument)
+From @nte-pearson-properties it has become clear that a correlation coefficient of zero indicates _no relationship_. But when do we call a non-zero correlation coefficient sufficiently large to indicate a _significant_ relationship? This is a question that typically lends itself for a statistical approach! In @sec-correlation-testing we will not go into too much detail, but a brief description of how significance testing for correlation coefficients work is necessary to interpret results. Once we have established how to determine which correlation coefficients can be seen as _statistically significant_, we ask the question "how to interpret a significant correlation?" in @sec-correlation-interpretation. 
+
+### Testing {#sec-correlation-testing}
+The main points for statistical testing of correlation coefficients are bundled in @nte-correlation-testing. 
+
+:::{#nte-correlation-testing .callout-note appearance='simple'}
+### Correlation coefficient significance testing
+To test whether a correlation coefficient is (statistically) significantly different from zero, we take into account three things:
+
+- __Sample size__ (n): with larger samples we are more confident our observation is 'real'
+- __Magnitude__ of the correlation coefficient: a larger coefficient is more likely to be significant
+- Chosen __significance level__ ($\alpha$): the typical statistical approach, we test a null hypothesis $H_0: r = 0$, if the p-value is smaller than $\alpha$ we conclude significance.
+
+For __Pearson correlation__ the test looks as follows: we compute a t-statistic based on sample size $n$ and correlation coefficient $r$, and we compare the t-statistic to a t-distribution to get a p-value. Approaches for other correlation coefficients are similar in nature, but differ in details.
+$$
+t = r\sqrt{\frac{n-2}{1-r^2}}
+$$ {#eq-pearson-test}
+
+From @eq-pearson-test it can be observed that a large sample size $n$ will _always_ lead to a large test statistic $t$, which in turn will _always_ lead to a low p-value. @tbl-pearson-significance provides a few examples of which correlation coefficient will be significant at various sample sizes.
+
+| Sample size | Smallest \|r\| that is significant |
+|------------:|---------------------------------:|
+| n = 10 | ≈ 0.63 |
+| n = 30 | ≈ 0.36 |
+| n = 100 | ≈ 0.20 |
+| n = 1000 | ≈ 0.06 |
+: Pearson $r$ significance levels at different sample sizes using $\alpha=0.05$ {#tbl-pearson-significance .hover .responsive-sm}
+
+The __take home message__ here: A correlation is significant when the data provide enough evidence that the true association is not zero. This depends more on sample size than on the strength of the relationship!
+:::
+
+:::{#exr-exploring-anscombe}
+### Exploring Anscombe's dataset
+In this assignment you'll explore the limitations of summary statistics and correlation. Understanding these limitations is very important when analysing real datasets. To make the limitations very explicit, you will use a artificial dataset designed in 1973 by statistician Francis Anscombe. There are four pairs of observations in this dataset, so it's often referred to as 'Anscombe's quartet'. You can load the dataset into your R session with `data(anscombe)`, the corresponding dataframe will be called `anscombe`.
+
+- Calculate the main summary statistics discussed in @sec-summary-statistics using the `summary()` function. What do these look like?
+- Calculate correlation coefficients for all pairs of `X` and `Y`, check both Pearson and Spearman. What do these look like? 
+
+After calculating the summary statistics, let's take a look at a plot of these four pairs of observations. Copy-paste the code below^[We will cover 'long' and 'wide' dataframes and how to convert between these in the next chapter] and run it in your R session. What do you observe? How does this affect the interpretation of the summary statistics and correlation coefficients?
+
+```{r}
+#| eval: FALSE
+# Plotting anscombes quartet
+library(ggplot2)
+
+# Load the built-in dataset
+data(anscombe)
+
+# Reshape to long format
+anscombe_long <- data.frame(
+  x = c(anscombe$x1, anscombe$x2, anscombe$x3, anscombe$x4),
+  y = c(anscombe$y1, anscombe$y2, anscombe$y3, anscombe$y4),
+  set = factor(rep(1:4, each = nrow(anscombe)))
+)
+
+# Plot
+ggplot(anscombe_long, aes(x, y)) +
+  geom_point(size = 2) +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  facet_wrap(~ set, ncol = 2) +
+  labs(
+    title = "Anscombe's Quartet",
+    x = "x",
+    y = "y"
+  ) +
+  theme_minimal()
+```
+:::
+
+### Interpreting correlations (and building strong arguments) {#sec-correlation-interpretation}
+The main interpretation of finding a (significant) correlation between two variables, is that these two variables are _somehow_ related. This might seem obvious at first, but there are a few subtle nuances that are important to realize that might lead to _over interpretation_ when ignored. The most important nuance of correlation, is that it is not causation (See @wrn-causal-correlation).
+
+:::{#wrn-causal-correlation .callout-warning appearance='simple'}
+### Correlation is not causation
+Correlation describes __that__ two variables are related, it does _not_ tell you __why__ the variables are related. In many cases you will be interested in asking the 'why' question, in which case correlation might give you a hint. However, a correlation coefficient alone is never enough to make a causal statement.
+
+A good visual aid in remembering this, is that correlation is an _undirected_ relationship, whereas causation describes a _directed_ relationship:
+```{dot}
+digraph CorrelationVsCausation {
+  graph [
+    label="Correlation vs Causation"
+    labelloc=t
+    fontsize=18
+    fontname="Helvetica,Arial,sans-serif"
+    rankdir=LR
+  ]
+
+  node [
+    shape=box
+    style=rounded
+    fontname="Helvetica,Arial,sans-serif"
+    fontsize=12
+  ]
+
+  subgraph cluster_correlation {
+    label="Correlation"
+    style=dashed
+
+    Xc [label="Variable X"]
+    Yc [label="Variable Y"]
+
+    Xc -> Yc [dir=none label="association"]
+  }
+
+  subgraph cluster_causation {
+    label="Causation"
+    style=solid
+
+    Xd [label="Variable X"]
+    Yd [label="Variable Y"]
+
+    Xd -> Yd [label="X causes Y"]
+  }
+}
+```
+:::
+
+There are many examples of correlations that are not causal (also called _spurious_ correlations), for example those collected by [Tyler Vigen](https://www.tylervigen.com/spurious-correlations). Perhaps counter intuitively, there are also clear cases where a causal relationship does _not_ lead to a correlation (See @fig-photosynthesis for an example in the plant sciences).
+
+![Light intensity and photosynthesis efficiency are clearly causally related, but show no inherent correlation when measured: the relationship is neither linear nor monotonic. Figure from [-@Benedetti2018]](photosynthesis.png){#fig-photosynthesis width=60%}
