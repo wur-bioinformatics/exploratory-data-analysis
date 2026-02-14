@@ -1,9 +1,131 @@
----
-title: "Diving into the tidyverse"
----
+# Diving into the tidyverse
+
+```{r setup}
+#| echo: FALSE
+# this code is only for getting the data into the notebook during publishing
+data(grassland_traits_environment, package = "planteda")
+```
 
 :::{.callout-caution}
 ### WORK IN PROGRESS
 This chapter is not yet finished, come back later for the final product
+:::
+
+Throughout the book you have encountered packages from the __tidyverse__: one of the first things you did in @sec-importance-of-data-analysis was importing the `tidyverse` package. In this chapter we dive into more detail about what the tidyverse actually is, how it relates to important data analysis concepts, and how it differs from some base R concepts. 
+
+The main reasons we dedicate a chapter to this are:
+1. The tidyverse is used _a lot_: it will show up in many published data analysis approaches. 
+2. The approaches in the tidyverse are _quite different_ from what you see when using base R: especially the use of the pipe operator deserves some attention.
+
+## What is the tidyverse?
+In essence, the [tidyverse](https://tidyverse.org/) is not _just_ a package, it is a __collection of packages__.  The main application of the tidyverse is working with _tidy_ data: any data that can naturally be represented in tables where columns are variables and rows are observations. Coincidentally, many data science and statistics approaches work with such tabular data, making the tidyverse a natural fit. An example of a very common problem that is elegantly solved in the tidyverse is going back and forth between _long_ and _wide_ representations of tabular data (@nte-long-vs-wide).
+
+:::{#nte-long-vs-wide .callout-note appearance='simple'}
+### Long VS wide tables
+The tidyverse is designed to work with tables where rows are observations and columns are variables. However, some of the language features of the tidyverse are difficult to implement when the columns of a table represent the _actual_ variables ^[This happens when e.g. variables are compared, or used for subsetting: in both cases variables are treated as data, which is easier when they are actually _in_ the table]. A common solution in the tidyverse is to introduce two _abstract_ columns: a `name` and a `value` column, and to map the original variable names to the `name` column and the variable value to the `value` column. A table with the actual variables as columns is called a __wide__ table, a table with abstract columns `name` and `value` is called a __long__ table. A straightforward example can be a series of height measurement of various plants:
+
+|plant_id|day_0|day_1|day_3|day_7|
+|--------|-----|-----|-----|-----|
+|1|1|2|5.5|7|
+|2|1.2|1.3|4|8|
+: Wide format table of a time-series plant growth experiment {.hover .responsive-sm}
+
+
+|plant_id|name|value|
+|--------|----|-----|
+|1|"day0"|1|
+|1|"day1"|2|
+|1|"day3"|5.5|
+|1|"day7"|7|
+|2|"day0"|1.2|
+|2|"day1"|1.3|
+|2|"day3"|4|
+|2|"day7"|8|
+: Long format table of the same time-series plant growth experiment {.hover .responsive-sm}
+
+Wide tables are more readable for humans, long tables are more easy to perform computations on. Crucially, the _information_ contained in a long or wide table is identical. The tidyverse implements very clean logic to alternate between these two representations with `pivot_wider()` and `pivot_longer()`.
+:::
+
+The overarching design principle can be described as making data analysis code readable for humans. To achieve this, several packages implement very specific language features that bring the R language closer to the English language ^[A (part of a) programming language that is aimed at a very specific case is often referred to as a [Domain Specific Language](https://en.wikipedia.org/wiki/Domain-specific_language)]. In the following sections, we outline how `dplyr`, `tidyr`, and `ggplot2` implement their own specific language features.
+
+## Dplyr and tidyr
+Within the tidyverse, [dplyr](https://dplyr.tidyverse.org/) and [tidyr](https://tidyr.tidyverse.org/) implement most tidy language features for _transforming_ tabular data. Although they are distributed as separate packages, they are best understood as two parts of a single language for describing how a table should change.
+
+The difference between them is not the type of data they work on, but the aspect of the table they modify:
+
+- `dplyr` transforms the **contents** of a table (rows and columns)
+- `tidyr` transforms the **structure** of a table (long to wide and vice-versa)
+
+Both rely on a small set of _verbs_ (implemented as functions) that describe common data manipulation tasks, such as selecting rows (`filter()`) or columns (`select()`), creating or transforming variables (`mutate()`), computing summaries (`summarise()`), or reshaping data (`arrange()`,`group_by()`). More complex operations are expressed by _combining_ these verbs.
+
+These verbs are typically connected using the pipe operator `|>`^[Modern R versions include the pipe operator as part of the default language. In older versions of R you might see `%>%` being used, which does mostly the same thing but was introduced by the [`magritrr` package](https://magrittr.tidyverse.org/)], which passes the result of one step directly to the next (thus creating a _pipe_-line). This allows data manipulation code to be written as a sequence of transformations, read from top to bottom.
+
+While `dplyr` keeps the overall table structure intact, `tidyr` is used when the structure itself gets in the way of analysis. In particular, it provides tools to convert between wide and long tables by making information encoded in column names explicit.
+
+In practice, `dplyr` and `tidyr` are almost always used together. From the user’s perspective, they form a single, coherent language for data transformation, well suited for exploratory data analysis. 
+
+:::{#tip-dplyr-vs-base-r .callout-tip appearance='simple'}
+### Comparing dplyr with base R
+Any operation that can be performed with the tidyverse can in principle also be performed with base R. The tidyverse should mostly result in code that is more natural to read for humans, making it easier to follow which steps are being taken. The following two examples compute the exact same summaries, once in base R, and once use dplyr verbs.
+
+```{r}
+# Base R code to compute mean leaf tissue density for annuals and perennials seperately
+# 1. Remove rows with any NA
+dat <- grassland_traits_environment[complete.cases(grassland_traits_environment), ]
+
+# 2. Split data by life_history
+split_dat <- split(dat, dat$life_history)
+
+# 3. Compute mean ld per group
+result <- data.frame(
+  life_history = names(split_dat),
+  mean_ld = sapply(split_dat, function(x) mean(x$ld))
+)
+
+result
+```
+
+```{r}
+#| warnings: FALSE
+#| message: FALSE
+# dplyr code to compute mean leaf tissue density for annuals and perennials seperately
+library(tidyverse)
+
+grassland_traits_environment |>     # Dataset
+  drop_na() |>                      # Remove rows with NAs
+  group_by(life_history) |>         # Group by life history
+  summarise(mean_ld = mean(ld))     # Compute mean ld per group
+```
+:::
+
+:::{#exr-comparing-tidyverse-and-base-r}
+### Compare dplyr and base R results
+In @tip-dplyr-vs-base-r there are two examples of the same analysis, one in base R and one using dplyr. You'll notice the numbers are the same, but that one returns a regular dataframe and the other returns a 'tibble' (if you want you can verify this by copying and pasting the corresponding code). Tibbles are also part of the tidyverse, take a look at the [tibble homepage](https://tibble.tidyverse.org/) and describe the main differences with regular dataframes.
+:::
+
+## GGplot2
+Just like `dplyr` and `tidyr` introduce specific language elements for transforming data, `ggplot` introduces specific language elements for creating data visualizations. More specifically, it uses a hierarchical _Grammar of Graphics_^[Indeed, the GG in GGplot stands for Grammar of Graphics].
+
+A data visualization according to the grammar of graphics in ggplot2 is built up around the following elements:
+
+- Defaults: used for all other layers unless otherwise specified
+  - Dataset (typically a dataframe)
+  - Aesthetic mappings (e.g. what goes on the x and y axes, colors, fills, etc.)
+- Layers:
+    - Geometric objects (e.g. a point, line, box, ribbon, etc.)
+    - Statistical transformation
+    - Position adjustment
+- Scales: mapping of data to aesthetic attributes (e.g. choosing specific palettes)
+- Coordinates: mapping of data to the plane of the plot (mostly x,y but could also be e.g. [polar coordinates](https://en.wikipedia.org/wiki/Polar_coordinate_system))
+- Facets: split up the data
+- Themes: style choices for e.g. background colors, line widths, etc.
+
+The different elements of a ggplot2 visualization are implemented in corresponding functions: the `ggplot()` function takes care of the defaults, the other elements often have _prefixed_ functions indicating there role: `geom_*()`, `facet_*()`, `coord_*()`, or `theme_*()`.
+
+Unlike `dplyr` and `tidyr`, `ggplot2` elements are _not_ combined with the pipe operator. This follows the convention of making tidyverse language match natural language: different elements are __added__ to the plot, so `ggplot2` elements are combined with the `+` operator. Furthermore, where there are often one-to-one base R implementations of `dplyr` and `tidyr` pipelines, the same is not true for `ggplot2`: base R hase good default plotting functions, but `ggplot2` offers clear improvements in capability and flexibility.
+
+:::{#exr-recreate-warmerdam-plots}
+### Revisit tidyverse code from week 1
+In @exr-forplot you were presented with code that made extensive use of the tidyverse. Look at this code again, and see whether you can identify the different tidyverse concepts that have been introduced in this chapter. Next, we are going to modify the code from the earlier assignment, so that we can create a _single_ ggplot2 plot of a few of the accessions.
 :::
 

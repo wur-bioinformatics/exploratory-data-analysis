@@ -17,7 +17,7 @@ execute:
   message: false
 ---
 
-## The importance of data analysis
+## The importance of data analysis {#sec-importance-of-data-analysis}
 
 ### Introduction to day 1
 
