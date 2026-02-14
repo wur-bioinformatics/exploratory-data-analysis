@@ -1,13 +1,5 @@
 # Functions and summary statistics {#seq-functions-and-summary-statistics}
 
-::: callout-caution
-### WORK IN PROGRESS
-
-This chapter is not yet finished, come back later for the final product
-:::
-
-## Introduction
-
 In this chapter we expand on two concepts that we encountered in the previous week: functions, and summarizing a dataset with numbers. We start with a few concepts on what functions are and when to use them in @sec-functions, and we apply these concepts in @sec-summary-statistics to implement the calculation of some useful dataset summaries. We will explore several numerical summary techniques, such as computing the mean and standard deviation of a numeric variable, or counts/frequencies of a categorical variable. We finish the chapter with a brief section on various other programming concepts that you typically encounter when doing exploratory data analysis (@sec-other-programming-concepts).
 
 

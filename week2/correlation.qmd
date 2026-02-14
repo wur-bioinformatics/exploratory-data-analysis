@@ -1,10 +1,5 @@
 # Correlation
 
-:::{.callout-caution}
-### WORK IN PROGRESS
-This chapter is not yet finished, come back later for the final product
-:::
-
 ```{r setup}
 #| echo: FALSE
 # this code is only for getting the data into the notebook during publishing
@@ -216,8 +211,11 @@ The main interpretation of finding a (significant) correlation between two varia
 ### Correlation is not causation
 Correlation describes __that__ two variables are related, it does _not_ tell you __why__ the variables are related. In many cases you will be interested in asking the 'why' question, in which case correlation might give you a hint. However, a correlation coefficient alone is never enough to make a causal statement.
 
-A good visual aid in remembering this, is that correlation is an _undirected_ relationship, whereas causation describes a _directed_ relationship:
+A good visual aid in remembering this, is that correlation is an _undirected_ relationship, whereas causation describes a _directed_ relationship: note the arrow vs straight line in @fig-correlation-vs-causation below.
 ```{dot}
+//| fig-width: 5
+//| label: fig-correlation-vs-causation
+//| fig-cap: Correlation is undericted, causation implies a direction.
 digraph CorrelationVsCausation {
   graph [
     label="Correlation vs Causation"
@@ -260,3 +258,23 @@ digraph CorrelationVsCausation {
 There are many examples of correlations that are not causal (also called _spurious_ correlations), for example those collected by [Tyler Vigen](https://www.tylervigen.com/spurious-correlations). Perhaps counter intuitively, there are also clear cases where a causal relationship does _not_ lead to a correlation (See @fig-photosynthesis for an example in the plant sciences).
 
 ![Light intensity and photosynthesis efficiency are clearly causally related, but show no inherent correlation when measured: the relationship is neither linear nor monotonic. Figure from [-@Benedetti2018]](photosynthesis.png){#fig-photosynthesis width=60%}
+
+:::{#tip-building-correlation-arguments .callout-tip appearance="simple"}
+### Building a scientific argument based on correlation
+A strong scientific argument based on correlation builds on a few principles, which are outlined here. Building scientific arguments _in general_ is a fundamental aspect of good science, but outside of the scope of this course.
+
+When describing correlations, consider the following:
+
+- A high correlation supports an argument, but never proves a causal mechanism (See @wrn-causal-correlation).
+- Inspect the scatterplot: @exr-exploring-anscombe provides clear examples of what can go wrong.
+- Check you assumptions: linear versus non-linear? What do you know about the data that would suggest either of these to be a better fit?
+- Effect size is more important than significance: with enough observations, _every_ correlation is significant.
+- Robustness: what happens if you remove obvious outliers? 
+- Provide additional evidence: are there existing theories or mechanisms known?
+
+__Take home message__: A correlation coefficient is evidence, not a verdict. Strong scientific arguments combine visual inspection, use appropriate methods, consider effect size, and include biological reasoning.
+:::
+
+:::{#exr-interpret-many-correlations}
+Revisit @exr-multiple-correlations: Are there any groups of variables that are all correlated to eachother? How would you interpret such a group of variables? Which of the steps of @tip-building-correlation-arguments can you apply, and which are not feasible? How does this affect your conclusions?
+:::
