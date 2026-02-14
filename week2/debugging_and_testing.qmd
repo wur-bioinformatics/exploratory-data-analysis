@@ -9,11 +9,6 @@ data(corre_continuous, package = "planteda")
 data(grassland_traits_environment, package = "planteda")
 ```
 
-:::{.callout-caution}
-### WORK IN PROGRESS
-This chapter is not yet finished, come back later for the final product
-:::
-
 Programming and scripting for data analysis is _not only_ about writing code that runs.
 It is perhaps even more important to write code that produces correct and interpretable results.
 
@@ -37,8 +32,8 @@ The take home message: careful debugging and reproducible workflows matter in da
 
 We will work on two complementary skill sets:
 
-- Debugging and error handling:
-- Testing and validating: 
+- Debugging and error handling: what to do when your code (or someone else's code!) does not work as intended.
+- Testing and validating: how to formally verify your code works as intended
 
 ## Debugging and error handling
 
@@ -55,7 +50,7 @@ The word "bug" to describe a programming error is often linked to [Grace Hopper]
 Although the term bug was already used informally in engineering, this incident popularized it in computing. It nicely illustrates an important idea: bugs can arise from unexpected causes, and finding them requires careful investigation rather than guesswork.
 :::
 
-:::{.callout-tip appearance='simple'}
+:::{#tip-how-to-debug .callout-tip appearance='simple'}
 ### How to debug
 The main approach to debugging (potentially complex) code is to be systematic. The following steps help in identifying the underlying problem:
 
@@ -65,7 +60,7 @@ The main approach to debugging (potentially complex) code is to be systematic. T
 4. __Fix and verify__: Implement the fix, then _test_ the code by reproducing the original conditions under which the error occurred.
 :::
 
-To better understand what can cause your code to misbehave, it is useful to understand a little bit about different types of errors in R. The following section covers syntax errors, runtime errors, warnings, and logical errors.
+To better understand what can cause your code to misbehave, it is important to understand a little bit about different types of errors in R. The following section covers syntax errors, runtime errors, warnings, and logical errors.
 
 ### Syntax errors
 These errors often pop up when you are in the process of writing some new code. 
@@ -144,7 +139,7 @@ my_function(4)
 ```
 
 ### Warnings {#sec-warnings}
-In some cases, functions that you use might warn you when you are asking for unexpected behavior. One example we previously encountered are the warning messages of functions being overwritten when loading the `tidyverse` package. Warnings do not terminate your code, so just like logical errors you still get results. Unlike logical errors, you get some indication that there might be something not going as intended. Sometimes warnings can be safely ignored, sometimes they mean something is critically wrong.
+In some cases, functions that you use might _warn_ you when you are asking for unexpected behavior. One example we previously encountered are the warning messages of functions being overwritten when loading the `tidyverse` package. Warnings do not terminate your code, so just like logical errors you still get results. Unlike logical errors, you get _some_ indication that there might be something not going as intended. Sometimes warnings can be safely ignored, sometimes they mean something is critically wrong.
 
 ```{r}
 # Warning example 1: converting strings to number raises a warning, but you still get a result
@@ -177,7 +172,7 @@ The crucial problem here is that there is nothing in the code that checks assump
 
 :::{#exr-errors}
 ### Identify the error
-For each of the following 10 exercises, identify the type of error, and fix the code so that it works as expected.
+For each of the following 10 exercises, identify the type of error, and fix the code so that it works as expected. The aim of this exercise is to develop some intuition, so first try to do this without executing the code!
 
 ```{r}
 #| eval: FALSE
@@ -222,11 +217,14 @@ In @exr-variance you implemented the calculation of the variance. Here, you will
 
 - The variance of zero or one numbers is undefined
 - The variance of a collection of all the same numbers (e.g. `c(4,4,4)`) is zero
+
+Hint: you can throw an error with the `stop()` function and raise a warning with the `warning()` function.
 :::
 
 ## Testing and validating {#sec-testing-and-validating}
-In @sec-functions we discussed how and when to use functions. It turns out that by following our rule of thumb for when to create a function^[Is there a logical name for a sequence of steps? Then it should be a function. See @tip-function] we create functions that are often straightforward to test. 
+In @sec-functions we discussed how and when to use functions. It turns out that by following our rule of thumb for when to create a function^[Is there a logical name for a sequence of steps? Then it should be a function. See @tip-function] we create functions that are often straightforward to _test_. In @sec-testing, we discuss what we mean with _testing_ a function, and we highlight two ways of testing your code. In addition, we briefly discuss the difference between testing and validating in @sec-validating.
 
+### Testing code {#sec-testing}
 As an example, we revisit @exr-mean-vs-median-all-traits: we want to compute the difference between the mean and the median many times, so it makes sense to implement this in a function.
 
 ```{r}
@@ -239,5 +237,79 @@ mean_median_difference <- function(input){
 mean_median_difference(grassland_traits_environment$ld)
 ```
 
+Our example function does not throw errors or raise warnings, and it produces a result, so far everything looks alright! But apart from just reading and checking the code, we don't really _know_ whether our function behaves as intended. This is where it becomes useful to implement some checks of our code, _using code_. In this book we limit ourselves to [unit testing](https://en.wikipedia.org/wiki/Unit_testing): the process of testing small isolated components (i.e. functions). Approaches for testing integrations or entire systems exist as well, but these are outside of the scope of this course.
 
 
+The key component of testing functions is to identify a set of inputs for which the output is _known_. This often means coming up with small toy examples. In the case of our example function, the computations are relatively straightforward for small amounts of numbers, so we implement a simple testing procedure below:
+```{r}
+# We will test our function on a small test dataset for which we know the expected outcome of our function
+test_input <- c(1, 2, 2, 3, 7)
+
+# The mean of this collection of numbers is 3, and the median is 2, so the difference should be 1
+known_output <- 1
+
+# We run out function on the test input to acquire the test output
+test_output <- mean_median_difference(test_input)
+
+# We check if the acquired output matches the expected output
+if (test_output == known_output) {
+  print('Great success!')
+} else {
+  stop(paste('Expected', known_output, 'but got', test_output))
+}
+```
+:::{#exr-simple-testing}
+### Experiment with the simple testing example
+Create a few alternative testing datasets with known outputs, and use them with the simple testing code above. Also try out what happens when the known output does not match the test output.
+:::
+
+A careful observer might already have identified that our simple testing procedure that we describe above always does the same steps for every test you would design. This makes it a very good candidate for extracting the logic into a function, which is exactly what the [testthat](https://testthat.r-lib.org/index.html) package does! More precisely, the `testthat` package includes a lot of functionality for quickly and reproducibly writing unit tests, with functions that closely resemble the english language. This latter property makes for very readable testing code:
+
+```{r}
+# We implement the same test as before, but now with the testthat package, and including more test cases
+library(testthat)
+
+test_that("Correct difference between mean and median is calculated", {
+  expect_equal(mean_median_difference(c(1, 2, 2, 3, 7)), 1)
+  expect_equal(mean_median_difference(c(1, 2, 3)), 0)
+})
+
+```
+
+In addition to testing expected outputs, the `testthat` package makes it very easy to test other behavior of functions as well, for example whether it correctly produces an error when incorrect input data is provided:
+
+```{r}
+library(testthat)
+
+test_that("Error is thrown on incorrect input", {
+  expect_error(mean_median_difference('String'))
+})
+```
+Note that whereas we are incorrectly using the `mean_median_difference()` function and so it raises an error, this is actually part of the test, and so the _test itself_ is successful.
+
+In summary: __unit testing__ describes a set of tests that are automated in code. Tests are designed to throw an error upon unwanted behavior of the code, so if all tests pass this is a good sign of properly working code.
+
+:::{#exr-warning-debugging}
+Note that the _error_ test in the example above raises a _warning_? Can you find out where this warning is coming from and what is causing it? Hint: recall @tip-how-to-debug. Why does the test still pass if a warning is raised? What would be the best way to get rid of this warning: adding additional tests, or changing the function?
+:::
+
+:::{#exr-implement-tests}
+In @exr-implement-warnings you implemented some warnings and errors for your code that calculates the variance. Write tests with the `testthat` package to verify the calculation, errors, and warnings of your function.
+:::
+
+### Validating code {#sec-validating}
+In the previous section we looked at formally verifying the correctness of a piece of code. In other words, we answered the question "Does the code do what we programmed it to do?". This an important aspect of producing reliable analysis results, but is not the only thing that matters. In addition to formal correctness, you should also always think about whether it _makes sense_ what your code is doing. In this course, we call this __validating__: "Is the code solving the right problem?".
+
+For validation, we typically do not use automated procedures. Rather, we rely on external comparisons: this can be checking plausability of results with literature, but also submitting your code to expert- or peer review (This is in part why we do weekly code review sessions!). 
+
+Ultimately, you want your code to be both tested and validated (see @tbl-testing-validating), but it takes some time and effort before you get there! 
+
+| |Tested |Untested |
+|-|-------|---------|
+|__Validated__| Provably correct, relevant results | Correct idea, buggy execution|
+|__Unvalidated__| Bug-free implementation of a flawed idea | Don't go here 💀|
+: Different combinations of testing and validating your approach lead to different guarantees on your results {#tbl-testing-validating .bordered .responsive-sm .hover}
+
+:::{#exr-was-it-tested}
+Revisit #wrn-analysis-gone-wrong and decide whether testing, validating, or both went wrong. How should plant scientists make sure they do better than this example?
+:::

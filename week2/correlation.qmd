@@ -212,47 +212,9 @@ The main interpretation of finding a (significant) correlation between two varia
 Correlation describes __that__ two variables are related, it does _not_ tell you __why__ the variables are related. In many cases you will be interested in asking the 'why' question, in which case correlation might give you a hint. However, a correlation coefficient alone is never enough to make a causal statement.
 
 A good visual aid in remembering this, is that correlation is an _undirected_ relationship, whereas causation describes a _directed_ relationship: note the arrow vs straight line in @fig-correlation-vs-causation below.
-```{dot}
-//| fig-width: 5
-//| label: fig-correlation-vs-causation
-//| fig-cap: Correlation is undericted, causation implies a direction.
-digraph CorrelationVsCausation {
-  graph [
-    label="Correlation vs Causation"
-    labelloc=t
-    fontsize=18
-    fontname="Helvetica,Arial,sans-serif"
-    rankdir=LR
-  ]
 
-  node [
-    shape=box
-    style=rounded
-    fontname="Helvetica,Arial,sans-serif"
-    fontsize=12
-  ]
+![Correlation is undirected, causation implies a direction.](correlation_vs_causation.png){#fig-correlation-vs-causation width=.5}
 
-  subgraph cluster_correlation {
-    label="Correlation"
-    style=dashed
-
-    Xc [label="Variable X"]
-    Yc [label="Variable Y"]
-
-    Xc -> Yc [dir=none label="association"]
-  }
-
-  subgraph cluster_causation {
-    label="Causation"
-    style=solid
-
-    Xd [label="Variable X"]
-    Yd [label="Variable Y"]
-
-    Xd -> Yd [label="X causes Y"]
-  }
-}
-```
 :::
 
 There are many examples of correlations that are not causal (also called _spurious_ correlations), for example those collected by [Tyler Vigen](https://www.tylervigen.com/spurious-correlations). Perhaps counter intuitively, there are also clear cases where a causal relationship does _not_ lead to a correlation (See @fig-photosynthesis for an example in the plant sciences).
@@ -272,7 +234,7 @@ When describing correlations, consider the following:
 - Robustness: what happens if you remove obvious outliers? 
 - Provide additional evidence: are there existing theories or mechanisms known?
 
-__Take home message__: A correlation coefficient is evidence, not a verdict. Strong scientific arguments combine visual inspection, use appropriate methods, consider effect size, and include biological reasoning.
+__Take home message__: A correlation coefficient is evidence, not a verdict. Strong scientific arguments combine visual inspection, use appropriate methods, consider effect size, and include (biological) reasoning about the context.
 :::
 
 :::{#exr-interpret-many-correlations}
