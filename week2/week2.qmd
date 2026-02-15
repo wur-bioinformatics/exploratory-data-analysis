@@ -2,8 +2,66 @@
 title: 'II: Getting familiar with programming'
 ---
 
-:::{.callout-caution}
-### WORK IN PROGRESS
-This chapter is not yet finished, come back later for the final product
+## The goals for week 2
+
+This week is about promoting the basic R you met in week 1 into practical programming skills for data analysis. Where week 1 introduced R and the data-science cycle, week 2 focuses on how you express data checks, summaries, and small analyses as reusable, testable code. The goals are:
+
+- Compute and interpret common summary statistics programmatically.
+- Write small functions to encapsulate repeated operations and calculations.
+- Find and fix bugs using minimal, systematic debugging techniques and simple unit tests.
+- Quantify relationships between variables (correlation) and interpret what those relationships do and do not tell you.
+- Apply the core tidyverse verbs to reshape, summarise, and visualise data in reproducible pipelines.
+
+To achieve these goals, we will dive into a few topics you encountered already in week 1 in more detail. 
+
+## How week 2 is organized
+
+The material for week 2 is divided over four chapters, which you will work through in the first three days of the week.
+
+- Day 1: Chapter @sec-functions-and-summary-statistics
+- Day 2: Chapter @sec-debugging-and-testing and Chapter @sec-correlation
+- Day 3: Chapter @sec-diving-into-the-tidyverse
+
+The __data__ for week 2 focuses mostly on ecological traits and environmental measurements: we use two published datasets, and one dataset that was gathered during the course Plant Science in Practice (NEM11305). Since the focus of this week is mostly on programming techniques and analysis methods, the published datasets have been pre-processed into a _data package_.
+
+:::{#nte-data-week2 .callout-note appearance='simple'}
+### Installing the data package for week 2
+The following code lets you install the `PlantEDA` R package that contains the data for week 2. There are three datasets: `corre_continuous` and `corre_categorical`, and `grassland_traits_environment`.
+
+```{r}
+#| eval: FALSE
+# We need the remotes package to install from the WUR bioinformatics github
+install.packages('remotes')
+# Here we install the PlantEDA package from github, this contains the data for this week
+remotes::install_github('wur-bioinformatics/planteda')
+
+# If we load the PlantEDA package, we can load the datafiles from the package
+library(planteda)
+data("corre_continuous")
+
+# Alternatively, you can specify the package directly in the `data` call
+data("corre_continuous", package = 'wur-bioinformatics/planteda')
+```
 :::
 
+:::{.exercise}
+__BONUS EXERCISE: inspect the PlantEDA data package source code__
+
+The source code for the `PlantEDA` data package is available at [https://github.com/wur-bioinformatics/plantEDA](https://github.com/wur-bioinformatics/plantEDA). Inspect the repository structure and see if you can identify where the data is stored, and what steps are taken to publish it.
+:::
+
+### The assignment
+Like last week, a coding peer-feedback assignment is due on Wednesday (deadline 23:59), which you submit via feedback fruits on [Brightspace](https://brightspace.wur.nl). Again, your assignment will be reviewed by two students, and you will review the assignment of two other students. The instructions for the assignment of this week can be found in chapter @sec-diving-into-the-tidyverse. __Completing the assignment and participation in the code-review is mandatory.__
+
+### The exam
+At the end of week2 we expect you to be able to:
+
+- Everything from week 1
+- Produce your own `.qmd` document
+- Compute and interpret a basic summary of a structured dataset (i.e. a dataframe)
+- Describe the properties of a few summary statistics
+- Perform and interpet a correlation analysis using `cor()` and `cor.test()`
+- Systematically debug errors and broken code
+- Write and test a small function that performs a specific task
+- Create a simple `dplyr` and `tidyr` data processing pipeline
+- Create a simple `ggplot` data visualization

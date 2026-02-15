@@ -1,4 +1,4 @@
-# Diving into the tidyverse
+# Diving into the tidyverse {#sec-diving-into-the-tidyverse}
 
 ```{r setup}
 #| echo: FALSE

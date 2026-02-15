@@ -1,20 +1,4 @@
-# Functions and summary statistics {#seq-functions-and-summary-statistics}
-
-In this chapter we expand on two concepts that we encountered in the previous week: functions, and summarizing a dataset with numbers. We start with a few concepts on what functions are and when to use them in @sec-functions, and we apply these concepts in @sec-summary-statistics to implement the calculation of some useful dataset summaries. We will explore several numerical summary techniques, such as computing the mean and standard deviation of a numeric variable, or counts/frequencies of a categorical variable. We finish the chapter with a brief section on various other programming concepts that you typically encounter when doing exploratory data analysis (@sec-other-programming-concepts).
-
-
-::: {#exr-install-dependencies}
-### Installing the dependencies for this chapter
-
-```{r}
-#| eval: FALSE
-install.packages('remotes')
-remotes::install_github('wur-bioinformatics/planteda')
-library(planteda)
-data('corre_continuous')
-data('corre_categorical')
-```
-:::
+# Functions and summary statistics {#sec-functions-and-summary-statistics}
 
 ```{r}
 #| echo: FALSE
@@ -22,6 +6,25 @@ data('corre_categorical')
 data(corre_categorical, package = "planteda")
 data(corre_continuous, package = "planteda")
 ```
+
+In this chapter we expand on two concepts that we encountered in the previous week: functions, and summarizing a dataset with numbers. We start with a few concepts on what functions are and when to use them in @sec-functions, and we apply these concepts in @sec-summary-statistics to implement the calculation of some useful dataset summaries. We will explore several numerical summary techniques, such as computing the mean and standard deviation of a numeric variable, or counts/frequencies of a categorical variable. We finish the chapter with a brief section on various other programming concepts that you typically encounter when doing exploratory data analysis (@sec-other-programming-concepts).
+
+
+::: {#exr-check-datasets}
+### Inspecting the datasets for this week
+Make sure you have installed the `PlantEDA` data package (see @nte-data-week2). Inspect the documentation for the three datasets: `corre_continuous`, `corre_categorical`, and `grassland_traits_environment`. Where do these datasets come from? What is the difference between the three datasets? In what type of object are these datasets stored?
+
+```{r}
+#| eval: FALSE
+library(planteda)
+
+# Loading and inspecting the corre_continuous dataset
+data('corre_continuous')
+?corre_continuous
+```
+:::
+
+
 
 ## Functions {#sec-functions}
 

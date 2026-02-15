@@ -1,5 +1,4 @@
 ---
-title: "I: A first look at R"
 author: "Rens Holmer & Mark Sterken"
 date: "2026-02-11"
 format:
