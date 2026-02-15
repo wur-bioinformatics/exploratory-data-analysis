@@ -1,17 +1,26 @@
 ---
 title: "Gene expression analysis: salt and heat stress in Arabidopsis"
+author: "Harm Nijveen"
 format:
   html:
     toc: true
     toc-depth: 3
     code-fold: false
     code-tools: true
+    link-external-newwindow: true
+    link-external-icon: true
 editor: visual
 execute:
   eval: false
   warning: false
   message: false
 ---
+
+::: callout-caution
+### WORK IN PROGRESS
+
+This chapter is not yet finished, come back later for the final product
+:::
 
 ## Introduction
 
@@ -23,7 +32,10 @@ The data originate from the study:\
 
 We could start with the raw sequencing data, but that is beyond the scope of this course. Fortunately, the gene-level counts are already available through the **EMBL-EBI Expression Atlas** at <https://www.ebi.ac.uk/gxa/experiments/E-GEOD-72806/>
 
-We will use this dataset for: -exploratory RNA-seq analysis -clustering and principle component analysis -differential gene expression (DGE)
+We will use this dataset for: 
+-exploratory RNA-seq analysis 
+-clustering and principle component analysis 
+-differential gene expression (DGE)
 
 ------------------------------------------------------------------------
 
@@ -41,16 +53,13 @@ BiocManager::install(c(
   "edgeR",
   "pheatmap",
   "tidyverse",
-  "clusterProfiler",
-  "org.At.tair.db"
 ))
 
-install.packages("HDF5Array")
+if(!requireNamespace("HDF5Array", quietly = TRUE)) install.packages("HDF5Array")
 
-suppressMessages(library(ExpressionAtlas))
-suppressMessages(library(SummarizedExperiment))
-suppressMessages(library(tidyverse))
-suppressMessages(library(pheatmap))
+library(ExpressionAtlas)
+library(SummarizedExperiment)
+library(tidyverse)
 ```
 
 we can download the data directly from the EMBL-EBI Expression Atlas using the getAltasExperiment method in the ExpressionAtlas library method:
@@ -73,7 +82,7 @@ To learn more about the data structure use the class() method to see what kind o
 class(se)
 ```
 
-It is a a RangedSummarizedExperiment, which is a subclass of SummarizedExperiment. Try this to get more information about these classes:
+It is a a RangedSummarizedExperiment from the package SummarizedExperiment. Try this to get more information about these:
 
 ```{r}
 ?RangedSummarizedExperiment
@@ -94,6 +103,18 @@ Now we can load the data as:
 ```{r}
 se = loadHDF5SummarizedExperiment(dir="E-GEOD-72806")
 ```
+
+
+::: {#exr-create_load_function}
+
+Create a function called load_atlas_se in your **rnaseq_functions.R** script that returns a SummarizedExperiment either from disk or directly from the EMBL-EBI Expression Atlas. The function should take the accession as input and a Boolean to determine whether to load the data from disk or from the website. The default value for the Boolean should be TRUE.
+```{r}
+load_atlas_se <- function(accession,from_disk = TRUE) {
+  ...
+  return(se)
+}
+```
+:::
 
 The data in **se** are stored in different slots. To see which these are, you can use the **slotNames()** method on the **se** object. You can access these slots use the @***\*** **character. For instance, to see how the raw sequencing data were filtered you can look in the** metadata\*\* slot, which is a list, and then the **filtering** element.
 
@@ -166,7 +187,6 @@ You may see a warning that the scale_x_log10() introduced infinite values, can y
 :::
 
 We can avoid the "infinite values" warning by using the the log1p method:
-
 ```{r}
 ggplot(df_expr, aes(x = log1p(expr))) +
   geom_histogram(bins = 100) +
@@ -179,23 +199,20 @@ What is the difference with the previous plot? In which two ways does log1p() di
 :::
 
 For further analyses, we are not interested in genes that have little to no expression, so let's filter these out:
-
 ```{r}
 keep <- rowSums(counts >= 10) >= 3
 counts_filt <- as.matrix(counts[keep, ])
 ```
 
-Let's unpack what happens here: the *counts \>= 10* results in a matrix with boolean or logical (TRUE or FALSE) values. *rowSums()* counts a TRUE as 1 and a FALSE as 0. The resulting keep is a vector of logical values, which is used to select specific rows in counts.
+Let's unpack what happens here: the *counts \>= 10* results in a matrix with Boolean or logical (TRUE or FALSE) values. *rowSums()* counts a TRUE as 1 and a FALSE as 0. The resulting **keep** variable is a vector of logical values, which is used to select rows (genes) based on their counts.
 
 ::: {#exr-filter}
-How many genes are left? Describe which criteria genes have to meet to be kept
+How many genes are left? Describe which criteria genes have to meet to be kept.
 :::
 
 If we look at the mean expression per gene, we can see that a small proportion of genes is very highly expressed.
 
 ```{r}
-counts_filt
-
 gene_means <- rowMeans(counts_filt)
 gene_means_sorted <- sort(gene_means)
 
@@ -206,14 +223,12 @@ plot(
   ylab = "Mean expression",
   main = "Sorted gene mean expression"
 )
-
 ```
 
 I guess by now it is clear that for plotting gene expression values a log transformation is advised to not let the highly expressed genes dominate the analyses
 
 ```{r}
-logcounts = log10(counts_filt + 1)
-
+logcounts = log1p(counts_filt)
 ```
 
 Now let's look at the top 10 most highly expressed genes, which are actually the bottom 10 of the sorted list that we made before.
@@ -246,7 +261,10 @@ pheatmap(
 ```
 
 ::: {#exr-}
-In this plot you can already discern a pattern, at least for the 2 or 3 most highly expressed genes. Still the plot can be improved in a number of ways: -most of the sample annotation are not very useful, change the anno_col data frame to only keep the most informative annotation. -the most highly expressed genes still take most of the attention, the *scale* argument can improve that by converting the values to z-scores per row or column. Set the scale argument to the appropriate direction to see the relative expression over the different sample for the less highly expressed genes. -with clustering you can group samples and/or genes based on how similar their expression values are, more about that later in the clustering session. Try out what happens if you cluster genes and samples in this plot.
+In this plot you can already discern a pattern, at least for the 2 or 3 most highly expressed genes. Still the plot can be improved in a number of ways: 
+-most of the sample annotation are not very useful, change the anno_col data frame to only keep the most informative annotation. 
+-the most highly expressed genes still take most of the attention, the *scale* argument can improve that by converting the values to z-scores per row or column. Set the scale argument to the appropriate direction to see the relative expression over the different sample for the less highly expressed genes. 
+-with clustering you can group samples and/or genes based on how similar their expression values are, more about that later in the clustering session. Try out what happens if you cluster genes and samples in this plot.
 
 ```{r}
 anno_col <- as.data.frame(colData(se))
@@ -309,10 +327,10 @@ We can perform TMM normalization step by step, but we can also use a library tha
 ```{r}
 library(edgeR)
 
-dge <- DGEList(counts = counts_filt)
-dge <- calcNormFactors(dge)
+dge <- DGEList(counts = counts_filt) # create a DGEList object
+dge <- calcNormFactors(dge) # calculate the normalization factors and add these to the DGEList object
 
-cpm <- cpm(dge, log = FALSE)
+cpm <- cpm(dge, log = FALSE) # extract the CPM normalized counts from the DGEList object
 
 barplot(
   colSums(cpm),
@@ -321,3 +339,28 @@ barplot(
   ylab = "Normalized library size"
 )
 ```
+
+Did that help?
+
+We will come back to edgeR on Wednesday when we will use it to find which genes are significantly up- or down-regulated in response to the stress treatments. These genes are called Differentially Expressed Genes or DEG, and the analysis is called Differential Gene Expression or DGE.
+
+::: {#exr-create_load_function}
+
+Create a function called **get_normalized_counts_and_coldata** in your **rnaseq_functions.R** script that does the following:
+-extract the counts from a SummarizedExperiment
+-filters out lowly expressed genes
+-normalizes the counts using edgeR
+
+It should take as input a SummarizedExperiment and two numeric values that are used for filtering: min_count and min_samples. These should have default values 10 and 3. It should return the log2 CPM values and the colData from the SummarizedExperiment object as a list:
+```{r}
+get_normalized_counts_and_coldata<- function(se, min_count = 10, min_samples = 3) {
+  ...
+  out_list = list (
+    logcpm = logcpm,
+    coldata = coldata
+  )
+  
+  return(out_list)
+}
+```
+:::
