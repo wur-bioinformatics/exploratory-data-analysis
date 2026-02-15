@@ -1,0 +1,364 @@
+---
+title: "Principle Component Analysis and Differential Gene Expression"
+author: "Harm Nijveen"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+    link-external-newwindow: true
+    link-external-icon: true
+editor: visual
+execute:
+  eval: false
+  warning: false
+  message: false
+---
+
+:::{.callout-caution}
+### WORK IN PROGRESS
+This chapter is not yet finished, come back later for the final product
+:::
+
+# Dimensionality reduction
+
+We looked at clustering the samples based on the expression of 2 genes, which worked pretty good when this was based on the two most variable genes. With two genes, we could also plot the samples in a 2 dimensional figure and 'see' the clusters. However, if we take all genes into account, this will not work anymore: with three genes we reach the limit of the number of dimensions we can plot and already that third dimension does not work as well as the first two. Still, as always in exploratory analysis, being able to 'look' at your data can be very informative.
+
+A common way to address this is to perform [dimensionality reduction](https://en.wikipedia.org/wiki/Dimensionality_reduction), where the data are transformed into a lower dimensional space, while trying to preserve the main characteristics of the original data. Plotting the samples using the two most variable genes could be considered dimensionality reduction. Dimensionality reduction methods can be separated into linear and nonlinear approaches. In this session we will look at a specific method for linear dimensionality reduction called **principle component analysis** or PCA, which works quite well for bulk RNA-seq data. If the structure in de data becomes more complex, for instance in single-cell RNA-seq data which can consist of dozens of different cell types that each has its own unique expression profile, nonlinear methods like t-SNE and UMAP are popular alternatives. It is good to realize that flattening the data points to only two dimensions will unavoidably lead to a simplification of the overall structure, which may lead to wrong conclusions.
+
+## Principle Component Analysis
+
+To understand the algorithm for doing PCA involves leaning about matrix calculations like eigenvectors, which is beyond the scope of this course, but fortunately the underlying principle of PCA is less complicated.
+
+In this session we continue with the gene expression dataset from <https://www.ebi.ac.uk/gxa/experiments/E-GEOD-72806/>
+
+First load the proper libraries and filter/transform the data like before
+
+```{r}
+library(HDF5Array)
+library(edgeR)
+library(SummarizedExperiment)
+
+se <- load_atlas_se("E-GEOD-72806")
+lst <- get_normalized_counts_and_coldata(se)
+logcounts <- lst$logcpm
+coldata <- lst$coldata
+```
+
+We can try the same with three genes in three dimensions. For that we will make use of the [plotly library](https://plotly.com/r/) that offers a plethora of interactive graphs. Here we will use the scatter3d plot. First install and load plotly:
+
+```{r}
+if(!requireNamespace("plotly", quietly = TRUE)) install.packages("plotly")
+library(plotly)
+```
+
+We extend the gene list with a third, and create a data frame with the counts and sample annotation.
+
+```{r}
+genes <- c("AT4G27670", "AT1G56600", "AT4G09020")
+logcounts_genes3 <- t(logcounts[genes3, , drop = FALSE]) # transpose to have samples as rows and genes as columns
+expr_df <- as.data.frame(logcounts_genes3)
+expr_df$sample <- rownames(expr_df)
+
+# add sample annotation
+expr_df$environmental_stress <- coldata[expr_df$sample, "environmental_stress"]
+
+p3 <- plot_ly(
+  expr_df,
+  x = ~ .data[[genes3[1]]],
+  y = ~ .data[[genes3[2]]],
+  z = ~ .data[[genes3[3]]],
+  color = ~ environmental_stress,
+  colors = "Set2",
+  type = "scatter3d",
+  mode = "markers",
+  marker = list(size = 6)
+) %>%
+  layout(
+    title = "Samples in 3-gene expression space",
+    scene = list(
+      xaxis = list(title = genes3[1]),
+      yaxis = list(title = genes3[2]),
+      zaxis = list(title = genes3[3])
+    )
+  )
+
+p3
+```
+
+Drag/rotate the gene space in such a way that the samples are best spread out in the 2 dimensions that you effectively see. This is what PCA tries to accomplish. To see how that works in on this data, we first use the **prcomp()** function:
+
+```{r}
+pca <- prcomp(logcounts_genes3) # the PCA should be performed on the counts
+summary(pca)
+```
+
+In the summary you see the three principle components (PCs) of the data and the proportion of the total variance they explain. The first PC (PC1) already explains most of the variance, with a little left for PC2. We can visualize this as a barplot. This type of plot is called a screeplot.
+
+```{r}
+screeplot(pca)
+```
+
+To see how the samples separate in the space defined by the first two PCs, we can make a biplot.
+
+```{r}
+biplot(pca)
+```
+
+This is a bit hard to make sense of, so let us make a more pretty plot including the sample annotations. As before we can use ggplot, we need to store the data in a data frame.
+
+```{r}
+pca_df <- as.data.frame(pca$x)
+pca_df$sample <- rownames(pca$x)
+pca_df <- merge(pca_df,coldata, by = "sample",  all.x = TRUE) # add sample annotation
+
+var_expl <- summary(pca)$importance[2, 1:2] * 100 # variance explained by PC1 and PC2
+
+p <- ggplot(pca_df, aes(PC1, PC2, color = environmental_stress)) +
+  geom_point(size = 4) +
+  labs(title = "PCA of Arabidopsis heat/salt stress RNA-seq", 
+       x = paste0("PC1 (", round(var_expl[1], 1), "%)"),
+       y = paste0("PC2 (", round(var_expl[2], 1), "%)")) +
+  theme_bw()
+p
+```
+
+To see how the 3D gene space was actually rotated, we can look at the loadings of the genes on the PCs. These indicate how much each gene contributes to each PC. The loadings are stored in the **rotation** component of the PCA object.
+
+```{r}
+# loadings: variables (genes) x PCs
+loadings <- as.data.frame(pca$rotation[, 1:2])
+loadings
+``` 
+These loadings per PC represent a so-called unit vector (a line in the gene-space of length one) originating from the center, projecting the original gene axes. PC1 is strongly aligned with the first gene, while PC2 is largely determined by gene 2. We can add these vectors to the plot,
+
+```{r}
+loadings$gene <- rownames(loadings)
+
+p + geom_segment(
+    data = loadings,
+    aes(
+      x = 0, y = 0,
+      xend = PC1, yend = PC2
+    ),
+    arrow = arrow(length = unit(0.25, "cm")),
+    color = "red",
+    inherit.aes = FALSE
+  ) +
+    # loading labels
+  geom_text(
+    data = loadings,
+    aes(
+      x = PC1,
+      y = PC2,
+      label = gene
+    ),
+    color = "red",
+    size = 4,
+    vjust = 0,
+    hjust = -0.2,
+    inherit.aes = FALSE
+  )
+```
+Hmm, now gene 1 seems to be equally divided between PC1 and PC2, or not? 
+
+::: {#exr-loadings}
+What is misleading in this plot?
+:::
+
+Based on these three genes, the PCs separate the samples quite well. However, the results can be quite different if we change the way the data are preprocessed. For instance, if we do not log-transform the data, or if we center and/or scale the data before performing PCA, this can have a big impact on the results. The prcomp() function has options for centering and scaling the data, if you do not set them, the defaults are taken.
+
+::: {#exr-PCA_plot_function}
+To see the effect of centering and scaling, make a function that performs PCA and plots the samples in PC1 and PC2 for different combinations of centering and scaling. Then plot it using the **patchwork** library to arrange the four plots in a 2x2 grid.
+
+```{r}
+make_pca_plot <- function(logcounts_genes3, coldata, center, scale) {
+  #....
+  ggplot(pca_df, aes(PC1, PC2, color = environmental_stress)) +
+    geom_point(size = 4) +
+    labs(title = paste0("Center:", center, " Scale:", scale),
+         x = paste0("PC1 (", round(var_expl[1], 1), "%)"),
+         y = paste0("PC2 (", round(var_expl[2], 1), "%)")) +
+    theme_bw()
+}
+
+# Build the 4 plots for the different combinations of centering and scaling, to be plotted in a 2x2 grid
+for (c in c(FALSE,TRUE)) {
+  for (s in c(FALSE,TRUE)) {
+    print(paste("Center:", c, "Scale:", s))
+    p <- make_pca_plot(logcounts_genes3, coldata, center = c, scale = s)
+    assign(paste0("p", ifelse(c, "T", "F"), ifelse(s, "T", "F")), p)
+  }
+}
+
+# Arrange in a 2x2 grid using the patchwork library
+if (!requireNamespace("patchwork", quietly = TRUE)) install.packages("patchwork")
+library(patchwork)
+(pFF | pFT) / (pTF | pTT) # patchwork magic
+```
+:::
+
+If you see 4 different plots, great! If the plots are all the same, check the code of your function and make sure you are actually using the center and scale arguments in the prcomp() function. You should see that centering has a big impact on the results, while scaling does not have much effect. This is because the data are already on the same scale (log-transformed counts), but centering is important to make sure that PCA captures the variance around the mean rather than the absolute values.
+
+Which combination of center/scale gives the best separation of the samples? This is the one you should use for your analysis. In general, it is good practice to center the data before performing PCA, while scaling is not always necessary, especially if the data are already on a similar scale. How does this match the defaults of prcomp()?
+
+Next, we can see what happens if we base the PCA on all genes (so not just on logcounts_genes3).
+
+```{r}
+pca <- prcomp(t(logcounts))
+summary(pca)
+pca_df <- as.data.frame(pca$x)
+pca_df$sample <- rownames(pca$x)
+pca_df <- merge(pca_df,coldata, by = "sample",  all.x = TRUE) # add sample annotation
+
+var_expl <- summary(pca)$importance[2, 1:2] * 100 # variance explained by PC1 and PC2
+
+```
+
+This gives us more PCs, but the first one still explain most of the variance.
+
+::: {{#exr-PCA_plot}}
+To see how the samples separate now, plot them again using PC1 and PC2 of this PCA.
+
+```{r}
+
+```
+
+What do you conclude about the separation of the samples based on all genes compared to the three genes we selected? Do you think this is a better representation of the data? Why or why not?
+:::
+
+We can again look at the loadings/rotations of the genes for the PCs, but since we included all genes in the analyses and have many PCs we cannot plot all of them. We can focus on the genes that best align with PC1, which are the ones with the highest absolute loadings. 
+
+```{r}
+pc = "PC1"
+loadings <- pca$rotation[, pc]
+top50 <- names(sort(abs(loadings), decreasing = TRUE))[1:50]
+logcounts_top50 <- logcounts[top50,]
+annotation_col <- coldata[,"environmental_stress",drop=FALSE]
+
+library(pheatmap, quietly = TRUE)
+
+pheatmap( logcounts_top50, annotation_col = annotation_col, show_rownames=TRUE, show_colnames=FALSE, main=paste0("Top 50 genes by absolute ",pc," loading" ))
+```
+We can use the PCs also for clustering the samples. This gives us the opportunity to select the most important aspects of the data. Starting with the top 10 PCs to do the kmeans clustering gives a pretty good result.
+
+```{r}
+pca_scores <- pca$x[, 1:10]
+set.seed(42)
+km_pca <- kmeans(pca_scores, centers = 4, nstart=250)
+
+pca_df$cluster <- factor(km_pca$cluster[match(pca_df$sample, rownames(pca_scores))])
+
+ggplot(pca_df, aes(PC1, PC2, color = environmental_stress, shape = cluster)) +
+  geom_point(size = 4) +
+  labs(
+    title = "PCA of Arabidopsis heat/salt stress RNA-seq",
+    x = paste0("PC1 (", round(var_expl[1], 1), "%)"),
+    y = paste0("PC2 (", round(var_expl[2], 1), "%)"),
+    shape = "k-means cluster",
+    color = "Stress"
+  ) +
+  theme_bw()
+
+```
+But what happens if you try different numbers of PCs?
+
+# Differential Gene Expression
+Up to now we have been doing true exploratory data analysis (EDA), looking at the data without a strong hypothesis. This is what is typically called unsupervised analysis. We only used the treatment information to interpret the results, not to guide the analysis. Now we will do a supervised analysis, where we will take the sample information into account to do the analysis. The question we will address is: **For which genes does the expression significantly change in response to the stress treatment?**. As already mentioned on Monday, these genes are called Differentially Expressed Genes or DEG, and the analysis is called Differential Gene Expression or DGE. For this we group samples based on their treatment. For instance, all three samples that were only treated with heat are replicates of each other where we expect the same genes to be responding to the treatment. You may have noticed the term **significantly**, which implies we do a statistical test and get a *p*-value. The t-test is not appropriate for RNA-seq data, because these are discrete counts instead of continuous values. The counts generally follow a negative binomial distribution, which requires the modelling of the variance from the mean. Libraries like edgeR are specifically developed to do this.
+
+```{r}
+group <- factor(coldata$environmental_stress)
+levels(group) <- make.names(levels(group))
+group <- relevel(group, ref = "none")
+
+dge <- DGEList(counts = counts, group = group)
+
+keep <- filterByExpr(dge, group = group)
+dge <- dge[keep, , keep.lib.sizes = FALSE]
+dge <- calcNormFactors(dge)
+
+cpm = cpm(dge,log=FALSE)
+logcpm = cpm(dge,log=TRUE,prior_count=1)
+vsd <-vst(dge)
+
+design <- model.matrix(~ 0 + group)
+colnames(design) <- levels(group)
+design
+
+dge <- estimateDisp(dge, design)
+
+fit <- glmQLFit(dge, design)
+
+heat_contrast <- makeContrasts(
+  heat_stress = `heat.stress` - none,
+  levels = design
+)
+
+qlf_heat <- glmQLFTest(fit, contrast = heat_contrast)
+
+res_heat <- topTags(qlf_heat, n = Inf)$table
+
+salt_contrast <- makeContrasts(
+  salt_stress = `salt.stress` - none,
+  levels = design
+)
+
+qlf_salt <- glmQLFTest(fit, contrast = salt_contrast)
+
+res_salt <- topTags(qlf_salt, n = Inf)$table
+
+combo_contrast <- makeContrasts(
+  heat_stress = `salt.and.heat.stress` - none,
+  levels = design
+)
+
+qlf_combo <- glmQLFTest(fit, contrast = combo_contrast)
+
+res_combo <- topTags(qlf_combo, n = Inf)$table
+
+
+sum(res_heat$FDR < 0.05)
+sum(res_salt$FDR < 0.05)
+sum(res_combo$FDR < 0.05)
+
+```
+
+```{r}
+
+if(!requireNamespace("VennDiagram", quietly = TRUE)) BiocManager::install(c("VennDiagram"))
+library(VennDiagram)
+library(grid)
+
+# upregulated genes
+deg_heat <- rownames(res_heat)[res_heat$FDR < 0.05 & res_heat$logFC >= 0]
+deg_salt <- rownames(res_salt)[res_salt$FDR < 0.05 & res_salt$logFC >= 0]
+
+draw.pairwise.venn(
+  area1 = length(deg_heat),
+  area2 = length(deg_salt),
+  cross.area = length(intersect(deg_heat, deg_salt)),
+  category = c("Heat", "Salt")
+)
+
+```
+
+```{r}
+deg_combo <- rownames(res_combo)[res_combo$FDR < 0.05 & res_combo$logFC >= 0]
+
+grid.newpage()
+draw.triple.venn(
+  area1 = length(deg_heat),
+  area2 = length(deg_salt),
+  area3 = length(deg_combo),
+  n12 = length(intersect(deg_heat, deg_salt)),
+  n13 = length(intersect(deg_heat, deg_combo)),
+  n23 = length(intersect(deg_salt, deg_combo)),
+  n123 = length(Reduce(intersect, list(deg_heat, deg_salt, deg_combo))),
+  category = c("Heat", "Salt", "Salt+Heat")
+)
+
+```
+
+
+Compare this with [figure 3A in the Suzuki et al paper](http://journals.plos.org/plosone/article/figure?id=10.1371/journal.pone.0147625.g003).
