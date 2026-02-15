@@ -6,16 +6,14 @@
 data(grassland_traits_environment, package = "planteda")
 ```
 
-:::{.callout-caution}
-### WORK IN PROGRESS
-This chapter is not yet finished, come back later for the final product
-:::
 
 Throughout the book you have encountered packages from the __tidyverse__: one of the first things you did in @sec-importance-of-data-analysis was importing the `tidyverse` package. In this chapter we dive into more detail about what the tidyverse actually is, how it relates to important data analysis concepts, and how it differs from some base R concepts. 
 
 The main reasons we dedicate a chapter to this are:
 1. The tidyverse is used _a lot_: it will show up in many published data analysis approaches. 
 2. The approaches in the tidyverse are _quite different_ from what you see when using base R: especially the use of the pipe operator deserves some attention.
+
+![The tidyverse is a _universe_ of R packages for working with _tidy_ data](Tidyverse_hex_logo.png){#fig-tidyverse width=25%}
 
 ## What is the tidyverse?
 In essence, the [tidyverse](https://tidyverse.org/) is not _just_ a package, it is a __collection of packages__.  The main application of the tidyverse is working with _tidy_ data: any data that can naturally be represented in tables where columns are variables and rows are observations. Coincidentally, many data science and statistics approaches work with such tabular data, making the tidyverse a natural fit. An example of a very common problem that is elegantly solved in the tidyverse is going back and forth between _long_ and _wide_ representations of tabular data (@nte-long-vs-wide).
@@ -58,7 +56,7 @@ The difference between them is not the type of data they work on, but the aspect
 
 Both rely on a small set of _verbs_ (implemented as functions) that describe common data manipulation tasks, such as selecting rows (`filter()`) or columns (`select()`), creating or transforming variables (`mutate()`), computing summaries (`summarise()`), or reshaping data (`arrange()`,`group_by()`). More complex operations are expressed by _combining_ these verbs.
 
-These verbs are typically connected using the pipe operator `|>`^[Modern R versions include the pipe operator as part of the default language. In older versions of R you might see `%>%` being used, which does mostly the same thing but was introduced by the [`magritrr` package](https://magrittr.tidyverse.org/)], which passes the result of one step directly to the next (thus creating a _pipe_-line). This allows data manipulation code to be written as a sequence of transformations, read from top to bottom.
+These verbs are typically connected using the pipe operator `|>`^[Modern R versions include the pipe operator as part of the default language. In older versions of R you might see `%>%` being used, which does mostly the same thing but was introduced by the [`magritrr` package](https://magrittr.tidyverse.org/)], which passes the result of one step directly to the next (thus creating a _pipe_-line). The trick here is that by using the pipe operator, you automatically inject the _output_ of the first function into the _first argument_ of the second function. Most tidyverse functions are designed to take a `tibble` or `dataframe` as first argument, and also return a `tibble`, making it straightforward to chain operations. This allows data manipulation code to be written as a sequence of transformations, read from top to bottom.
 
 While `dplyr` keeps the overall table structure intact, `tidyr` is used when the structure itself gets in the way of analysis. In particular, it provides tools to convert between wide and long tables by making information encoded in column names explicit.
 
@@ -66,8 +64,9 @@ In practice, `dplyr` and `tidyr` are almost always used together. From the userâ
 
 :::{#tip-dplyr-vs-base-r .callout-tip appearance='simple'}
 ### Comparing dplyr with base R
-Any operation that can be performed with the tidyverse can in principle also be performed with base R. The tidyverse should mostly result in code that is more natural to read for humans, making it easier to follow which steps are being taken. The following two examples compute the exact same summaries, once in base R, and once use dplyr verbs.
+Any operation that can be performed with the tidyverse can in principle also be performed with base R. The tidyverse should mostly result in code that is more natural to read for humans, making it easier to follow which steps are being taken. The following examples compute the exact same summaries, once in base R, and twice using dplyr verbs (once with and once without the pipe operator).
 
+#### Base R
 ```{r}
 # Base R code to compute mean leaf tissue density for annuals and perennials seperately
 # 1. Remove rows with any NA
@@ -85,6 +84,7 @@ result <- data.frame(
 result
 ```
 
+#### dplyr
 ```{r}
 #| warnings: FALSE
 #| message: FALSE
@@ -96,11 +96,24 @@ grassland_traits_environment |>     # Dataset
   group_by(life_history) |>         # Group by life history
   summarise(mean_ld = mean(ld))     # Compute mean ld per group
 ```
+
+#### dplyr (no pipe operator)
+```{r}
+#| warnings: FALSE
+#| message: FALSE
+# dplyr code to compute mean leaf tissue density for annuals and perennials seperately
+# Key difference with previous example: no pipe operators used!
+library(tidyverse)
+
+summarise(group_by(drop_na(grassland_traits_environment), life_history), mean_ld=mean(ld))
+```
 :::
 
 :::{#exr-comparing-tidyverse-and-base-r}
 ### Compare dplyr and base R results
-In @tip-dplyr-vs-base-r there are two examples of the same analysis, one in base R and one using dplyr. You'll notice the numbers are the same, but that one returns a regular dataframe and the other returns a 'tibble' (if you want you can verify this by copying and pasting the corresponding code). Tibbles are also part of the tidyverse, take a look at the [tibble homepage](https://tibble.tidyverse.org/) and describe the main differences with regular dataframes.
+In @tip-dplyr-vs-base-r there are three examples of the same analysis, one in base R and two using dplyr. You'll notice the numbers are the same, but that one returns a regular dataframe and the others return a 'tibble' (if you want you can verify this by copying and pasting the corresponding code). Tibbles are also part of the tidyverse, take a look at the [tibble homepage](https://tibble.tidyverse.org/) and describe the main differences with regular dataframes.
+
+Which `dplyr` version of the code do you prefer and why?
 :::
 
 ## GGplot2
@@ -127,5 +140,44 @@ Unlike `dplyr` and `tidyr`, `ggplot2` elements are _not_ combined with the pipe 
 :::{#exr-recreate-warmerdam-plots}
 ### Revisit tidyverse code from week 1
 In @exr-forplot you were presented with code that made extensive use of the tidyverse. Look at this code again, and see whether you can identify the different tidyverse concepts that have been introduced in this chapter. Next, we are going to modify the code from the earlier assignment, so that we can create a _single_ ggplot2 plot of a few of the accessions.
+
+Using tidyverse concepts, do the following:
+
+- Load the day1 dataset (`BIF20806_Warmerdam_dataset.txt`), you can find this on the week1 BrightSpace
+- Select only the following plant genotypes: 'Col-0','Bay-0','Ler-1','Hey-1'. Hint: you can use the `filter()` function and make use of the `%in%` operator.
+- Make a ggplot2 boxplot with the datapoints added as points, put the plant genotype on the X-axis and use the plant genotype for color.
+
+Which genotype has the highest eggmass? Which has the most observations? What would you do if you wanted to plot a few other genotypes (Hint: @sec-functions)?
+
+- Next, add the following to your ggplot: `facet_wrap(~screening)`. 
+
+How does the plot change? What additional difference between plant genotypes do you notice? What does the `~` in `facet_wrap()` do?
 :::
 
+## Assignment for code review week 2
+
+In the course Plant Science in Practice ([NEM11305](https://studyhandbook.wur.nl/modules/NEM11305)) you previously worked on collecting your own plant trait and environmental data. Specifically, you collected field observations for _Jacobaea vulgaris_, and recorded your observations using a form with standardized questions (@fig-nem11305). For this assignment, you will (re-)analyse the data that you (and your fellow students) gathered yourself.
+
+![Instructions for gathering field observations used in the course Plant Science in Practice (NEM11305). The standardized form should make downstream analysis more straightforward.](NEM11305_instructions.png){#fig-nem11305 width=50%}
+
+The dataset for this assignment is available on BrightSpace (Content --> Week 2 --> Assignment --> NEM11305 Dataset).
+
+:::{#exr-nem11305-assignment}
+### Analyse student-collected plant trait and environment data
+For this assignment you will hand in a quarto notebook (`.qmd` file) that contains your code and interpretation. The work you hand in should contain the following:
+
+__Code__ for the following operations:
+
+- Installing and loading the relevant packages
+- Loading the dataset
+- Creating a summary of the dataset
+- A correlation analysis of stem length and plant width ('Stengellengte' and 'Plantbreedte' in the dataset)
+- A boxplot visualizing the distribution of soil acidity ('Zuurgraad') across different soil types ('Bodemtype')
+
+__Text__ with the following interpretations/explanations:
+
+- A brief description of what the dataset looks like: size, variables, summary statistics
+- Interpretations for the correlation analysis and visualization
+
+Make use of the quarto markdown elements to structure your work in a readable fashion.
+::: 
