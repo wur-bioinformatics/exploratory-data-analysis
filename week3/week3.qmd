@@ -1,6 +1,74 @@
-# III: Visualization & unsupervised analysis
+---
+title: "Visualization & (un)supervised analysis"
+author: "Harm Nijveen"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+    link-external-newwindow: true
+    link-external-icon: true
+editor: visual
+execute:
+  eval: false
+  warning: false
+  message: false
+---
+# III: Visualisation and unsupervised analysis
+
 
 :::{.callout-caution}
 ### WORK IN PROGRESS
 This chapter is not yet finished, come back later for the final product
 :::
+
+## The goals for week 3
+
+In the third week, the goals are:
+
+1.  Use classed objects
+2.  Use visualizations to explore a large data set
+3.  Apply clustering methods
+4.  Analyse a data set using PCA
+5.  Understand Differential gene expression
+
+
+::: {#tip-classed_objects .callout-tip appearance="simple"}
+### What are classed objects'?
+In week 2 you already encountered object oriented programming (OOP). 
+From [Advanced R by Hadley Wickham](http://adv-r.had.co.nz/OO-essentials.html)
+"A class defines the behaviour of objects by describing their attributes and their relationship to other classes. The class is also used when selecting methods, functions that behave differently depending on the class of their input."
+
+:::
+
+## How week 3 is organized
+
+The material you are supposed to work through each day is a chapter in the book. During the scheduled tutorials background and context will be given. Also, there will be help available if you get stuck with the coding.
+
+There will be three days of working through the chapters (Monday - Wednesday).
+
+Monday      [Chapter 8]((week3/gene_expression.qmd))
+Tuesday     [Chapter 9]((week3/clustering.qmd)) 
+Wednesday   [Chapter 10]((week1/pca_and_dge.qmd)), 
+
+We will mostly work on data associated with this paper [ABA Is Required for Plant Acclimation to a Combination of Salt and Heat Stress](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0147625) by Suzuki et al. from 2016.
+
+### The assignment
+Like before, at the end of Wednesday (23:59), a coding peer-feedback assignment is due, which you submit via feedback fruits on [Brightspace](https://brightspace.wur.nl/). Your assignment will be reviewed by two students, as you will review the assignment of two other students. For this week the assignment consists of creating a set of R functions in a separate R-script, that can be used to perform RNA-seq analyse. Like before **Completing the assignment and participation in the code-review is mandatory.**
+
+You need to hand in an .R script.
+
+The code-review (peer-feedback via [Brightspace](https://brightspace.wur.nl/)) is due Thursday at 13:00. Instructions for how to give feedback can be found in [Chapter 3]((week1/day3.qmd)). The items we expect you to give feedback on as well.
+
+### The exam
+
+The exam of week 3 **does count for your final grade of the course**. 
+
+At the end of week 3 we expect you to be able to:
+
+-   Understand classed objects
+-   Perform hierarchical clustering and explain important characteristics of the method
+-   Perform k-means clustsering and explain the strong and weak points
+-   Perform a Principle component analysis and interpret a PCA biplot
+-   Perform a simpple differential gene expression analysis
