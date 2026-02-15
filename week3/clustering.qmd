@@ -7,6 +7,8 @@ format:
     toc-depth: 3
     code-fold: false
     code-tools: true
+    link-external-newwindow: true
+    link-external-icon: true
 editor: visual
 execute:
   eval: false
@@ -14,9 +16,14 @@ execute:
   message: false
 ---
 
+:::{.callout-caution}
+### WORK IN PROGRESS
+This chapter is not yet finished, come back later for the final product
+:::
+
 In this session we continue with the gene expression dataset from <https://www.ebi.ac.uk/gxa/experiments/E-GEOD-72806/>
 
-First load the proper libraries and filter/transform the data like before
+First load the proper libraries and filter/transform the data using the functions that you created yesterday
 
 ```{r}
 library(HDF5Array)
@@ -24,17 +31,10 @@ library(edgeR)
 library(SummarizedExperiment)
 library(ExpressionAtlas)
 
-se = loadHDF5SummarizedExperiment(dir="E-GEOD-72806")
-
-counts <- assay(se) 
-coldata <- as.data.frame(colData(se)[, c("environmental_stress"), drop = FALSE])
-coldata$samples = rownames(coldata)
-keep <- rowSums(counts >= 10) >= 3
-counts_filt <- counts[keep, ]
-dge <- DGEList(counts = counts_filt)
-dge <- calcNormFactors(dge)
-
-logcounts <- cpm(dge, log = TRUE, prior.count = 1) #adds 1 to avoid taking the log of zero
+se <- load_atlas_se("E-GEOD-72806")
+lst <- get_normalized_counts_and_coldata(se)
+logcounts <- lst$logcpm
+coldata <- lst$coldata
 ```
 
 ## Clustering
@@ -125,7 +125,7 @@ genes <- names(sort(gene_var, decreasing = TRUE))[1:200]
 ```
 
 ::: {#exr-plot_2genes}
-Now we could copy the plotting code from above, but copying a block of code is generally not a good idea, it is better to turn that into a function that you can call. So please go ahead and create a function that takes the list of genes as input, as well as the data that is needed to make the plot (logcounts and coldata).
+Now we could copy the plotting code from above, but copying a block of code is generally not a good idea, it is better to turn that into a function that you can call. So please go ahead and create a function that takes the list of genes as input, as well as the data that is needed to make the plot (logcounts and coldata). Add this function to your **rnaseq_functions.R** script
 
 ```{r}
 
@@ -174,16 +174,17 @@ We can also get gene information programmatically using an R package called [org
 
 ## hierarchical clustering
 
-We can use the 2-gene representation of the samples to find clusters of similar samples (like you already did on day 2 of the course).
+We can use the 2-gene representation of the samples to find clusters of similar samples (like you already did on day 2 of the course). Hierarchical clustering starts with each sample in its own cluster and then step-wise merges the two most similar clusters based on a distance measure (Euclidean, Correlation-based, etc.) until all samples are in one cluster. This is typically depicted as a This merging can be stopped if a certain number of clusters is reached. How the distance is calculated depends on the distance measure, but also on the point in a cluster to calculate the distance from.For this several methods are used that give different results. With **average linkage**, the distance between two cluster is calculated as the average of all distances between the members of both cluster. In **complete linkage**, the largest distance between any two members of two cluster is used, while **single linkage** uses the smallest distance between any two members of both clusters. You can imagine that both the distance measure as well as the linkage methods affect the clustering.
 
 ```{r}
-d_samples <- dist(df[,genes], method = "euclidean")
-hc_samples <- hclust(d_samples, method = "complete")
-
-plot(hc_samples)
+d_samples <- dist(df[,genes], method = "euclidean") # calculate Euclidean distance between all samples
+hc_samples <- hclust(d_samples, method = "complete") # cluster using complete-linkage
+plot(hc_samples, hang=-1) # this actually calls plot.hclust, hang=-1 makes sure the tree starts (ends?) at 0
 ```
 
-This should show a tree (upside down?!) with two very distinct branches of samples. To get the actual clusters, we should cut the tree at a certain height.
+This should show a tree (upside down?!) with two very distinct branches of samples. The height value on the y-axis is actually the distance between clusters. We can check this by looking at the content `d_samples`. The distance between samples 11 and 12 is a bit more that 12 and that is also where the horizonal line is that merges both clusters. The root of the tree is slightly higher than 70, which agrees with the largest distance between any pair of samples (try `max(d_samples)`) which is 73.6.
+
+To get the actual clusters, we can cut the tree at a certain height. Alternatively you can specify the number of clusters you want.
 
 ::: {#exr-cutttree}
 Choose a height cutoff that should result in two clusters (this is usually not so easy) and check the result.
@@ -196,7 +197,7 @@ sample_clusters
 ```
 :::
 
-Now we can add the cluster numbers to the data frame and annotate the figure with these to check that the clustering worked. The stress type now is shown via the shape of the sample.
+Now we can add the cluster numbers to the data frame and annotate the figure with these to check that the clustering worked. The stress type is shown as the shape of the sample.
 
 ```{r}
 df$cluster <- factor(sample_clusters)
@@ -228,7 +229,7 @@ What if we include all genes in the distance calculation?
 
 ```{r}
 d_samples <- dist(t(logcounts), method = "euclidean")
-hc_samples <- hclust(d_samples, method = "ward.D2")
+hc_samples <- hclust(d_samples, method = "complete")
 
 plot(hc_samples)
 ```
@@ -255,7 +256,7 @@ cluster_annot <- merge(
   all.x = TRUE
 )
 
-cluster_annot
+print(cluster_annot)
 ```
 
 Not quite there yet? Especially one of the two stresses does not seem to make enough of a difference to clearly tell the samples apart.
@@ -263,7 +264,7 @@ Not quite there yet? Especially one of the two stresses does not seem to make en
 We can vary a number of choices in the different steps to cluster the samples according to their stress treatment, but you should be careful not to take this too far. You could also conclude that there is little effect of one of these stresses, or even that samples could have been swapped during the experiment. Still, we can check how different choices for the distance measure, the number of genes, or the clustering agglomeration method affect the clustering.
 
 ::: {#exr-clustering_parameters}
-Try out different distance measures and agglomeration methods (see ?dist and ?hclust).
+Try out different distance measures and agglomeration/linkage methods (see ?dist and ?hclust).
 
 One distance measure that is not included in dist() is correlation. But you can easily do that using the cor() function and then calculate the distance by subtracting the correlation from 1:
 
@@ -418,4 +419,6 @@ library(pheatmap)
 
 pheatmap( mat_top, cluster_rows = hc_genes, cluster_cols = FALSE, show_rownames = FALSE, show_colnames = FALSE, annotation_col = coldata, scale = "row", main = paste("Top",n_top,"most variable genes") )
 
-``` This shows a few clear patterns of genes showing similar expression.
+```
+
+This shows a few clear patterns of genes showing similar expression.
