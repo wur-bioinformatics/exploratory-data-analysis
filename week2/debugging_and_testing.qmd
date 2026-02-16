@@ -67,7 +67,26 @@ These errors often pop up when you are in the process of writing some new code.
 Simply put, a syntax error is any form of mistake where your code does not follow the [syntax](https://en.wikipedia.org/wiki/Syntax) definitions of the R language.
 As a consequence, the code cannot be parsed and executed by the interpreter. 
 These error are caught relatively easy, because any syntax error will break the execution of your code.
-In addition, when viewing the full error message (see note [...]), a syntax error always starts with `Error in parse(text = input): [...]` indicating that _parsing_ of the code failed.
+In addition, when viewing the full Quarto error message (see @nte-rstudio-errors), a syntax error always starts with `Error in parse(text = input): [...]` indicating that _parsing_ of the code failed.
+
+:::{#nte-rstudio-errors .callout-note appearance='simple'}
+### Rstudio VS Quarto syntax errors
+The syntax errors you see in RStudio will look slightly different from what you see in this book (see @fig-rstudio-error). This has to do with a difference between how RStudio and Quarto (used to create this book) read R code: RStudio reads line by line, Quarto reads an entire chunk. A scenario where this becomes relevant is when you try to render a notebook that contains a syntax error: then you will see the _Quarto_ error, and not the _RStudio_ error.
+
+![Example RStudio error, compare with syntax error example 1 below: the exact error messages are different](rstudio_error.png){#fig-rstudio-error width=60%}
+
+Replicating the Quarto error message in RStudio is possible, but requires some trickery: we force RStudio to read an entire chunk at once.
+
+```{r}
+#| eval: FALSE
+# Executing this code in RStudio mimics how Quarto parses code and should produce the same error.
+code <- "
+# Syntax error example 1, missing closing bracket
+collection <- c(1,2,3,
+"
+parse(text = code)
+```
+:::
 
 ```{r}
 #| error: TRUE
