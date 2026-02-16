@@ -259,7 +259,7 @@ In this assignment you will implement the calculation of quantiles for a continu
 ```{r}
 #| eval: FALSE
 
-custom_quantile(data, quantile_percentage){
+custom_quantile <- function(data, quantile_percentage){
   # Do stuff here
   quant <- # Some more calculations
   return(quant)

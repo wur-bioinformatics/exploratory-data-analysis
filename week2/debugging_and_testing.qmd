@@ -311,5 +311,5 @@ Ultimately, you want your code to be both tested and validated (see @tbl-testing
 : Different combinations of testing and validating your approach lead to different guarantees on your results {#tbl-testing-validating .bordered .responsive-sm .hover}
 
 :::{#exr-was-it-tested}
-Revisit #wrn-analysis-gone-wrong and decide whether testing, validating, or both went wrong. How should plant scientists make sure they do better than this example?
+Revisit @wrn-analysis-gone-wrong and decide whether testing, validating, or both went wrong. How should plant scientists make sure they do better than this example?
 :::
