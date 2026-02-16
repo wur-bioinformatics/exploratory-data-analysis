@@ -38,7 +38,7 @@ book:
       chapters: 
         - week3/gene_expression.qmd
         - week3/clustering.qmd
-        - week3/principle_component_analysis.qmd
+        - week3/PCA_and_DGE.qmd
     - part: week4/week4.qmd
       chapters: 
         - week4/errors_outliers.qmd
