@@ -40,7 +40,7 @@ library(planteda)
 data("corre_continuous")
 
 # Alternatively, you can specify the package directly in the `data` call
-data("corre_continuous", package = 'wur-bioinformatics/planteda')
+data("corre_continuous", package = 'planteda')
 ```
 :::
 
