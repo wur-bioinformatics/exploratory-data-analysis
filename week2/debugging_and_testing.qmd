@@ -237,7 +237,20 @@ In @exr-variance you implemented the calculation of the variance. Here, you will
 - The variance of zero or one numbers is undefined
 - The variance of a collection of all the same numbers (e.g. `c(4,4,4)`) is zero
 
-Hint: you can throw an error with the `stop()` function and raise a warning with the `warning()` function.
+Hints: 
+
+- You can implement a check with `if` and `else`:
+  ```{r}
+  #| eval: FALSE
+  if (condition) {
+    # Code to run when condition is TRUE
+  } else {
+    # Code to run when condition is FALSE
+  }
+  ```
+  In this case `condition` must evaluate to `TRUE` or `FALSE`, e.g. `is.numeric(column)` or `length(input) == 3`. You don't always need the `else` part.
+- You can throw an error with the `stop()` function.
+- You can raise a warning with the `warning()` function.
 :::
 
 ## Testing and validating {#sec-testing-and-validating}
