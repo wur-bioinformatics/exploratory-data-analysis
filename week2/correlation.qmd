@@ -107,7 +107,7 @@ ggplot(na.omit(corre_continuous), aes(x=SLA, y=LDMC)) +
 ```
 :::{#exr-spearman}
 ### Verifying the spearman correlation coefficient
-@sec-spearman describes how non-linear spearman correlation is a simple modificiation of pearson correlation. Verify this is true: you can get the ranks of a variable by using the `index.return = TRUE` option of the `sort()` function. Pick two variables of your choice, and compare spearman correlation (`cor()` function with `method = spearman`) to pearson correlation on the ranks.
+@sec-spearman describes how non-linear spearman correlation is a simple modificiation of pearson correlation. Verify this is true: you can get the ranks of a variable by using the `rank()` function. Pick two variables of your choice, and compare spearman correlation (`cor()` function with `method = spearman`) to pearson correlation on the ranks.
 :::
 
 :::{#exr-spearman-vs-pearson}
