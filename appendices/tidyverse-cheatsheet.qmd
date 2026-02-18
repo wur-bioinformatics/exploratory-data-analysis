@@ -1,1 +1,76 @@
+---
+execute:
+  eval: false
+  warning: false
+  message: false
+---
 # Tidyverse Cheatsheet {.unnumbered}
+
+All examples use built-in data (`data('iris')`) so you can copy and paste the examples. This is not an exhaustive manual, but describes the main approaches used in the book.
+
+Installing and loading the entire tidyverse 
+```{r}
+install.packages('tidyverse') # only needed once
+library(tidyverse)
+```
+
+## The pipe operator `|>`
+The pipe operator is used in the tidyverse to chain together actions described by the verbs. It works by injecting the output of one function as first argument in the next function:
+
+```{r}
+# Pipe operator
+# Output of function1 is injected into first argument of position2
+function1(input, arg1) |> function2(arg2)
+
+# Explicit nesting
+# This performs the exact same computation as the previous example
+function2(function1(input, arg1), arg2)
+
+# Slightly more abstract
+x |> f(y) == f(x, y)
+```
+
+
+## Core `dplyr` verbs used in this course
+
+### `filter()`: select __rows__ (observations) in a tidy dataset
+Typically used with a _logical expression_ using _comparison operators_ (e.g. `==`, `>=`, etc., see 'comparison operators' in the base R cheatsheet)
+```{r}
+# Select all observations of the setosa iris species
+iris |>
+  filter(Species == 'setosa')
+```
+
+### `select()`: select __columns__ (variables) in a tidy dataset
+```{r}
+# Select only petal width and petal length variables
+iris |>
+  select(Petal.Width, Petal.Length)
+```
+
+### `group_by()`: create groups based on variables in the data
+```{r}
+# Create groups for individual species
+iris |> 
+  group_by('Species')
+```
+
+### `mutate()`: create new columns/variables (based on existing ones)
+```{r}
+# Create a new variable of the ratio between petal length and width
+iris |>
+  mutate(
+    petal_ratio = Petal.Length / Petal.Width
+  )
+```
+
+### `summarise()`: create summaries of existing variables
+```{r}
+# Compute the mean and median petal width
+iris |>
+  summarise(
+    mean_petal_width = mean(Petal.Width),
+    median_petal_width = median(Petal.Width)
+  )
+```
+
