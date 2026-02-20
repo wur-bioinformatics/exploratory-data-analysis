@@ -30,12 +30,15 @@ The data originate from the study:\
 **ABA Is Required for Plant Acclimation to a Combination of Salt and Heat Stress**\
 <https://doi.org/10.1371/journal.pone.0147625>
 
-We could start with the raw sequencing data, but that is beyond the scope of this course. Fortunately, the gene-level counts are already available through the **EMBL-EBI Expression Atlas** at <https://www.ebi.ac.uk/gxa/experiments/E-GEOD-72806/>
+We could start with the [raw sequencing data](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE72806), but that is beyond the scope of this course. Fortunately, the gene-level counts are already available through the **EMBL-EBI Expression Atlas** at <https://www.ebi.ac.uk/gxa/experiments/E-GEOD-72806/>
 
-We will use this dataset for: 
--exploratory RNA-seq analysis 
--clustering and principle component analysis 
--differential gene expression (DGE)
+We will use this data set for:
+
+-   exploratory RNA-seq analysis
+
+-   clustering and principle component analysis
+
+-   differential gene expression (DGE)
 
 ------------------------------------------------------------------------
 
@@ -55,14 +58,17 @@ BiocManager::install(c(
   "tidyverse",
 ))
 
-if(!requireNamespace("HDF5Array", quietly = TRUE)) install.packages("HDF5Array")
+if(!requireNamespace("HDF5Array", quietly = TRUE)) 
+  install.packages("HDF5Array")
 
 library(ExpressionAtlas)
 library(SummarizedExperiment)
 library(tidyverse)
 ```
 
-we can download the data directly from the EMBL-EBI Expression Atlas using the getAltasExperiment method in the ExpressionAtlas library method:
+## Loading RNA-seq expression data
+
+we can download the gene expression data directly from the EMBL-EBI Expression Atlas website using the getaAtlasExperiment method in the ExpressionAtlas library:
 
 ```{r}
 exp <- getAtlasExperiment("E-GEOD-72806")
@@ -74,40 +80,39 @@ This returns a list (SimpleList) of data structures, in this case only one, let'
   se <- exp[[1]]
 ```
 
-To further explore the resulting data structure, use the str() and show() methods to get more information about the content.
+To further explore the resulting data structure, use the `str()` and `show()` functions to get more information about the content.
 
-To learn more about the data structure use the class() method to see what kind of data we are dealing with.
+To learn more about the data structure use the `class()` function to see what kind of data we are dealing with.
 
 ```{r}
 class(se)
 ```
 
-It is a a RangedSummarizedExperiment from the package SummarizedExperiment. Try this to get more information about these:
+It is a `RangedSummarizedExperiment` from the package [SummarizedExperiment](https://bioconductor.org/help/course-materials/2019/BSS2019/04_Practical_CoreApproachesInBioconductor.html). Try this to get more information about these:
 
 ```{r}
 ?RangedSummarizedExperiment
 ?SummarizedExperiment
 ```
 
-The Expression Atlas site can be unresponsive at times, so best to store the data structure locally. Because it is a complex data set, we cannot simply save it as a csv file. Instead, we can use the [Hierarchical Data Format (HDF)](https://en.wikipedia.org/wiki/Hierarchical_Data_Format). In the HDF5Array library there are specific methods to store and load SummarizedExperiment files:
+The Expression Atlas website can be unresponsive at times, so best to store the data structure locally. Because it is a complex data set, we cannot simply save it as a csv file. Instead, we can use the [Hierarchical Data Format (HDF)](https://en.wikipedia.org/wiki/Hierarchical_Data_Format) file format. In the `HDF5Array` library there are specific functions to store and load `SummarizedExperiment` files:
 
 ```{r}
 library(HDF5Array)
 saveHDF5SummarizedExperiment(se,dir="E-GEOD-72806")
 ```
 
-Using the dir() command you can check that a directory was created called **E-GEOD-72806**.
+Using the `dir()` function you can check that a directory was created called **E-GEOD-72806**.
 
-Now we can load the data as:
+From now on we can load the data as:
 
 ```{r}
 se = loadHDF5SummarizedExperiment(dir="E-GEOD-72806")
 ```
 
-
 ::: {#exr-create_load_function}
+Create a function called `load_atlas_se` in your **rnaseq_functions.R** script that returns a SummarizedExperiment either from disk or directly from the EMBL-EBI Expression Atlas. The function should take the accession as input and a Boolean (TRUE/FALSE) to determine whether to load the data from disk or from the website. The default value for the Boolean should be TRUE.
 
-Create a function called load_atlas_se in your **rnaseq_functions.R** script that returns a SummarizedExperiment either from disk or directly from the EMBL-EBI Expression Atlas. The function should take the accession as input and a Boolean to determine whether to load the data from disk or from the website. The default value for the Boolean should be TRUE.
 ```{r}
 load_atlas_se <- function(accession,from_disk = TRUE) {
   ...
@@ -116,7 +121,7 @@ load_atlas_se <- function(accession,from_disk = TRUE) {
 ```
 :::
 
-The data in **se** are stored in different slots. To see which these are, you can use the **slotNames()** method on the **se** object. You can access these slots use the @***\*** **character. For instance, to see how the raw sequencing data were filtered you can look in the** metadata\*\* slot, which is a list, and then the **filtering** element.
+The different kinds ofdata in the **se** object are stored in different slots. To see which these are, you can use the **slotNames()** method on the **se** object. You can access these slots use the **\@** character. For instance, to see how the raw sequencing data were filtered you can look in the **metadata** slot, which is a list, and then the **filtering** element like this:
 
 ```{r}
 se@metadata$filtering 
@@ -124,9 +129,9 @@ se@metadata$filtering
 se@metadata[["filtering"]]
 ```
 
-Notice that for accessing an element of a list you do not use an \*\*@*\* character, but instead a dollar sign or double square brackets.
+Notice that for accessing an element of a list you do not use an **\@** character, but instead a dollar sign or double square brackets.
 
-However, accessing slots directly like this is not advisable, especially for making changes to the object. The recommended way to access data in a complex data structure like this is via accessor functions:
+However, accessing slots directly is like opening the bakery’s display case and taking a cake without going through the counter. It might work, but you are bypassing the process that keeps inventory, presentation, and handling consistent. The recommended way to access data in a complex data structure like this is via accessor functions:
 
 ```{r}
 metadata(se)$filtering 
@@ -134,35 +139,68 @@ metadata(se)$filtering
 
 To find the proper accessor function, the help text for the class is usually the best place to look.
 
+## Exploring the count data
+
 To get the actual expression data in the RangedSummarizedExperiment, we can use the assay() method:
 
 ```{r}
 counts <- assay(se) # genes x samples
+counts
 ```
 
-This returns a matrix with rows representing genes and columns representing samples. Let's look at the dimensions:
+This returns a matrix with rows representing genes and columns representing samples. The class of counts is `DelayedMatrix`, which behaves like a regular numeric matrix, but computations are performed lazily. This means that transformations (such as log-transformation or scaling) are not executed immediately; instead, they are stored and applied only when the data are accessed. This allows efficient handling of large datasets that may reside on disk rather than in computer memory. To view the counts matrix in Rstudio, try the following commands:
+
+```{r}
+View(counts)
+View(as.matrix(counts))
+```
+
+Let's look at the dimensions of counts:
 
 ```{r}
 dim(counts)
 ```
 
-There are 12 samples with various treatments. The columns are the samples, so to get information for the samples we can use the colData method:
+There are more than 32000 genes and 12 samples with various treatments. The columns are the samples, to get information about the samples we can use the colData method:
 
 ```{r}
 coldata <- colData(se) # sample level information
 coldata
 ```
 
-Now to get some idea of the expression values, we can can plot their distribution. First flatten the counts into one vector:
+The samples have non-descriptive names like "SRR2302908", but the **environment_stress** column tells us which stress the sample was subjected to. The other columns do not help to differentiate between the samples. We can clean up the coldata DataFrame to only keep the enviromental_stress column. You probably did not notice it, but coldata is a Bioconductor DataFrame object and not a base R data.frame. We can fix that in the same command:
+
+```{r}
+coldata <- as.data.frame(coldata[, "environmental_stress", drop = FALSE])
+
+```
+
+Now to get some idea of the gene expression values (the counts) for the RNA-seq experiment, we can first sum the counts per sample (so per column). The `apply()` function works for this, where we apply the `sum()` function to the columns. `DelayedArray` objects also have a specific function to do the same called: `colSums()`
+
+```{r}
+apply(counts,2,sum) # or colSums(counts)
+```
+
+::: {.callout-tip appearance="simple"}
+### apply (1)
+
+The `apply(X, MARGIN, FUN)` function performs the function given by FUN on all rows or columns (indicated by the MARGIN value: 1 for rows and 2 for column) of the matrix X. So in the code above, we calculated the `sum()` per column of `counts`.
+:::
+
+In the Suzuki et al. paper we can read that they generated on average 14 million sequencing reads per sample, the sums you see here are after filtering to remove bad quality reads. Do the sums match the number from the paper?
+
+One sequencing read corresponds to one mRNA (fragment), so they can be used to determine the abundance of the mRNAs and quantify the expression of the different Arabidopsis genes.
+
+To get an idea of the overall properties of the counts, we can plot their distribution. For this we look at the counts of all genes and samples together, so let's flatten the counts into one vector:
 
 ```{r}
 expr <- as.vector(counts)
 ```
 
-And plot this as a histogram with 100 bins:
+And then plot this as a histogram with 100 bins:
 
 ```{r}
-df_expr <- data.frame(expr = expr)
+df_expr <- data.frame(expr = expr) # ggplot needs a data.frame
 
 library(ggplot2)
 
@@ -172,7 +210,7 @@ ggplot(df_expr, aes(x = expr)) +
   x = "Counts", y = "Frequency")
 ```
 
-This is not very informative, is it? To bring the values in the same range, we can plot the log10 transformed counts:
+This is not very informative, is it? A common trick to bring values in the same range is to performa a log transformation of the counts. We can plot the log10 transformed counts with a simple addition:
 
 ```{r}
 ggplot(df_expr, aes(x = expr)) +
@@ -183,10 +221,11 @@ ggplot(df_expr, aes(x = expr)) +
 ```
 
 ::: {#exr-log_warnings}
-You may see a warning that the scale_x_log10() introduced infinite values, can you explain why and for which expression values this happened?
+You may see a warning that the `scale_x_log10()` introduced infinite values, can you explain why and for which expression values this happened?
 :::
 
-We can avoid the "infinite values" warning by using the the log1p method:
+We can avoid the "infinite values" warning by using the the `log1p` method:
+
 ```{r}
 ggplot(df_expr, aes(x = log1p(expr))) +
   geom_histogram(bins = 100) +
@@ -195,22 +234,23 @@ ggplot(df_expr, aes(x = log1p(expr))) +
 ```
 
 ::: {#exr-log1p}
-What is the difference with the previous plot? In which two ways does log1p() differ from log10()?
+What is the difference with the previous plot? In which two ways does `log1p()` differ from `log10()`?
 :::
 
 For further analyses, we are not interested in genes that have little to no expression, so let's filter these out:
+
 ```{r}
 keep <- rowSums(counts >= 10) >= 3
 counts_filt <- as.matrix(counts[keep, ])
 ```
 
-Let's unpack what happens here: the *counts \>= 10* results in a matrix with Boolean or logical (TRUE or FALSE) values. *rowSums()* counts a TRUE as 1 and a FALSE as 0. The resulting **keep** variable is a vector of logical values, which is used to select rows (genes) based on their counts.
+Let's unpack what happens here: the `counts >= 10` results in a matrix with Boolean/logical (TRUE or FALSE) values. `rowSums()` counts a TRUE as 1 and a FALSE as 0. The resulting `keep` variable is a vector of logical values, which is used to select rows (genes) of the counts matrix.
 
 ::: {#exr-filter}
 How many genes are left? Describe which criteria genes have to meet to be kept.
 :::
 
-If we look at the mean expression per gene, we can see that a small proportion of genes is very highly expressed.
+The differences in expression level per gene can vary a lot. If we create a line plot of the (sorted) mean expression values per gene, we can see that a small proportion of genes are very highly expressed:
 
 ```{r}
 gene_means <- rowMeans(counts_filt)
@@ -218,27 +258,27 @@ gene_means_sorted <- sort(gene_means)
 
 plot(
   gene_means_sorted,
-  type = "l",
+  type = "l", #line
   xlab = "Genes (sorted by mean expression)",
   ylab = "Mean expression",
   main = "Sorted gene mean expression"
 )
 ```
 
-I guess by now it is clear that for plotting gene expression values a log transformation is advised to not let the highly expressed genes dominate the analyses
+By now it should be clear that for plotting gene expression values a log transformation is advised to not let these highly expressed genes dominate the analyses
 
 ```{r}
 logcounts = log1p(counts_filt)
 ```
 
-Now let's look at the top 10 most highly expressed genes, which are actually the bottom 10 of the sorted list that we made before.
+## Top 10 most highly expressed genes
+
+Now let's look at the top 10 most highly expressed genes, which are actually the bottom 10 of the sorted list that we just plotted.
 
 ```{r}
 top_n <- 10
 top_genes <- names(tail(gene_means_sorted,top_n))
-
-mat_top <- logcounts[top_genes,]
-
+mat_top <- logcounts[top_genes,] # select the rows by the row names of logcounts
 ```
 
 To plot the expression of these genes in all samples we can use a fancy heatmap that also allows us to add annotation from the metadata of the samples.
@@ -246,7 +286,7 @@ To plot the expression of these genes in all samples we can use a fancy heatmap 
 ```{r}
 library(pheatmap)
 
-anno_col <- as.data.frame(colData(se))  # sample annotations
+anno_col <- coldata  # sample annotations
 
 pheatmap(
   mat_top,
@@ -255,19 +295,19 @@ pheatmap(
   annotation_col = anno_col,
   show_colnames = FALSE,
   fontsize_row = 7,
-  scale = "row",
+  scale = "none",
   main = paste("Top", top_n, "most highly expressed genes")
 )
 ```
 
-::: {#exr-}
+::: {#exr-improve_pheatmap}
 In this plot you can already discern a pattern, at least for the 2 or 3 most highly expressed genes. Still the plot can be improved in a number of ways: 
--most of the sample annotation are not very useful, change the anno_col data frame to only keep the most informative annotation. 
--the most highly expressed genes still take most of the attention, the *scale* argument can improve that by converting the values to z-scores per row or column. Set the scale argument to the appropriate direction to see the relative expression over the different sample for the less highly expressed genes. 
--with clustering you can group samples and/or genes based on how similar their expression values are, more about that later in the clustering session. Try out what happens if you cluster genes and samples in this plot.
+
+ - the most highly expressed genes still take most of the attention, the *scale* argument can improve that by converting the values to z-scores per row or column. Set the scale argument to the appropriate direction (row or column) to see the relative expression over the different samples for the less highly expressed genes. 
+ - with clustering you can group samples and/or genes based on how similar their expression values are, more about that tomorrow in the clustering session. Try out what happens if you cluster genes and samples in this plot.
 
 ```{r}
-anno_col <- as.data.frame(colData(se))
+anno_col <- coldata
 
 pheatmap(
   mat_top,
@@ -282,10 +322,11 @@ pheatmap(
 ```
 :::
 
-So we have looked at the expression at the gene level, what about the sample level: do all samples have roughly the same number of counts? The total number of counts per sample is also called *library size*.
+## Normalization
+
+So we have looked at the expression at the gene level, let us get back to the total number counts per sample and address the question do all samples have the same number of counts? The total number of counts per sample is also called *library size*:
 
 ```{r}
-
 libsize <- colSums(counts_filt)
 
 barplot(
@@ -294,23 +335,29 @@ barplot(
   ylab = "Total counts",
   main = "Library size per sample"
 )
-
 ```
 
-Hmm, pretty similar but not identical. The total number of counts per sample is more a technical than a biological aspect of the data, it does not say anything about the total number of transcripts that were sequenced. If we compare the sample with the most counts and the sample with the least counts, there is a 20% difference:
+The total counts are pretty similar but not identical. If we compare the sample with the most counts and the sample with the fewest counts, there is a 20% difference:
 
 ```{r}
 min(libsize)/max(libsize)
 ```
 
-And if we look at the correlation between the counts for the top 10 most highly expressed genes with the library size, some are very highly correlated.
+The total number of counts (reads) per sample is more a technical than a biological aspect of the data, you typically ask the DNA sequencing facility for a certain number of reads per sample. Deviation from this requested number is usually due to variation in sample quality and/or sequencing efficiency.
+
+If we look at the correlation between the counts for the top 10 most highly expressed genes with the library size, some are very strongly correlated.
 
 ```{r}
-apply(mat_top, 1, cor, y = libsize, method = "pearson")
-
+apply(mat_top, 1, cor, y = libsize, method = "pearson") 
 ```
 
-We just discovered something uncomfortable: different samples have very different total numbers of reads. That means our analyses so far were biased. So how do we address this? A simple and reasonably effective method is to just correct the counts for the total number of reads per sample. Just dividing each count by the total counts per sample would create very small numbers, so it is commonly multiplied by a million to generate so called Counts Per Million
+::: {.callout-tip appearance="simple"}
+### apply (2)
+
+This use of `apply()` is a bit more complicated than before. That is because the `cor()` function requires more information than just the rows or columns of the given matrix. The additional arguments of `apply()` are passed on to `cor()`. So for every row (second argument is a `1`) of `mat_top`, the function calculates the Pearson correlation with the `libsize` vector.
+:::
+
+We just discovered something uncomfortable: different samples have quite different total numbers of reads. That means our analyses so far were biased. How do we deal with this? A simple and reasonably effective method is to just correct the counts for the total number of reads per sample. But just dividing each count by the total counts per sample would create very small numbers, so the result after dividing is commonly multiplied by a million to generate so-called **Counts Per Million** or CPM.
 
 $$
 CPM_{i} = \frac {counts_{i}}{\sum_{n=1}^{n}counts_n}\times10^6
@@ -318,17 +365,17 @@ $$
 
 Summing all CPM normalized counts in a sample would then give a uniform total of $10^6$
 
-In practice, this is too simple, so more sophisticated normalization methods are commonly used in RNA-seq analysis. To understand what the problem is with the simple method, think of the following scenario: a treatment causes a very strong increase in expression of all top 10 most highly expressed genes, but does not affect all other genes. The top 10 genes now take an even larger proportion of the total counts, which effectively lowers the counts for all the other genes making it seem like their expression decreased due to the treatment. The problem is that the simple scaling based normalization is sensitive to a change in composition.
+In practice, this does not remove all bias, so more sophisticated normalization methods are used in RNA-seq analysis. To understand what the problem is with the simple method, think of the following scenario: a treatment causes a very strong increase in the expression of only the top 10 most highly expressed genes, but does not affect any other gene. The top 10 genes now take an even larger proportion of the total counts, which effectively lowers the relative counts for all the other genes making it seem like their expression decreased due to the treatment. The problem is that the simple scaling-based normalization is sensitive to a change in composition.
 
 A normalization method that addresses this is called TMM, or "Trimmed Mean of M-values". This specifically ignores genes that change a lot between different samples in calculating a scaling factor. It is good to realize that TMM only works well if the majority of genes do not change much in expression.
 
-We can perform TMM normalization step by step, but we can also use a library that was designed for RNA-seq analyses called **edgeR**.
+We can perform TMM normalization step-by-step, but we can also use a library that was designed for RNA-seq analyses called **edgeR**.
 
 ```{r}
 library(edgeR)
 
 dge <- DGEList(counts = counts_filt) # create a DGEList object
-dge <- calcNormFactors(dge) # calculate the normalization factors and add these to the DGEList object
+dge <- calcNormFactors(dge) # calculate the normalization factors and include these in the DGEList object
 
 cpm <- cpm(dge, log = FALSE) # extract the CPM normalized counts from the DGEList object
 
@@ -344,23 +391,15 @@ Did that help?
 
 We will come back to edgeR on Wednesday when we will use it to find which genes are significantly up- or down-regulated in response to the stress treatments. These genes are called Differentially Expressed Genes or DEG, and the analysis is called Differential Gene Expression or DGE.
 
-::: {#exr-create_load_function}
+::: {#exr-create_function_get_normalized_counts}
+Create a function called **get_normalized_counts** in your **rnaseq_functions.R** script that does the following: -extract the counts from a SummarizedExperiment -filters out lowly expressed genes -normalizes the counts using edgeR's `cpm()` function -optionally log transforms the counts
 
-Create a function called **get_normalized_counts_and_coldata** in your **rnaseq_functions.R** script that does the following:
--extract the counts from a SummarizedExperiment
--filters out lowly expressed genes
--normalizes the counts using edgeR
+It should take as input a **SummarizedExperiment** object, a logical value **log** indicating whether the counts should be log2 transformed (default TRUE) and two numeric values that are used for filtering: **min_count** and **min_samples**. These should have default values 10 and 3. It should return the cpm values:
 
-It should take as input a SummarizedExperiment and two numeric values that are used for filtering: min_count and min_samples. These should have default values 10 and 3. It should return the log2 CPM values and the colData from the SummarizedExperiment object as a list:
 ```{r}
-get_normalized_counts_and_coldata<- function(se, min_count = 10, min_samples = 3) {
+get_normalized_counts<- function(se, log = TRUE, min_count = 10, min_samples = 3) {
   ...
-  out_list = list (
-    logcpm = logcpm,
-    coldata = coldata
-  )
-  
-  return(out_list)
+  return(cpm)
 }
 ```
 :::
