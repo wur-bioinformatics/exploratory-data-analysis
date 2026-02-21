@@ -16,14 +16,10 @@ execute:
   message: false
 ---
 
-:::{.callout-caution}
-### WORK IN PROGRESS
-This chapter is not yet finished, come back later for the final product
-:::
-
+# Clustering
 In this session we continue with the gene expression dataset from <https://www.ebi.ac.uk/gxa/experiments/E-GEOD-72806/>
 
-First load the proper libraries and filter/transform the data using the functions that you created yesterday
+First load the proper libraries and filter/transform the data using the functions that you created yesterday. To make the functions available in the current R session, you can use the `source()` function to run the R script.
 
 ```{r}
 library(HDF5Array)
@@ -31,21 +27,21 @@ library(edgeR)
 library(SummarizedExperiment)
 library(ExpressionAtlas)
 
+source("./rnaseq_functions.R")
 se <- load_atlas_se("E-GEOD-72806")
-lst <- get_normalized_counts_and_coldata(se)
-logcounts <- lst$logcpm
-coldata <- lst$coldata
+logcounts <- get_normalized_counts(se)
+coldata <- as.data.frame(colData(se)[, c("environmental_stress"), drop = FALSE])
 ```
 
-## Clustering
+## Introduction
 
-We have already seen that the 12 samples represent 4 treatments, with 3 replicates per treatment. We expect the replicates to have similar gene expression values. To check this, we can cluster samples based on these expression values. You were already introduced to clustering on day 2 of the course. Then you used hierarchical clustering, to day we will also look at another common clustering method called k-means.
+We have already seen that the 12 samples represent 4 treatments, with 3 replicates per treatment. We expect the replicates to have similar gene expression values. To check this, we can cluster samples based on these expression values. You were already introduced to clustering on day 2 of the course. Then you used hierarchical clustering, today we will also look at another common clustering method called *k*-means.
 
 In clustering we group samples together that are similar, but how do we determine how similar samples are? We need a similarity measure. This is usually derived from a distance measure, which is inversely related to the similarity.
 
 ### Euclidean distance.
 
-An often used distance measure is the Euclidean distance, which is simply the straight-line distance between two points. We can consider the samples to be points in a multidimensional space, where each genes is a dimension and the position of the samples is determined by the expression values. This becomes quite difficult to imagine, so let's start with defining a sample by only two genes, x and y. For the Euclidean distance we can use **Pythagoras**:
+An often-used distance measure is the Euclidean distance, which is simply the straight-line distance between two points. We can consider the samples to be points in a multidimensional space, where each gene is a dimension and the position of the samples is determined by the expression values. This becomes quite difficult to picture, so let's start with defining a sample by only two genes, x and y. For the Euclidean distance we can use **Pythagoras**:
 
 $$
 d(\text{sample}_1, \text{sample}_2)
@@ -55,9 +51,11 @@ d(\text{sample}_1, \text{sample}_2)
   +
   (y_1 - y_2)^2
 }
-$$ Where $x_1$ is the expression value of gene x in sample 1, etc.
+$$ 
+Where $x_1$ is the expression value of gene x in sample 1, etc.
 
-For all genes this would look like this: $$
+For all genes this would look like this: 
+$$
 d(\text{sample}_1, \text{sample}_2)
 =
 \sqrt{
@@ -84,8 +82,11 @@ library(ggplot2)
 # Extract expression of the two genes and transpose
 expr_df <- as.data.frame(t(logcounts[genes, ]))
 
-# Make sure expr_df has sample names as a column
+# Make sure expr_df has the sample names as a column
 expr_df$sample = rownames(expr_df)
+
+# Make sure coldate has the sample names as a column
+coldata$sample = rownames(coldata)
 
 # Merge expression data with metadata, on the sample column
 df <- merge(
@@ -116,12 +117,12 @@ p2
 
 ```
 
-This shows the samples in a 2-dimensional plot, but does not really help to group the samples according to their treatment...
+This shows the samples in a 2-dimensional scatter plot, but does not really help to group the samples according to their treatment...
 
 We can try the same for the two most variable genes:
 
 ```{r}
-genes <- names(sort(gene_var, decreasing = TRUE))[1:200]
+genes <- names(sort(gene_var, decreasing = TRUE))[1:2]
 ```
 
 ::: {#exr-plot_2genes}
@@ -167,37 +168,35 @@ Now we can see that the samples form two groups.
 ::: {#exr-stress_response}
 Based on their treatments, which stress response would you say that the genes are involved in?
 
-The gene IDs are not really informative to learn more about the kinds of genes that we are dealing with, but you can look them up at the TAIR website <https://www.arabidopsis.org>. Does it make sense that you find these genes upregulated under the stress condition?
+The gene IDs are not really informative to learn more about the kinds of genes that we are dealing with, but you can look them up at the TAIR website <https://www.arabidopsis.org>. Does it make sense that you find these genes upregulated in the stress response?
 :::
-
-We can also get gene information programmatically using an R package called [org.At.tair.db](https://bioconductor.org/packages/release/data/annotation/html/org.At.tair.db.html).
 
 ## hierarchical clustering
 
-We can use the 2-gene representation of the samples to find clusters of similar samples (like you already did on day 2 of the course). Hierarchical clustering starts with each sample in its own cluster and then step-wise merges the two most similar clusters based on a distance measure (Euclidean, Correlation-based, etc.) until all samples are in one cluster. This is typically depicted as a This merging can be stopped if a certain number of clusters is reached. How the distance is calculated depends on the distance measure, but also on the point in a cluster to calculate the distance from.For this several methods are used that give different results. With **average linkage**, the distance between two cluster is calculated as the average of all distances between the members of both cluster. In **complete linkage**, the largest distance between any two members of two cluster is used, while **single linkage** uses the smallest distance between any two members of both clusters. You can imagine that both the distance measure as well as the linkage methods affect the clustering.
+We can use the 2-gene representation of the samples to find clusters of similar samples (like you already did on day 2 of the course). Hierarchical clustering starts with each sample in its own cluster and then step-wise merges the two most similar clusters based on a distance measure (Euclidean, correlation-based, etc.) until all samples are in one cluster. This is typically depicted as a tree/dendrogram. This merging can be stopped if a certain number of clusters is reached. How the distance is calculated depends on the distance measure, but also on the positions in the clusters the distance is calculated between. For this several so-called **agglomeration** or **linkage methods** are used that give different results. With **average linkage**, the distance between two cluster is calculated as the average of all distances between the members of both cluster. In **complete linkage**, the largest distance between any two members of two cluster is used, while **single linkage** uses the smallest distance between any two members of both clusters. You can imagine that both the distance measure as well as the linkage methods affect the clustering.
 
 ```{r}
 d_samples <- dist(df[,genes], method = "euclidean") # calculate Euclidean distance between all samples
 hc_samples <- hclust(d_samples, method = "complete") # cluster using complete-linkage
-plot(hc_samples, hang=-1) # this actually calls plot.hclust, hang=-1 makes sure the tree starts (ends?) at 0
+plot(hc_samples, hang=-1) # this actually calls plot.hclust, hang=-1 makes sure the tree starts (or ends, depending on your perspective) at 0
 ```
 
-This should show a tree (upside down?!) with two very distinct branches of samples. The height value on the y-axis is actually the distance between clusters. We can check this by looking at the content `d_samples`. The distance between samples 11 and 12 is a bit more that 12 and that is also where the horizonal line is that merges both clusters. The root of the tree is slightly higher than 70, which agrees with the largest distance between any pair of samples (try `max(d_samples)`) which is 73.6.
+This should show a tree (upside down?!) with two very distinct branches of samples. The height value on the y-axis is actually the distance between clusters. We can check this by looking at the content of the distance matrix `d_samples`. The distance between samples 11 and 12 is a bit larger than 12 and that is also where the horizontal line is that merges both clusters. The root of the tree is slightly above 70, which agrees with the largest distance between any pair of samples (try `max(d_samples)`) which is 73.6.
 
-To get the actual clusters, we can cut the tree at a certain height. Alternatively you can specify the number of clusters you want.
+To get the actual clusters, we can use `cutree()` to cut the tree at a certain height. Alternatively you can specify the number of clusters you want and let `cutree()` determine the appropriate cut position.
 
 ::: {#exr-cutttree}
-Choose a height cutoff that should result in two clusters (this is usually not so easy) and check the result.
+Choose a height cutoff that should result in two clusters (this is usually not as easy) and check the result.
 
 ```{r}
-h = 10##
+h = ##
 
 sample_clusters <- cutree(hc_samples, h = h)
 sample_clusters
 ```
 :::
 
-Now we can add the cluster numbers to the data frame and annotate the figure with these to check that the clustering worked. The stress type is shown as the shape of the sample.
+The resulting clusters are numbered starting at 1. We can add these cluster numbers to the data frame and show them in the figure to check that the clustering worked. environmental_stress is now shown as the shape of the sample.
 
 ```{r}
 df$cluster <- factor(sample_clusters)
@@ -234,13 +233,13 @@ hc_samples <- hclust(d_samples, method = "complete")
 plot(hc_samples)
 ```
 
-Picking a proper height to cut this tree into four clusters is difficult, but the cutree() function can do that for you. Instead of specifying the h argument, you can specify k for the number of clusters.
+Picking a proper height to cut this tree into four clusters (one for each stress) is difficult, but the `cutree()` function can do that for you. Instead of specifying the `h` argument, you can specify `k` for the number of clusters.
 
 ```{r}
 sample_clusters <- cutree(hc_samples, k = 4)
 ```
 
-In the plot it is hard to see how this worked, but we can just look whether the clusters math the stress, by combining the cluster information with the sample annotation into one dataframe like this:
+In the plot it is hard to see how this worked, but we can just look whether the clusters match the stress, by combining the cluster information with the sample annotation into one dataframe like this:
 
 ```{r}
 cluster_df <- data.frame(
@@ -259,14 +258,18 @@ cluster_annot <- merge(
 print(cluster_annot)
 ```
 
-Not quite there yet? Especially one of the two stresses does not seem to make enough of a difference to clearly tell the samples apart.
+Not quite there yet? Especially one of the two stresses does not seem to make enough of a difference to clearly tell the samples apart. 
 
-We can vary a number of choices in the different steps to cluster the samples according to their stress treatment, but you should be careful not to take this too far. You could also conclude that there is little effect of one of these stresses, or even that samples could have been swapped during the experiment. Still, we can check how different choices for the distance measure, the number of genes, or the clustering agglomeration method affect the clustering.
+We can vary a number of choices in the different steps to try and cluster the samples according to their stress treatment, but you should be careful not to take this too far.
+
+["If you torture the data long enough, it will confess to anything"](https://en.wiktionary.org/wiki/if_you_torture_the_data_long_enough,_it_will_confess_to_anything)
+
+You could also conclude that there is little effect of one of these stresses, or even that samples could have been swapped during the experiment. Still, we can check how different choices for the distance measure, the number of genes, or the clustering agglomeration method affect the clustering.
 
 ::: {#exr-clustering_parameters}
-Try out different distance measures and agglomeration/linkage methods (see ?dist and ?hclust).
+Try out different distance measures and agglomeration/linkage methods (see `?dist` and `?hclust`).
 
-One distance measure that is not included in dist() is correlation. But you can easily do that using the cor() function and then calculate the distance by subtracting the correlation from 1:
+One distance measure that is not included in `dist()` is correlation. But you can easily do that using the `cor()` function and then calculate the distance by subtracting the correlation from 1:
 
 ```{r}
 cor_samples <- cor(logcounts, method = "pearson")
@@ -277,13 +280,18 @@ d_samples <- as.dist(1 - cor_samples)
 Do you find a combination of parameter choices that gives the expected clustering?
 :::
 
-## k-means
+## *K*-means
 
-Next we will look at the other common clustering method called [*k*-means clustering](https://en.wikipedia.org/wiki/K-means_clustering). K-means clustering works by dropping a fixed number of points at random positions in your gene space. These points become the centers of the clusters, and hence are called centroids. So the number of centroinds determines that number of clusters you get. The procedure is iterative, it repeats a number of steps until a certain stop criterium is reached. These steps are: -assign all samples to their nearest centroid, using Euclidean distance -move the centroids to the center of the cluster, by averaging over all points that are assigned to it -repeat until the centroids no longer change position (or for a fixed number of steps).
+Next we will look at the other common clustering method called [*K*-means clustering](https://en.wikipedia.org/wiki/K-means_clustering). *K*-means clustering works by dropping a fixed number of points at random positions in your gene space. These points become the centers of the clusters, and hence are called centroids. So the number of centroids determines that number of clusters you get. The procedure is iterative, it repeats a number of steps until a certain stop condition is reached. These steps are: 
+ - assign all samples to their nearest centroid, using Euclidean distance 
+ 
+ - move the centroids to the center of the cluster, by averaging over all points that are assigned to it 
+ 
+ - repeat until the centroids no longer change position (or run a fixed number of steps).
 
 Again, for simplicity we can start with two genes, I selected a couple that better separate the samples. With four groups of samples, I suggest we try setting $k$ to 4.
 
-*k*-means clustering starts by randomly positioning centroids in the gene space, which means that it is not-deterministic and might produce different clusterings when you run it multiple times. To still make it reproducible, we can use a trick involving a so called [Random seed](https://en.wikipedia.org/wiki/Random_seed) that makes sure we get the same random choices every we run the code. This works because random numbers in R (and generally in computers) are not really random. An algorithm called the pseudorandom number generator generates sequences of numbers that appear to be random, but if we fix the starting point, we always get the same sequence of 'random' numbers. Normally the starting point is set using dynamic information, like the current time in seconds.
+*K*-means clustering starts by randomly positioning centroids in the gene space, which means that it is not-deterministic and might produce different clusterings when you run it multiple times. To still make it reproducible, we can use a trick involving a so called [Random seed](https://en.wikipedia.org/wiki/Random_seed) that makes sure we get the same random choices every we run the code. This works because random numbers in R (and generally in computers) are not really random. An algorithm called the pseudorandom number generator generates sequences of numbers that appear to be random, but if we fix the starting point, we always get the same sequence of 'random' numbers. Normally the starting point is set using dynamic information, like the current time in seconds.
 
 ```{r}
 set.seed(421) # set the starting point for the random number generator
@@ -344,10 +352,10 @@ print(table(km$cluster))
 
 ```
 
-Given the randomness of the initialisation of the centroid locations, this might not be the best we can get.
+Given the randomness of the initialization of the centroid locations, this might not be the best we can get.
 
 ::: {#exr-kmeans_multiple_runs}
-Write a for-loop to repeat the k-means clustering 10 times and report the number of samples per cluster for each repetition
+Write a for-loop to repeat the *K*-means clustering 10 times and report the number of samples per cluster for each repetition
 
 ```{r}
 
@@ -363,7 +371,7 @@ Does it get better?
 :::
 
 ::: {#exr-nstart}
-Ideally we would want to run k-means many times and keep only the best result. As it happens, kmeans has a built-in argument for this, called nstart. Try setting that to 25 and check the result by plotting the samples in 2-gene space like above with their cluster annotation
+Ideally we would want to run *K*-means many times and keep only the best result. As it happens, `kmeans()` has a built-in argument for this, called `nstart`. Try setting that to 25 and check the result by plotting the samples in 2-gene space like above with their cluster annotation
 
 ```{r}
 
@@ -377,22 +385,13 @@ Next to clustering the samples, we can also cluster the genes based on their exp
 We can again load it from the Expression Atlas like before
 
 ```{r}
-exp <- getAtlasExperiment("E-GEOD-94457")
-se <- exp[[1]]
+se <- load_atlas_se("E-GEOD-94457",from_disk=FALSE)
 
 # store it for later use
-#saveHDF5SummarizedExperiment(se,dir="E-GEOD-94457",replace=TRUE)
-#se = loadHDF5SummarizedExperiment(dir="E-GEOD-94457")
+saveHDF5SummarizedExperiment(se,dir="E-GEOD-94457",replace=TRUE)
 
-counts <- assay(se) 
-coldata <- as.data.frame(colData(se)[, c("time", "growth_condition"), drop = FALSE])
-keep <- rowSums(counts >= 10) >= 3
-counts_filt <- counts[keep, ]
-
-dge <- DGEList(counts = counts_filt)
-dge <- calcNormFactors(dge)
-
-logcounts <- cpm(dge, log = TRUE, prior.count = 1) #adds 1 to avoid taking the log of zero
+coldata = as.data.frame(colData(se)[,c("growth_condition","time")])
+logcounts <- get_normalized_counts(se)
 ```
 
 And now we take the top 1000 most variable genes:
@@ -412,13 +411,67 @@ d_genes <- as.dist(1 - cor_mat)
 hc_genes <- hclust(d_genes, method = "complete")
 ```
 
-Now we could plot the tree, but with 1000 genes this will not be very helpful. We could show the clusters in a heatmap to see the corresponding expression patterns. The pheatmap function that we used before can already do the clustering for you, but now we will provide the clustering results that we obtained above.
+We could plot the tree, but with 1,000 genes this will not be very helpful. We can instead show the clusters in a heatmap to see the corresponding expression patterns. The `pheatmap()` function that we used before can already do the clustering for you, but we will provide the clustering results that we obtained above.
 
 ```{r}
 library(pheatmap)
 
-pheatmap( mat_top, cluster_rows = hc_genes, cluster_cols = FALSE, show_rownames = FALSE, show_colnames = FALSE, annotation_col = coldata, scale = "row", main = paste("Top",n_top,"most variable genes") )
-
+pheatmap( mat_top,
+          cluster_rows = hc_genes, 
+          cluster_cols = FALSE, 
+          show_rownames = FALSE, 
+          show_colnames = FALSE, 
+          annotation_col = coldata, 
+          scale = "row", 
+          main = paste("Top",n_top,"most variable genes") )
 ```
 
-This shows a few clear patterns of genes showing similar expression.
+This shows a few clear patterns of genes with similar expression. Some of the genes are tuned down during germination while others are activated in the middle or at the end. We could group the genes into three clusters: early, middle and late.
+
+``` {r}
+gene_clusters = cutree(hc_genes, k=3)
+
+for (cluster in 1:3) {
+  pheatmap( mat_top[gene_clusters == cluster,],
+            cluster_rows = FALSE, 
+            cluster_cols = FALSE, 
+            show_rownames = FALSE, 
+            show_colnames = FALSE, 
+            annotation_col = coldata, 
+            scale = "row", 
+            main = paste("Cluster",cluster) )
+}
+```
+As a bonus (so not part of the examn) we can investigate which biological processes these genes are involved in to dive into the biology. For this a common approach is [Gene Ontology enrichment analysis](https://geneontology.org/docs/go-enrichment-analysis/), which basically comes down to finding biological progresses that occur more frequently in the set of genes in a cluster than would expected by chance. The code below does that for all three clusters. The dotplots show the top 20 most enriched biological processes per cluster.
+
+``` {r}
+if (!requireNamespace("org.At.tair.db", quietly = TRUE)) 
+  BiocManager::install("org.At.tair.db")
+
+if (!requireNamespace("clusterProfiler", quietly = TRUE)) 
+  BiocManager::install("clusterProfiler")
+
+library(clusterProfiler) # for the enrichment analysis
+library(org.At.tair.db) # contains gene function annotation 
+
+background_genes <- rownames(logcounts) # the background set of genes
+
+for (cluster in 1:3) {
+  genes <- names(gene_clusters)[gene_clusters == cluster] # the list of genes in the cluster
+  
+  ego <- enrichGO(
+    gene          = genes,
+    universe      = background_genes,
+    OrgDb         = org.At.tair.db,
+    keyType       = "TAIR",      
+    ont           = "BP",   
+    pAdjustMethod = "BH",
+    pvalueCutoff  = 0.05,
+    qvalueCutoff  = 0.05,
+    readable      = TRUE
+  )
+  
+  print(dotplot(ego, showCategory = 20, title = paste("Cluster",cluster)))
+}
+```
+One cluster is clearly composed of seed expressed genes, another more focuessed on cell wall organisation, and one clearly enriched in photosynthesis related genes.
