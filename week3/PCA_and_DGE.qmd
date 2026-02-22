@@ -16,7 +16,7 @@ execute:
   message: false
 ---
 
-# Dimensionality reduction
+## Dimensionality reduction
 
 We looked at clustering the samples based on the expression of 2 genes, which worked pretty good when this was based on the two most variable genes. With two genes, we could also plot the samples in a 2 dimensional figure and 'see' the clusters. However, if we take all genes into account, this will not work anymore: with three genes we reach the limit of the number of dimensions we can plot and that third dimension is already less easy to interpret than the first two. Still, in exploratory data analysis, being able to 'look' at your data can be very informative.
 
