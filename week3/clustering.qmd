@@ -16,7 +16,7 @@ execute:
   message: false
 ---
 
-## Clustering
+## Introduction
 In this session we continue with the gene expression dataset from <https://www.ebi.ac.uk/gxa/experiments/E-GEOD-72806/>
 
 First load the proper libraries and filter/transform the data using the functions that you created yesterday. To make the functions available in the current R session, you can use the `source()` function to run the R script.
@@ -32,8 +32,6 @@ se <- load_atlas_se("E-GEOD-72806")
 logcounts <- get_normalized_counts(se)
 coldata <- as.data.frame(colData(se)[, c("environmental_stress"), drop = FALSE])
 ```
-
-## Introduction
 
 We have already seen that the 12 samples represent 4 treatments, with 3 replicates per treatment. We expect the replicates to have similar gene expression values. To check this, we can cluster samples based on these expression values. You were already introduced to clustering on day 2 of the course. Then you used hierarchical clustering, today we will also look at another common clustering method called *k*-means.
 
@@ -125,41 +123,11 @@ We can try the same for the two most variable genes:
 genes <- names(sort(gene_var, decreasing = TRUE))[1:2]
 ```
 
-::: {#exr-plot_2genes}
+::: {#exr-two_gene_scatter_plot}
 Now we could copy the plotting code from above, but copying a block of code is generally not a good idea, it is better to turn that into a function that you can call. So please go ahead and create a function that takes the list of genes as input, as well as the data that is needed to make the plot (logcounts and coldata). Add this function to your **rnaseq_functions.R** script
 
 ```{r}
-
-# ---- extract expression and transpose ----
-expr_df <- as.data.frame(t(logcounts[genes, , drop = FALSE]))
-expr_df$sample <- rownames(expr_df)
-
-# ---- merge expression with metadata ----
-df <- merge(
-  expr_df,
-  coldata,
-  by = "sample",
-  all.x = TRUE
-)
-
-p2 <- ggplot(
-  df,
-  aes(
-    x = .data[[genes[1]]],
-    y = .data[[genes[2]]],
-    color = environmental_stress
-  )
-) +
-  geom_point(size = 4) +
-  geom_text(aes(label = sample), vjust = -0.8, size = 3) +
-  labs(
-    title = "Samples projected onto the two most variable genes",
-    x = paste(genes[1], "(log(cpm) expression)"),
-    y = paste(genes[2], "(log(cpm) expression)")
-  ) +
-  theme_bw()
-
-p2
+two_gene_scatter_plot(genes, logcounts, coldata)
 ```
 :::
 
@@ -176,7 +144,8 @@ The gene IDs are not really informative to learn more about the kinds of genes t
 We can use the 2-gene representation of the samples to find clusters of similar samples (like you already did on day 2 of the course). Hierarchical clustering starts with each sample in its own cluster and then step-wise merges the two most similar clusters based on a distance measure (Euclidean, correlation-based, etc.) until all samples are in one cluster. This is typically depicted as a tree/dendrogram. This merging can be stopped if a certain number of clusters is reached. How the distance is calculated depends on the distance measure, but also on the positions in the clusters the distance is calculated between. For this several so-called **agglomeration** or **linkage methods** are used that give different results. With **average linkage**, the distance between two cluster is calculated as the average of all distances between the members of both cluster. In **complete linkage**, the largest distance between any two members of two cluster is used, while **single linkage** uses the smallest distance between any two members of both clusters. You can imagine that both the distance measure as well as the linkage methods affect the clustering.
 
 ```{r}
-d_samples <- dist(df[,genes], method = "euclidean") # calculate Euclidean distance between all samples
+X <- df[, genes] # select only the gene expression columns for clustering
+d_samples <- dist(X, method = "euclidean") # calculate Euclidean distance between all samples
 hc_samples <- hclust(d_samples, method = "complete") # cluster using complete-linkage
 plot(hc_samples, hang=-1) # this actually calls plot.hclust, hang=-1 makes sure the tree starts (or ends, depending on your perspective) at 0
 ```
@@ -308,9 +277,10 @@ df <- merge(
 )
 
 k <- 4
+X <- df[, genes] # select only the gene expression columns for clustering
 
 km <- kmeans(
-  df[, genes],
+  X,
   centers = k,
 )
 
@@ -333,7 +303,7 @@ p2 <- ggplot(
   geom_point(size = 4) +
   geom_text(aes(label = sample), vjust = -0.8, size = 3) +
   labs(
-    title = "k-means clustering in 2-gene expression space",
+    title = "K-means clustering in 2-gene expression space",
     subtitle = paste("k =", k),
     x = paste(genes[1], "(log(cpm) expression)"),
     y = paste(genes[2], "(log(cpm) expression)")
@@ -349,7 +319,6 @@ We can print the cluster assignment in a table with the cluster numbers as colum
 
 ```{r}
 print(table(km$cluster))
-
 ```
 
 Given the randomness of the initialization of the centroid locations, this might not be the best we can get.
@@ -358,12 +327,14 @@ Given the randomness of the initialization of the centroid locations, this might
 Write a for-loop to repeat the *K*-means clustering 10 times and report the number of samples per cluster for each repetition
 
 ```{r}
+X <- df[, genes]
+
 
 km <- kmeans(
-  df[, genes],
+  X,
   centers = k,
 )
-
+print(table(km$cluster))
 
 ```
 
@@ -377,6 +348,27 @@ Ideally we would want to run *K*-means many times and keep only the best result.
 
 ```
 :::
+
+Choosing *K* is important for *K*-means clustering. We used the number of treatments, but we can also let the data inform us of the optimal *K*. For this we use the total sum of the the squared distance of every sample to the center of its cluster, the total Within Sum of Squares or total WSS. Total WSS will be largest when *K* is 1 and smallest (zero) if we set *K* to the number of samples. If we plot a trend line of the total WSS (an elbow plot), we can look for a bend that indicates a point after which adding more clusters does not improve the total WSS as much anymore. 
+
+
+
+``` {r}
+set.seed(42)
+X <- t(logcounts) # now we take all genes into account. With the transpose t() we would cluster the genes instead of the samples.
+wss <- numeric(10) # vector to keep track of the total Within Sum of Squares values per K
+for (k in 1:10) {
+  km <- kmeans(X, centers = k, nstart = 25)
+  wss[k] <- km$tot.withinss # the kmeans object already has the total WSS
+}
+
+plot(1:10, wss,
+     type = "b", # a line plot with points
+     pch = 19,
+     xlab = "Number of clusters (k)",
+     ylab = "Total within-cluster sum of squares",
+     main = "Elbow Plot")
+```
 
 ## Clustering genes
 
@@ -442,7 +434,7 @@ for (cluster in 1:3) {
             main = paste("Cluster",cluster) )
 }
 ```
-As a bonus (so not part of the examn) we can investigate which biological processes these genes are involved in to dive into the biology. For this a common approach is [Gene Ontology enrichment analysis](https://geneontology.org/docs/go-enrichment-analysis/), which basically comes down to finding biological progresses that occur more frequently in the set of genes in a cluster than would expected by chance. The code below does that for all three clusters. The dotplots show the top 20 most enriched biological processes per cluster.
+As a bonus (so not part of the exam) we can investigate which biological processes these genes are involved in to dive into the biology. For this a common approach is [Gene Ontology enrichment analysis](https://geneontology.org/docs/go-enrichment-analysis/), which basically comes down to finding biological progresses that occur more frequently in the set of genes in a cluster than would expected by chance. The code below does that for all three clusters. The dotplots show the top 20 most enriched biological processes per cluster.
 
 ``` {r}
 if (!requireNamespace("org.At.tair.db", quietly = TRUE)) 
@@ -474,4 +466,4 @@ for (cluster in 1:3) {
   print(dotplot(ego, showCategory = 20, title = paste("Cluster",cluster)))
 }
 ```
-One cluster is clearly composed of seed expressed genes, another more focuessed on cell wall organisation, and one clearly enriched in photosynthesis related genes.
+One cluster is clearly composed of seed expressed genes, another more focused on cell wall organisation, and one clearly enriched in photosynthesis related genes.
