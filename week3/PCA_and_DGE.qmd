@@ -172,7 +172,7 @@ Based on these three genes, the PCs separate the samples quite well. However, th
 ::: {#exr-PCA_plot_function}
 To see the effect of centering and scaling, complete the make_pca_plot function that performs PCA and plots the samples in PC1 and PC2 for different combinations of centering and scaling. Then plot it using the `patchwork` library to arrange the four plots in a 2x2 grid.
 
-Add the make_pca_plot function to your rnaseq_functions.R script
+Add the `make_pca_plot()` function to your **rnaseq_functions.R** script
 
 ```{r}
 make_pca_plot <- function(logcounts, coldata, center, scale) {
@@ -271,7 +271,9 @@ ggplot(pca_df, aes(PC1, PC2, color = environmental_stress, shape = cluster)) +
   theme_bw()
 
 ```
-But what happens if you try different numbers of PCs?
+::: {#exr-clustering_different_PCs}
+Try out what happens if you try different numbers of top PCs than 10, does the clustering still match the treatments?
+:::  
 
 ## Differential Gene Expression
 Up to now we have been doing true exploratory data analysis (EDA), looking at the data without a strong hypothesis. This is what is typically called unsupervised analysis. We only used the treatment information to interpret the results, not to guide the analysis. Now we will do a supervised analysis, where we take the sample information into account to do the analysis. The question we will address is: **For which genes does the expression significantly change in response to the stress treatments?**. As already mentioned on Monday, these genes are called Differentially Expressed Genes or DEG, and the analysis is called Differential Gene Expression or DGE. For this we group samples based on their treatment. For instance, all three samples that were only treated with heat are replicates of each other where we expect the same genes to be responding to the treatment. You may have noticed the term **significantly**, which implies we do a statistical test and get a *p*-value. The t-test is not appropriate for RNA-seq data, because these are discrete counts instead of continuous values. RNA-seq counts for a gene are generally assumed to follow a negative binomial distribution. Libraries like [edgeR](https://bioconductor.org/packages/devel/bioc/vignettes/edgeR/inst/doc/edgeRUsersGuide.pdf) are specifically developed to use the count information from the replicates to predict the mean and variance for the expression of a gene and use these in a statistical test comparing different treatments or time points. Below the code for this analysis, not need to understand every step.
@@ -351,4 +353,10 @@ draw.triple.venn(
 
 ```
 
-Compare this with [figure 3A in the Suzuki et al paper](http://journals.plos.org/plosone/article/figure?id=10.1371/journal.pone.0147625.g003).
+::: {#exr-compare_venn_diagrams}
+Look at [figure 3A in the Suzuki et al paper](http://journals.plos.org/plosone/article/figure?id=10.1371/journal.pone.0147625.g003).
+
+How do the Venn diagrams from the paper compare to this one?
+
+What would be a good next comparison to make?
+:::
