@@ -1,5 +1,15 @@
 ---
+title: "Gene expression analysis: salt and heat stress in Arabidopsis"
 author: "Harm Nijveen"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    code-tools: true
+    link-external-newwindow: true
+    link-external-icon: true
+editor: visual
 execute:
   eval: false
   warning: false
@@ -63,12 +73,27 @@ we can download the gene expression data directly from the EMBL-EBI Expression A
 ```{r}
 exp <- getAtlasExperiment("E-GEOD-72806")
 ```
-
 This returns a list (actually a `SimpleList`) of data structures, in this case only one, let's extract that:
 
 ```{r}
   se <- exp[[1]]
 ```
+
+:::{.callout-note appearance='simple'}
+If the Expression Atlas site does not work, you can also download a copy from our website as a zip file,  unzip it and load the data from there.
+
+``` {r}
+download.file(
+  url = "https://www.bioinformatics.nl/courses/BIF-20806/E-GEOD-72806.zip",
+  destfile = "./E-GEOD-72806.zip",
+  mode = "wb")
+unzip("E-GEOD-72806.zip")
+library(HDF5Array)
+se = loadHDF5SummarizedExperiment(dir="E-GEOD-72806")
+```
+:::
+
+The gene expression data are in this `se` object.
 
 ::: {#exr-class_structure}
 To learn more about the resulting data in `se` use the `class()` function to see what kind we are dealing with.
