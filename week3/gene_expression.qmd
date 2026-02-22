@@ -15,8 +15,8 @@ execute:
   warning: false
   message: false
 ---
-# Gene expression analysis: salt and heat stress in Arabidopsis
 
+## Introduction
 Gene expression analyses can shed light on all kinds of biological processes and environmental responses, through identifying genes that are activated or silenced. In this session we will analyze RNA-seq gene expression data from *Arabidopsis thaliana* plants exposed to salt and heat stress and a combination of salt and heat stress.
 
 The data originate from the study:\
