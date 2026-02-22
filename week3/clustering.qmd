@@ -16,7 +16,7 @@ execute:
   message: false
 ---
 
-# Clustering
+## Clustering
 In this session we continue with the gene expression dataset from <https://www.ebi.ac.uk/gxa/experiments/E-GEOD-72806/>
 
 First load the proper libraries and filter/transform the data using the functions that you created yesterday. To make the functions available in the current R session, you can use the `source()` function to run the R script.
