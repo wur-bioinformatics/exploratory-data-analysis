@@ -18,12 +18,6 @@ execute:
 
 # III: Visualisation and unsupervised analysis
 
-::: callout-caution
-### WORK IN PROGRESS
-
-This chapter is not yet finished, come back later for the final product
-:::
-
 ## The goals for week 3
 
 In the third week, the goals are:
@@ -54,7 +48,14 @@ We will mostly work on data associated with the paper [ABA Is Required for Plant
 
 Like before, at the end of Wednesday (23:59), a coding peer-feedback assignment is due, which you submit via feedback fruits on [Brightspace](https://brightspace.wur.nl/). Your assignment will be reviewed by two students, as you will review the assignment of two other students. For this week the assignment consists of creating a set of R functions in a separate R-script, that can be used to perform RNA-seq analyses. Like before **Completing the assignment and participation in the code-review is mandatory.**
 
-You need to hand in an **.R** script.
+You need to hand in a script file called **rnaseq_functions.R* that should contain the definition of four functions you will write during the coming three days:
+
+ - `load_atlas_se(experiment_id)`
+ - `get_normalized_counts(se)`
+ - `two_gene_scatter_plot(genes, logcounts, coldata)`
+ - `pca_plot(logcounts, coldata, center, scale)`
+ 
+ The script should also contain a function called `run_tests()` that runs each of the functions with appropriate input to test them.
 
 The code-review (peer-feedback via [Brightspace](https://brightspace.wur.nl/)) is due Thursday at 13:00. Instructions for how to give feedback can be found in [Chapter 3]((week1/day3.qmd)). The items we expect you to give feedback on as well.
 
