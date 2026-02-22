@@ -170,12 +170,12 @@ Check this with the loadings for AT4G27670 for PC1 and PC2. What is misleading i
 Based on these three genes, the PCs separate the samples quite well. However, the results can be quite different if we change the way the data are preprocessed. For instance, if we do not log-transform the data, or if we center and/or scale the data before performing PCA, this can have a big impact on the results. The prcomp() function has options for centering and scaling the data, if you do not set them, the defaults are taken.
 
 ::: {#exr-PCA_plot_function}
-To see the effect of centering and scaling, complete the make_pca_plot function that performs PCA and plots the samples in PC1 and PC2 for different combinations of centering and scaling. Then plot it using the `patchwork` library to arrange the four plots in a 2x2 grid.
+To see the effect of centering and scaling, complete the `pca_plot()` function that performs PCA and plots the samples in PC1 and PC2 for different combinations of centering and scaling. Then plot it using the `patchwork` library to arrange the four plots in a 2x2 grid.
 
-Add the `make_pca_plot()` function to your **rnaseq_functions.R** script
+Add the `pca_plot()` function to your **rnaseq_functions.R** script
 
 ```{r}
-make_pca_plot <- function(logcounts, coldata, center, scale) {
+pca_plot <- function(logcounts, coldata, center, scale) {
   # add code here to construct pca_df for the given center and scale
   p <- ggplot(pca_df, aes(PC1, PC2, color = environmental_stress)) +
     geom_point(size = 4) +
