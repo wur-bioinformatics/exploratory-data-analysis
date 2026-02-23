@@ -55,9 +55,6 @@ if (!requireNamespace("edgeR", quietly = TRUE))
 if (!requireNamespace("pheatmap", quietly = TRUE)) 
   BiocManager::install("pheatmap")
 
-if (!requireNamespace("tidyverse", quietly = TRUE)) 
-  BiocManager::install("tidyverse")
-
 if(!requireNamespace("HDF5Array", quietly = TRUE)) 
   BiocManager::install("HDF5Array")
 
@@ -68,6 +65,16 @@ library(ExpressionAtlas)
 library(SummarizedExperiment)
 library(tidyverse)
 ```
+:::{.callout-note appearance='simple'}
+Installing these packages can take quite some time. If you encounter errors during installation, these can be challenging to solve. It is usually a good start to properly read the error and look for clues. If the error is a version conflict, for instance on the `rlang` or `xfun` packages, it can help to re-install these:
+`install.packages("xfun")`
+`install.packages("rlang")`
+
+Clearing the workspace (under the Session menu in RStudio) and restarting the R session can help.
+
+If you get asked whether you want to update certain packages, you can select **a** for all.
+:::
+
 
 ## Loading RNA-seq expression data
 
