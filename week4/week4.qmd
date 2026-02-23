@@ -21,7 +21,7 @@ The learning objectives of week 4 are:
 
 ## How week 4 is organised
 
-Similar to previous weeks, the first three days are intended to work through these objectives, while Thursday is kept for code peer-review and exam preparation, and Friday (morning) the exam. As before, there is an assignment due on Wednesday evening (23:59), which forms the basis of the peer-review exercise on Thursday. 
+Similar to previous weeks, the first three days are intended to work through these objectives, while Thursday is kept for code peer-review and exam preparation, and Friday (morning) the exam. 
 
 The content of the first three days is as follows:
 
@@ -31,5 +31,25 @@ The content of the first three days is as follows:
 
 -   **Wednesday**: (if needed) Completion of the data analysis from Tuesday / String operations
 
+## The assignment
+As for the previous weeks, there is an assignment due on Wednesday evening (23:59), which forms the basis of the peer-review exercise on Thursday. 
 
+The assignment instructions are given at the end of day 3 (@sec-wk4d3_assignment), with an accompanying dataset that can be downloaded from Brightspace in the [Week 4 Content]("https://brightspace.wur.nl/d2l/le/content/336819/Home") Assignment section. 
 
+## The exam
+
+The exam of week 4 **counts towards your final grade for the course**.
+
+At the end of week 4 we expect you to be able to:
+
+-	give a practical ("rule of thumb") definition of what a data outlier is, and what to do with such data points if they arise
+
+-	apply different methods for identifying errors in data, and be able to correct / curate these before performing an analysis
+
+-	evaluate the advantages and disadvantages of different approaches to dealing with "big data" in R
+
+-	understand the importance of different colour palettes for different data types and visualisation purposes
+
+-	perform PCA and GWAS using whole-genome SNP information from a large plant population
+
+-	apply basic string operations such as string concatenation, string splitting, as well as be familiar with regular expressions for pattern matching and string manipulation.

@@ -423,7 +423,7 @@ The steps described below provide a suggested approach to solve this problem. Yo
 
 :::
 
-## Assignment for week 4 code peer-review
+## Assignment for week 4 code peer-review {#sec-wk4d3_assignment}
 
 Finally, the following exercise needs to be submitted by the end of the day today, in .qmd format. Please check that the file actually Renders correctly before submitting!
 
