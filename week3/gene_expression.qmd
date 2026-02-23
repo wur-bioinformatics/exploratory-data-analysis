@@ -59,7 +59,10 @@ if (!requireNamespace("tidyverse", quietly = TRUE))
   BiocManager::install("tidyverse")
 
 if(!requireNamespace("HDF5Array", quietly = TRUE)) 
-  install.packages("HDF5Array")
+  BiocManager::install("HDF5Array")
+
+if(!requireNamespace("GenomeInfoDb", quietly = TRUE)) 
+  BiocManager::install("GenomeInfoDb")
 
 library(ExpressionAtlas)
 library(SummarizedExperiment)
