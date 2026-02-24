@@ -48,11 +48,11 @@ We will mostly work on data associated with the paper [ABA Is Required for Plant
 
 Like before, at the end of Wednesday (23:59), a coding peer-feedback assignment is due, which you submit via feedback fruits on [Brightspace](https://brightspace.wur.nl/). Your assignment will be reviewed by two students, as you will review the assignment of two other students. For this week the assignment consists of creating a set of R functions in a separate R-script, that can be used to perform RNA-seq analyses. Like before **Completing the assignment and participation in the code-review is mandatory.**
 
-You need to hand in a script file called **rnaseq_functions.R* that should contain the definition of four functions you will write during the coming three days:
+You need to hand in a script file called **rnaseq_functions.R** that should contain the definition of four functions you will write during the coming three days:
 
- - `load_atlas_se(experiment_id)`
- - `get_normalized_counts(se)`
- - `two_gene_scatter_plot(genes, logcounts, coldata)`
+ - `load_atlas_se(experiment_id, from_disk)`
+ - `get_normalized_counts(se, log, min_count, min_samples)`
+ - `two_gene_scatter_plot(genes, logcounts, coldata, title)`
  - `pca_plot(logcounts, coldata, center, scale)`
  
  The script should also contain a function called `run_tests()` that runs each of the functions with appropriate input to test them.
