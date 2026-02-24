@@ -124,10 +124,10 @@ genes <- names(sort(gene_var, decreasing = TRUE))[1:2]
 ```
 
 ::: {#exr-two_gene_scatter_plot}
-Now we could copy the plotting code from above, but copying a block of code is generally not a good idea, it is better to turn that into a function that you can call. So please go ahead and create a function that takes the list of genes as input, as well as the data that is needed to make the plot (logcounts and coldata). Add this function to your **rnaseq_functions.R** script
+Now we could copy the plotting code from above, but copying a block of code is generally not a good idea, it is better to turn that into a function that you can call. So please go ahead and create a function that takes the list of genes as input, as well as the data that is needed to make the plot (logcounts and coldata). It is also a good idea to include the title of the plot as parameter. Add this function to your **rnaseq_functions.R** script
 
 ```{r}
-two_gene_scatter_plot(genes, logcounts, coldata)
+two_gene_scatter_plot(genes, logcounts, coldata, title)
 ```
 :::
 
@@ -144,6 +144,15 @@ The gene IDs are not really informative to learn more about the kinds of genes t
 We can use the 2-gene representation of the samples to find clusters of similar samples (like you already did on day 2 of the course). Hierarchical clustering starts with each sample in its own cluster and then step-wise merges the two most similar clusters based on a distance measure (Euclidean, correlation-based, etc.) until all samples are in one cluster. This is typically depicted as a tree/dendrogram. This merging can be stopped if a certain number of clusters is reached. How the distance is calculated depends on the distance measure, but also on the positions in the clusters the distance is calculated between. For this several so-called **agglomeration** or **linkage methods** are used that give different results. With **average linkage**, the distance between two cluster is calculated as the average of all distances between the members of both cluster. In **complete linkage**, the largest distance between any two members of two cluster is used, while **single linkage** uses the smallest distance between any two members of both clusters. You can imagine that both the distance measure as well as the linkage methods affect the clustering.
 
 ```{r}
+expr_df <- as.data.frame(t(logcounts[genes, , drop = FALSE]))
+expr_df$sample <- rownames(expr_df)
+
+df <- merge(
+  expr_df,
+  coldata,
+  by = "sample",
+  all.x = TRUE
+)
 X <- df[, genes] # select only the gene expression columns for clustering
 d_samples <- dist(X, method = "euclidean") # calculate Euclidean distance between all samples
 hc_samples <- hclust(d_samples, method = "complete") # cluster using complete-linkage
