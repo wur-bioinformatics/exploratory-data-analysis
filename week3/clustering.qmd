@@ -150,7 +150,7 @@ hc_samples <- hclust(d_samples, method = "complete") # cluster using complete-li
 plot(hc_samples, hang=-1) # this actually calls plot.hclust, hang=-1 makes sure the tree starts (or ends, depending on your perspective) at 0
 ```
 
-This should show a tree (upside down?!) with two very distinct branches of samples. The height value on the y-axis is actually the distance between clusters. We can check this by looking at the content of the distance matrix `d_samples`. The distance between samples 11 and 12 is a bit larger than 12 and that is also where the horizontal line is that merges both clusters. The root of the tree is slightly above 70, which agrees with the largest distance between any pair of samples (try `max(d_samples)`) which is 73.6.
+This should show a tree (upside down?!) with two very distinct branches of samples. The height value on the y-axis is actually the distance between clusters. We can check this by looking at the content of the distance matrix `d_samples`. The distance between samples 11 and 12 is a bit larger than 12 and that is also where the horizontal line is that merges both clusters. The root of the tree is slightly below 14, which agrees with the largest distance between any pair of samples (try `max(d_samples)`) which is 13.6.
 
 To get the actual clusters, we can use `cutree()` to cut the tree at a certain height. Alternatively you can specify the number of clusters you want and let `cutree()` determine the appropriate cut position.
 
