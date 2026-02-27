@@ -3,11 +3,6 @@ title: "Errors and outliers"
 author: "Peter Bourke"
 ---
 
-:::{.callout-caution}
-### WORK IN PROGRESS
-This chapter is not yet finished, come back later for the final product
-:::
-
 ## Introduction {#sec-w4d1_intro}
 
 The focus of today will be on errors - data points that for one reason or another do not fit in our dataset. We often need to be able to identify errors so that we can remove (or correct) them before running an analysis. This is generally the case for types of analyses or calculations that assume data is error-free (there are more advanced approaches that can explicitly model the possibility of errors in the data e.g. Bayesian methods, but we will not be using them here). Errors could lead to false conclusions being drawn, or a loss of statistical power for testing differences (by inflating the estimates of the variance in the data for example). We will spend some time considering in particular what an "outlier" means, and what to do with them.

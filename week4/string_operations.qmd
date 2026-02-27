@@ -3,11 +3,6 @@ title: "String operations"
 author: "Peter Bourke"
 ---
 
-:::{.callout-caution}
-### WORK IN PROGRESS
-This chapter is not yet finished, come back later for the final product
-:::
-
 
 ## Introduction {#sec-wk4d3_intro}
 
@@ -398,7 +393,7 @@ attempt1[1:10]
 
 `attempt1` is a character vector, not something that you usually have to work with as genetic marker data, but here it is the first step at getting the data into `R`. A number of string operations will be necessary to extract the genotypic data and convert it into a numeric matrix. 
 
-This is left as a final exercise to practice on (this is at a slightly advanced level, and goes beyond the expected skill level for the exam, so don't worry if you cannot complete it). A sample script to complete this exercise will be made available via Brightspace after a reasonable attempt has been made by most students.
+This is left as a final exercise to practice on (slightly advanced level). A sample script to complete this exercise will be made available via Brightspace after a reasonable attempt has been made by most students.
 
 
 ::: {#exr-readLines}
