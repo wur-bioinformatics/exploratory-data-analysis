@@ -319,9 +319,16 @@ Each of the groups are given in a separate column, along with the original strin
 ::: {#exr-substr}
 ### Practicing string manipulations
 
--   Using the `substr()` function, remove the starting letter from elements of the vector c("M1234567","N23456","O345678","P4567","Q567890","R67").
+-   Using the `substr()` function, remove the starting letter from elements of the vector `v`:
+```{r}
+v <- c("M1234567","N23456","O345678","P4567","Q567890","R67")
+```
 
--   Extract the words "COVID" and "SARS" from the vector c("COVID-19","SARS-CoV-2"), ie. extract the word before the first dash symbol.
+-   Extract the words "COVID" and "SARS" from the vector `cov`, ie. extract the word before the first dash symbol:
+```{r}
+cov <- c("COVID-19","SARS-CoV-2")
+```
+
 
 -   Standardise the vector 'test' below to have an underscore between the prefix letters and numbers (so, all elements having the form Na_123 for example):
 
