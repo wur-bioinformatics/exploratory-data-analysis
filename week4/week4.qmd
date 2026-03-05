@@ -46,6 +46,4 @@ At the end of week 4 we expect you to be able to:
 
 -	understand the importance of different colour palettes for different data types and visualisation purposes
 
--	perform PCA and GWAS using whole-genome SNP information from a large plant population
-
 -	apply basic string operations such as string concatenation, string splitting, as well as be familiar with regular expressions for pattern matching and string manipulation.
